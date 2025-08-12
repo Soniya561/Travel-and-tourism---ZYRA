@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmed - Zyra Travels</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #3CB371;
+            --accent-color: #98FB98;
+            --gold-color: #FFD700;
+            --dark-green: #1F5F3F;
+            --light-green: #F0FFF0;
+            --text-dark: #2F4F2F;
+            --text-light: #6B8E6B;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, rgba(240, 255, 240, 0.9), rgba(248, 255, 248, 0.9)), 
+                        url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80') center/cover fixed;
+            min-height: 100vh;
+        }
+
+        /* Header & Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-menu a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .book-now-btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        .book-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        /* Main Container */
+        .confirmation-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        /* Success Header */
+        .success-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            animation: bounceIn 1s ease;
+        }
+
+        .success-icon i {
+            font-size: 3rem;
+            color: var(--white);
+        }
+
+        .success-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--success-color);
+            margin-bottom: 1rem;
+        }
+
+        .success-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .booking-reference {
+            background: var(--light-green);
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .reference-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .reference-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Booking Details */
+        .booking-details {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .details-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .detail-section {
+            background: rgba(46, 139, 87, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .steps-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(46, 139, 87, 0.05);
+            border-radius: 15px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .action-btn {
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-green);
+            transform: translateY(-2px);
+        }
+
+        /* Contact Info */
+        .contact-info {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+
+        .contact-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .contact-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .confirmation-container {
+                padding: 100px 1rem 2rem;
+            }
+
+            .success-title {
+                font-size: 2rem;
+            }
+
+            .success-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .booking-details,
+            .next-steps,
+            .contact-info {
+                padding: 2rem 1.5rem;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .contact-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="landing.html" class="logo">
+                <i class="fas fa-globe-americas"></i>
+                Zyra Travels
+            </a>
+            <nav class="nav-menu">
+                <a href="landing.html">Home</a>
+                <a href="destinations.html">Destinations</a>
+                <a href="services.html">Services</a>
+                <a href="reviews.html">Reviews</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <a href="booking.html" class="book-now-btn">Book Another Trip</a>
+        </div>
+    </header>
+
+    <!-- Main Confirmation Container -->
+    <div class="confirmation-container">
+        <!-- Success Header -->
+        <div class="success-header">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h1 class="success-title">Booking Confirmed!</h1>
+            <p class="success-subtitle">Thank you for choosing Zyra Travels. Your dream vacation is now secured!</p>
+            
+            <div class="booking-reference">
+                <div class="reference-label">Your Booking Reference</div>
+                <div class="reference-number" id="booking-reference">ZT-20241108-001</div>
+            </div>
+        </div>
+
+        <!-- Booking Details -->
+        <div class="booking-details">
+            <h2 class="details-title">Booking Details</h2>
+            <div class="details-grid">
+                <!-- Package Information -->
+                <div class="detail-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-map-marked-alt"></i>
+                        Package Information
+                    </h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Package:</span>
+                        <span class="detail-value" id="package-name">Bali Paradise</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Duration:</span>
+                        <span class="detail-value" id="package-duration">7 Days / 6 Nights</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Travel Mode:</span>
+                        <span class="detail-value" id="travel-mode">Flight</span>
+                    </div>
+                </div>
+
+                <!-- Travel Dates -->
+                <div class="detail-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-calendar-alt"></i>
+                        Travel Dates
+                    </h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Departure:</span>
+                        <span class="detail-value" id="departure-date">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Return:</span>
+                        <span class="detail-value" id="return-date">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Departure City:</span>
+                        <span class="detail-value" id="departure-city">-</span>
+                    </div>
+                </div>
+
+                <!-- Traveler Information -->
+                <div class="detail-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-users"></i>
+                        Traveler Information
+                    </h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Number of Travelers:</span>
+                        <span class="detail-value" id="traveler-count">1</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Primary Contact:</span>
+                        <span class="detail-value" id="primary-contact">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Email:</span>
+                        <span class="detail-value" id="contact-email">-</span>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="detail-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-credit-card"></i>
+                        Payment Information
+                    </h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Payment Method:</span>
+                        <span class="detail-value" id="payment-method">Credit Card</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Total Amount:</span>
+                        <span class="detail-value" id="total-amount">$988</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Payment Status:</span>
+                        <span class="detail-value" style="color: var(--success-color);">Confirmed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="next-steps">
+            <h2 class="steps-title">What Happens Next?</h2>
+            
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Confirmation Email</h4>
+                    <p>You'll receive a detailed confirmation email within the next 15 minutes with your booking voucher and travel documents.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Travel Consultant Contact</h4>
+                    <p>Our dedicated travel consultant will contact you within 24 hours to finalize your itinerary and answer any questions.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>Pre-Travel Preparation</h4>
+                    <p>We'll send you a comprehensive travel guide 2 weeks before departure, including packing lists, local customs, and important information.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>Final Documents</h4>
+                    <p>All final travel documents, tickets, and vouchers will be sent to you 48 hours before your departure date.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="#" class="action-btn btn-primary" onclick="downloadBookingPDF()">
+                <i class="fas fa-download"></i>
+                Download Booking Confirmation
+            </a>
+            <a href="landing.html" class="action-btn btn-secondary">
+                <i class="fas fa-home"></i>
+                Return to Home
+            </a>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <h3 class="contact-title">Need Help? We're Here for You!</h3>
+            <p>Our customer support team is available 24/7 to assist you with any questions or concerns.</p>
+            
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>support@zyratravels.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Live Chat Available</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load booking data and populate confirmation details
+        window.addEventListener('load', function() {
+            loadBookingConfirmation();
+        });
+
+        function loadBookingConfirmation() {
+            const bookingData = localStorage.getItem('completedBooking');
+            
+            if (bookingData) {
+                const booking = JSON.parse(bookingData);
+                
+                // Update booking reference
+                if (booking.reference) {
+                    document.getElementById('booking-reference').textContent = booking.reference;
+                }
+                
+                // Update package information
+                if (booking.package) {
+                    document.getElementById('package-name').textContent = booking.package.name || 'Bali Paradise';
+                    document.getElementById('package-duration').textContent = '7 Days / 6 Nights'; // You can store this in package data
+                }
+                
+                // Update travel details
+                if (booking.travelDetails) {
+                    const details = booking.travelDetails;
+                    document.getElementById('departure-date').textContent = formatDate(details.departureDate) || '-';
+                    document.getElementById('return-date').textContent = formatDate(details.returnDate) || '-';
+                    document.getElementById('departure-city').textContent = formatCity(details.departureCity) || '-';
+                    document.getElementById('traveler-count').textContent = details.travelers || '1';
+                }
+                
+                // Update traveler information
+                if (booking.travelers && booking.travelers.traveler1) {
+                    const primaryTraveler = booking.travelers.traveler1;
+                    const fullName = `${primaryTraveler['first-name'] || ''} ${primaryTraveler['last-name'] || ''}`.trim();
+                    document.getElementById('primary-contact').textContent = fullName || '-';
+                    document.getElementById('contact-email').textContent = primaryTraveler.email || '-';
+                }
+                
+                // Update payment information
+                if (booking.paymentMethod) {
+                    document.getElementById('payment-method').textContent = formatPaymentMethod(booking.paymentMethod);
+                }
+                
+                if (booking.pricing) {
+                    document.getElementById('total-amount').textContent = `$${booking.pricing.total}`;
+                }
+                
+                // Store for PDF generation
+                window.bookingData = booking;
+            } else {
+                // Fallback data if no booking found
+                console.warn('No booking data found');
+            }
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function formatCity(cityCode) {
+            const cities = {
+                'new-york': 'New York, NY',
+                'los-angeles': 'Los Angeles, CA',
+                'chicago': 'Chicago, IL',
+                'miami': 'Miami, FL',
+                'boston': 'Boston, MA',
+                'seattle': 'Seattle, WA',
+                'denver': 'Denver, CO',
+                'atlanta': 'Atlanta, GA'
+            };
+            return cities[cityCode] || cityCode || '-';
+        }
+
+        function formatPaymentMethod(method) {
+            const methods = {
+                'card': 'Credit/Debit Card',
+                'paypal': 'PayPal',
+                'bank': 'Bank Transfer'
+            };
+            return methods[method] || method || 'Credit Card';
+        }
+
+        function downloadBookingPDF() {
+            // In a real application, this would generate and download a PDF
+            // For now, we'll show an alert
+            alert('Your booking confirmation PDF will be downloaded shortly. Please check your downloads folder.');
+            
+            // You could implement actual PDF generation here using libraries like jsPDF
+            // or send the booking data to a server endpoint that generates the PDF
+        }
+
+        // Clear booking data after successful confirmation (optional)
+        // Uncomment if you want to clear the stored data after confirmation
+        /*
+        setTimeout(() => {
+            localStorage.removeItem('selectedPackage');
+            localStorage.removeItem('travelDetails');
+            localStorage.removeItem('travelerData');
+            localStorage.removeItem('paymentData');
+            localStorage.removeItem('completedBooking');
+        }, 5000); // Clear after 5 seconds
+        */
+
+        // Add some celebration effects
+        function createConfetti() {
+            const colors = ['#2E8B57', '#3CB371', '#98FB98', '#FFD700'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.zIndex = '9999';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.borderRadius = '50%';
+                
+                document.body.appendChild(confetti);
+                
+                const animation = confetti.animate([
+                    { transform: 'translateY(-10px) rotate(0deg)', opacity: 1 },
+                    { transform: `translateY(100vh) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2000,
+                    easing: 'cubic-bezier(0.5, 0, 0.5, 1)'
+                });
+                
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        // Trigger confetti on page load
+        setTimeout(createConfetti, 500);
+    </script>
+</body>
+</html>

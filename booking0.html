@@ -34,7 +34,9 @@
             line-height: 1.6;
             color: var(--text-dark);
             overflow-x: hidden;
-            background: linear-gradient(135deg, var(--light-green), #F8FFF8);
+            background: linear-gradient(135deg, rgba(240, 255, 240, 0.85), rgba(248, 255, 248, 0.85)), 
+                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80') center/cover fixed;
+            min-height: 100vh;
         }
 
         /* Header & Navigation */
@@ -222,11 +224,13 @@
 
         /* Booking Form */
         .booking-form {
-            background: var(--white);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             border-radius: 25px;
             padding: 3rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
+            border: 1px solid rgba(46, 139, 87, 0.1);
         }
 
         .form-step {
@@ -301,6 +305,176 @@
             display: block;
         }
 
+        /* Destination Search */
+        .destination-search {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid #E8F5E8;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+            background: var(--white);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1.2rem;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            font-size: 1rem;
+            cursor: pointer;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        .clear-search:hover {
+            color: var(--primary-color);
+        }
+
+        /* Selection completion indicator */
+        .selection-status {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .status-item.completed {
+            background: var(--light-green);
+            color: var(--primary-color);
+        }
+
+        .status-item.pending {
+            background: #f8f9fa;
+            color: var(--text-light);
+        }
+
+        .status-item i {
+            font-size: 1rem;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 2px solid #E8F5E8;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suggestion-item:hover {
+            background: var(--light-green);
+            color: var(--primary-color);
+        }
+
+        .suggestion-item i {
+            color: var(--primary-color);
+            width: 20px;
+        }
+
+        /* Travel Modes */
+        .travel-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .travel-mode {
+            border: 2px solid #E8F5E8;
+            border-radius: 15px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .travel-mode:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .travel-mode.selected {
+            border-color: var(--primary-color);
+            background: var(--light-green);
+            color: var(--primary-color);
+        }
+
+        .travel-mode i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .travel-mode-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .travel-mode-desc {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.3rem;
+        }
+
         /* Package Selection */
         .package-grid {
             display: grid;
@@ -316,6 +490,8 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
         }
 
         .package-card:hover {
@@ -419,12 +595,14 @@
 
         /* Summary Section */
         .booking-summary {
-            background: var(--white);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
             border-radius: 25px;
             padding: 2rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 120px;
+            border: 1px solid rgba(46, 139, 87, 0.1);
         }
 
         .summary-title {
@@ -476,7 +654,8 @@
         }
 
         .btn-prev:hover {
-            background: #e9ecef;
+            background: var(--light-green);
+            border-color: var(--primary-color);
         }
 
         .btn-next {
@@ -567,6 +746,23 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+
+            .travel-modes {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .destination-search {
+                margin-bottom: 1.5rem;
+            }
+
+            .search-input {
+                padding: 0.8rem 0.8rem 0.8rem 2.5rem;
+            }
+
+            .search-icon {
+                left: 0.8rem;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -580,10 +776,6 @@
             </a>
             <nav class="nav-menu">
                 <a href="landing.html">Home</a>
-<<<<<<< HEAD
-                <a href="about.html">About</a>
-=======
->>>>>>> 79ed8c02b6d9b57acfcda3f74421ccbbaf57d28d
                 <a href="destinations.html">Destinations</a>
                 <a href="services.html">Services</a>
                 <a href="reviews.html">Reviews</a>
@@ -626,7 +818,104 @@
             <div class="booking-form">
                 <!-- Step 1: Package Selection -->
                 <div class="form-step active" data-step="1">
-                    <h2 class="step-title">Choose Your Package</h2>
+                    <h2 class="step-title">Choose Your Destination & Package</h2>
+                    
+                    <!-- Destination Search -->
+                    <div class="destination-search">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="destination-search" placeholder="Search for destinations (e.g., Bali, Paris, Tokyo, Maldives...)">
+                        <i class="fas fa-times clear-search" id="clear-search"></i>
+                        <div class="search-suggestions" id="search-suggestions">
+                            <div class="suggestion-item" data-destination="" style="background: #f8f9fa; font-weight: 600;">
+                                <i class="fas fa-globe"></i>
+                                <span>Show All Destinations</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="bali">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Bali, Indonesia</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="paris">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Paris, France</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="tokyo">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Tokyo, Japan</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="maldives">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Maldives</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="switzerland">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Switzerland</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="thailand">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Thailand</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="dubai">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Dubai, UAE</span>
+                            </div>
+                            <div class="suggestion-item" data-destination="santorini">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Santorini, Greece</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Travel Modes -->
+                    <div class="form-group">
+                        <label>Preferred Travel Mode</label>
+                        <div class="travel-modes">
+                            <div class="travel-mode" data-mode="flight">
+                                <i class="fas fa-plane"></i>
+                                <div class="travel-mode-name">Flight</div>
+                                <div class="travel-mode-desc">Fast & Convenient</div>
+                            </div>
+                            <div class="travel-mode" data-mode="train">
+                                <i class="fas fa-train"></i>
+                                <div class="travel-mode-name">Train</div>
+                                <div class="travel-mode-desc">Scenic Journey</div>
+                            </div>
+                            <div class="travel-mode" data-mode="bus">
+                                <i class="fas fa-bus"></i>
+                                <div class="travel-mode-name">Bus</div>
+                                <div class="travel-mode-desc">Budget Friendly</div>
+                            </div>
+                            <div class="travel-mode" data-mode="car">
+                                <i class="fas fa-car"></i>
+                                <div class="travel-mode-name">Car Rental</div>
+                                <div class="travel-mode-desc">Freedom to Explore</div>
+                            </div>
+                            <div class="travel-mode" data-mode="cruise">
+                                <i class="fas fa-ship"></i>
+                                <div class="travel-mode-name">Cruise</div>
+                                <div class="travel-mode-desc">Luxury Experience</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Package Display Info -->
+                    <div style="text-align: center; margin-bottom: 1rem;">
+                        <p id="package-display-info" style="color: var(--text-light); font-size: 0.9rem;">
+                            Showing all available destinations
+                        </p>
+                    </div>
+
+                    <!-- Selection Status -->
+                    <div class="selection-status">
+                        <div class="status-item pending" id="travel-mode-status">
+                            <i class="fas fa-circle"></i>
+                            <span>Select Travel Mode</span>
+                        </div>
+                        <div class="status-item pending" id="package-status">
+                            <i class="fas fa-circle"></i>
+                            <span>Choose Package</span>
+                        </div>
+                    </div>
+
                     <div class="package-grid">
                         <div class="package-card" data-package="bali" data-price="899">
                             <h3 class="package-title">Bali Paradise</h3>
@@ -664,6 +953,71 @@
                                 <li><i class="fas fa-check"></i> Traditional temples</li>
                                 <li><i class="fas fa-check"></i> Sushi masterclass</li>
                                 <li><i class="fas fa-check"></i> Mount Fuji tour</li>
+                            </ul>
+                        </div>
+
+                        <div class="package-card" data-package="maldives" data-price="2299" style="display: none;">
+                            <h3 class="package-title">Maldives Paradise</h3>
+                            <p class="package-duration">8 Days / 7 Nights</p>
+                            <div class="package-price">$2299 <span style="font-size: 1rem; font-weight: 400;">per person</span></div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> Overwater villa</li>
+                                <li><i class="fas fa-check"></i> All meals included</li>
+                                <li><i class="fas fa-check"></i> Snorkeling & diving</li>
+                                <li><i class="fas fa-check"></i> Spa treatments</li>
+                                <li><i class="fas fa-check"></i> Sunset cruise</li>
+                            </ul>
+                        </div>
+
+                        <div class="package-card" data-package="switzerland" data-price="1899" style="display: none;">
+                            <h3 class="package-title">Swiss Alps Experience</h3>
+                            <p class="package-duration">7 Days / 6 Nights</p>
+                            <div class="package-price">$1899 <span style="font-size: 1rem; font-weight: 400;">per person</span></div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> Mountain resort</li>
+                                <li><i class="fas fa-check"></i> Scenic train rides</li>
+                                <li><i class="fas fa-check"></i> Cable car tours</li>
+                                <li><i class="fas fa-check"></i> Hiking adventures</li>
+                                <li><i class="fas fa-check"></i> Swiss cuisine</li>
+                            </ul>
+                        </div>
+
+                        <div class="package-card" data-package="thailand" data-price="799" style="display: none;">
+                            <h3 class="package-title">Thailand Explorer</h3>
+                            <p class="package-duration">9 Days / 8 Nights</p>
+                            <div class="package-price">$799 <span style="font-size: 1rem; font-weight: 400;">per person</span></div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> Beach & city hotels</li>
+                                <li><i class="fas fa-check"></i> Island hopping</li>
+                                <li><i class="fas fa-check"></i> Temple visits</li>
+                                <li><i class="fas fa-check"></i> Thai cooking class</li>
+                                <li><i class="fas fa-check"></i> Elephant sanctuary</li>
+                            </ul>
+                        </div>
+
+                        <div class="package-card" data-package="dubai" data-price="1199" style="display: none;">
+                            <h3 class="package-title">Dubai Luxury</h3>
+                            <p class="package-duration">5 Days / 4 Nights</p>
+                            <div class="package-price">$1199 <span style="font-size: 1rem; font-weight: 400;">per person</span></div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> 5-star hotel</li>
+                                <li><i class="fas fa-check"></i> Burj Khalifa visit</li>
+                                <li><i class="fas fa-check"></i> Desert safari</li>
+                                <li><i class="fas fa-check"></i> Shopping tours</li>
+                                <li><i class="fas fa-check"></i> Luxury dining</li>
+                            </ul>
+                        </div>
+
+                        <div class="package-card" data-package="santorini" data-price="1699" style="display: none;">
+                            <h3 class="package-title">Santorini Romance</h3>
+                            <p class="package-duration">6 Days / 5 Nights</p>
+                            <div class="package-price">$1699 <span style="font-size: 1rem; font-weight: 400;">per person</span></div>
+                            <ul class="package-features">
+                                <li><i class="fas fa-check"></i> Cliffside hotel</li>
+                                <li><i class="fas fa-check"></i> Sunset views</li>
+                                <li><i class="fas fa-check"></i> Wine tasting</li>
+                                <li><i class="fas fa-check"></i> Volcano tour</li>
+                                <li><i class="fas fa-check"></i> Greek cuisine</li>
                             </ul>
                         </div>
                     </div>
@@ -843,6 +1197,10 @@
                         <span id="summary-travelers">-</span>
                     </div>
                     <div class="summary-item">
+                        <span>Travel Mode:</span>
+                        <span id="summary-travel-mode">-</span>
+                    </div>
+                    <div class="summary-item">
                         <span>Departure:</span>
                         <span id="summary-departure">-</span>
                     </div>
@@ -868,6 +1226,180 @@
         let selectedPackage = null;
         let packagePrice = 0;
         let numberOfTravelers = 1;
+        let selectedTravelMode = null;
+        let selectedDestination = null;
+
+        // Destination search functionality
+        const destinationSearch = document.getElementById('destination-search');
+        const searchSuggestions = document.getElementById('search-suggestions');
+        const clearSearch = document.getElementById('clear-search');
+        
+        destinationSearch.addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const suggestions = document.querySelectorAll('.suggestion-item');
+            let hasVisibleSuggestions = false;
+            
+            // Show/hide clear button
+            clearSearch.style.display = query.length > 0 ? 'block' : 'none';
+            
+            suggestions.forEach(suggestion => {
+                const text = suggestion.textContent.toLowerCase();
+                if (text.includes(query) && query.length > 0) {
+                    suggestion.style.display = 'flex';
+                    hasVisibleSuggestions = true;
+                } else if (query.length === 0) {
+                    suggestion.style.display = 'flex';
+                    hasVisibleSuggestions = true;
+                } else {
+                    suggestion.style.display = 'none';
+                }
+            });
+            
+            searchSuggestions.style.display = hasVisibleSuggestions ? 'block' : 'none';
+        });
+
+        destinationSearch.addEventListener('focus', function() {
+            searchSuggestions.style.display = 'block';
+        });
+
+        // Clear search functionality
+        clearSearch.addEventListener('click', function() {
+            destinationSearch.value = '';
+            clearSearch.style.display = 'none';
+            searchSuggestions.style.display = 'none';
+            selectedDestination = null;
+            showAllPackages();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.destination-search')) {
+                searchSuggestions.style.display = 'none';
+            }
+        });
+
+        // Handle suggestion selection
+        document.querySelectorAll('.suggestion-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const destination = this.dataset.destination;
+                const destinationName = this.textContent.trim();
+                
+                destinationSearch.value = destinationName;
+                selectedDestination = destination;
+                searchSuggestions.style.display = 'none';
+                
+                // Show relevant packages
+                if (destination === '') {
+                    // Show all packages
+                    showAllPackages();
+                } else {
+                    filterPackagesByDestination(destination);
+                }
+            });
+        });
+
+        // Filter packages by destination
+        function filterPackagesByDestination(destination) {
+            const allPackages = document.querySelectorAll('.package-card');
+            const displayInfo = document.getElementById('package-display-info');
+            
+            if (destination) {
+                // Show only the selected destination package
+                let destinationName = '';
+                allPackages.forEach(card => {
+                    if (card.dataset.package === destination) {
+                        card.style.display = 'block';
+                        destinationName = card.querySelector('.package-title').textContent.split(' ')[0];
+                        // Auto-scroll to packages section
+                        setTimeout(() => {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                displayInfo.textContent = `Showing packages for ${destinationName}`;
+            } else {
+                // Show default packages (first 3)
+                const defaultPackages = ['bali', 'paris', 'tokyo'];
+                allPackages.forEach(card => {
+                    if (defaultPackages.includes(card.dataset.package)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                displayInfo.textContent = 'Showing popular destinations';
+            }
+        }
+
+        // Show all packages function
+        function showAllPackages() {
+            const allPackages = document.querySelectorAll('.package-card');
+            const displayInfo = document.getElementById('package-display-info');
+            
+            allPackages.forEach(card => {
+                card.style.display = 'block';
+            });
+            displayInfo.textContent = 'Showing all available destinations';
+        }
+
+        // Update status indicator
+        function updateStatusIndicator(statusId, completed) {
+            const statusItem = document.getElementById(statusId);
+            if (completed) {
+                statusItem.classList.remove('pending');
+                statusItem.classList.add('completed');
+                statusItem.querySelector('i').className = 'fas fa-check-circle';
+            } else {
+                statusItem.classList.remove('completed');
+                statusItem.classList.add('pending');
+                statusItem.querySelector('i').className = 'fas fa-circle';
+            }
+        }
+
+        // Check if both package and travel mode are selected, then auto-advance
+        function checkAndAutoAdvance() {
+            if (selectedPackage && selectedTravelMode && currentStep === 1) {
+                // Show a brief success message
+                const nextBtn = document.getElementById('next-btn');
+                const originalText = nextBtn.innerHTML;
+                nextBtn.innerHTML = '<i class="fas fa-check"></i> Great! Moving to next step...';
+                nextBtn.style.background = 'var(--success-color)';
+                
+                // Auto-advance after 2 seconds
+                setTimeout(() => {
+                    currentStep = 2;
+                    updateStep();
+                    nextBtn.innerHTML = originalText;
+                    nextBtn.style.background = 'var(--gradient-primary)';
+                    
+                    // Smooth scroll to the form
+                    document.querySelector('.form-step.active').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                }, 2000);
+            }
+        }
+
+        // Travel mode selection
+        document.querySelectorAll('.travel-mode').forEach(mode => {
+            mode.addEventListener('click', function() {
+                document.querySelectorAll('.travel-mode').forEach(m => m.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedTravelMode = this.dataset.mode;
+                
+                // Update summary
+                const modeName = this.querySelector('.travel-mode-name').textContent;
+                document.getElementById('summary-travel-mode').textContent = modeName;
+                
+                // Update status indicator
+                updateStatusIndicator('travel-mode-status', true);
+                
+                // Auto-advance to next step if both package and travel mode are selected
+                checkAndAutoAdvance();
+            });
+        });
 
         // Package selection
         document.querySelectorAll('.package-card').forEach(card => {
@@ -886,6 +1418,12 @@
                 document.getElementById('price-per-person').textContent = '$' + packagePrice;
                 
                 updateTotalAmount();
+                
+                // Update status indicator
+                updateStatusIndicator('package-status', true);
+                
+                // Auto-advance to next step if both package and travel mode are selected
+                checkAndAutoAdvance();
             });
         });
 
@@ -964,6 +1502,10 @@
             if (currentStep === 1) {
                 if (!selectedPackage) {
                     alert('Please select a package');
+                    return false;
+                }
+                if (!selectedTravelMode) {
+                    alert('Please select a travel mode');
                     return false;
                 }
             } else if (currentStep === 2) {
@@ -1073,6 +1615,11 @@
             } else {
                 header.classList.remove('scrolled');
             }
+        });
+
+        // Initialize page - show all packages by default
+        document.addEventListener('DOMContentLoaded', function() {
+            showAllPackages();
         });
     </script>
 </body>
