@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Zyra Travels</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #3CB371;
+            --accent-color: #98FB98;
+            --gold-color: #FFD700;
+            --dark-green: #1F5F3F;
+            --light-green: #F0FFF0;
+            --text-dark: #2F4F2F;
+            --text-light: #6B8E6B;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe8d6 25%, #ffd4a3 50%, #fff2e6 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Layers */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, #ffb366 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, #ffa726 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #ffcc80 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, #ffe0b2 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, #fff3e0 0%, transparent 50%);
+            background-size: 800px 800px, 600px 600px, 1000px 1000px, 700px 700px, 900px 900px;
+            animation: backgroundMove 25s ease infinite;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%),
+                linear-gradient(-45deg, transparent 30%, rgba(255, 255, 255, 0.05) 50%, transparent 70%);
+            background-size: 200px 200px, 150px 150px;
+            animation: patternMove 15s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes backgroundMove {
+            0% { 
+                background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%, 20% 80%;
+                transform: rotate(0deg);
+            }
+            25% { 
+                background-position: 100% 0%, 0% 100%, 0% 50%, 20% 80%, 80% 20%;
+                transform: rotate(90deg);
+            }
+            50% { 
+                background-position: 100% 100%, 0% 0%, 50% 0%, 80% 80%, 20% 20%;
+                transform: rotate(180deg);
+            }
+            75% { 
+                background-position: 0% 100%, 100% 0%, 100% 50%, 20% 20%, 80% 80%;
+                transform: rotate(270deg);
+            }
+            100% { 
+                background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%, 20% 80%;
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes patternMove {
+            0% { background-position: 0 0, 0 0; }
+            100% { background-position: 200px 200px, -150px -150px; }
+        }
+
+        /* Header */
+        .page-header {
+            background: 
+                linear-gradient(135deg, rgba(255, 179, 102, 0.85), rgba(255, 167, 38, 0.8), rgba(255, 204, 128, 0.85)),
+                url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            backdrop-filter: blur(10px);
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(255, 167, 38, 0.3);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .page-header .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: logoFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .page-header .logo i {
+            font-size: 2.8rem;
+            color: var(--secondary-color);
+            animation: iconRotate 8s linear infinite;
+        }
+
+        @keyframes iconRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .page-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--white);
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+            animation: titleGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { filter: drop-shadow(0 0 5px rgba(46, 139, 87, 0.3)); }
+            100% { filter: drop-shadow(0 0 20px rgba(46, 139, 87, 0.6)); }
+        }
+
+        .page-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+            font-weight: 400;
+            line-height: 1.8;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* About Section */
+        .about-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 255, 240, 0.9));
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 4rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .about-section:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--gold-color));
+            border-radius: 30px 30px 0 0;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .about-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .about-content .subtitle {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(46, 139, 87, 0.1), rgba(60, 179, 113, 0.1));
+            z-index: 1;
+            transition: opacity 0.3s ease;
+        }
+
+        .about-image:hover::before {
+            opacity: 0;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .about-image:hover img {
+            transform: scale(1.08);
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s ease;
+            opacity: 0;
+        }
+
+        .about-image:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        .stats-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .stats-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .stats-header .subtitle {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(240, 255, 240, 0.8));
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(46, 139, 87, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .stat-item:hover::before {
+            left: 100%;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(46, 139, 87, 0.2);
+        }
+
+        .stat-item i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .stat-item:hover i {
+            color: var(--secondary-color);
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.8rem;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 10px rgba(46, 139, 87, 0.3));
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .stat-item:hover .stat-label {
+            color: var(--primary-color);
+        }
+
+        /* Mission & Vision Section */
+        .mission-vision-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header .subtitle {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .mission-vision-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .mission-card, .vision-card {
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            background: linear-gradient(135deg, var(--light-green), #F8FFF8);
+        }
+
+        .mission-card:hover, .vision-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .mission-card {
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .vision-card {
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .mission-card i, .vision-card i {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-card i {
+            color: var(--primary-color);
+        }
+
+        .vision-card i {
+            color: var(--secondary-color);
+        }
+
+        .mission-card h4, .vision-card h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+        }
+
+        .mission-card p, .vision-card p {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Team Section */
+        .team-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .team-member {
+            background: linear-gradient(135deg, var(--light-green), #F8FFF8);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+        }
+
+        .member-image {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .member-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .team-member:hover .member-image img {
+            transform: scale(1.1);
+        }
+
+        .member-info {
+            padding: 2rem;
+        }
+
+        .member-info h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .member-role {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .member-info p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 35px;
+            height: 35px;
+            background: var(--white);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Values Section */
+        .values-section {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-item {
+            background: linear-gradient(135deg, var(--light-green), #F8FFF8);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .value-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-item i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .value-item h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .value-item p {
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            background: var(--primary-color);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .page-header {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .about-section,
+            .stats-section,
+            .mission-vision-section,
+            .team-section,
+            .values-section {
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .mission-vision-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .about-content h2 {
+                font-size: 2rem;
+            }
+
+            .section-header h3 {
+                font-size: 1.8rem;
+            }
+
+            .stats-header h3 {
+                font-size: 1.8rem;
+            }
+
+            .back-button {
+                top: 1rem;
+                left: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.8rem;
+            }
+
+            .about-content h2 {
+                font-size: 1.6rem;
+            }
+
+            .section-header h3,
+            .stats-header h3 {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Animated Wave Background */
+        .wave-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 200px;
+            background: linear-gradient(45deg, rgba(255, 179, 102, 0.15), rgba(255, 167, 38, 0.15));
+            border-radius: 50%;
+            animation: waveAnimation 20s ease-in-out infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: -5s;
+            background: linear-gradient(45deg, rgba(255, 204, 128, 0.12), rgba(255, 224, 178, 0.12));
+            height: 150px;
+            animation-duration: 15s;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: -10s;
+            background: linear-gradient(45deg, rgba(255, 243, 224, 0.18), rgba(255, 242, 230, 0.18));
+            height: 100px;
+            animation-duration: 25s;
+        }
+
+        @keyframes waveAnimation {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0px) rotate(0deg);
+            }
+            25% {
+                transform: translateX(-40%) translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateX(-60%) translateY(-10px) rotate(180deg);
+            }
+            75% {
+                transform: translateX(-45%) translateY(-30px) rotate(270deg);
+            }
+        }
+
+        /* Floating Geometric Shapes */
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+
+
+        .floating-shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: floatShape 20s infinite linear;
+        }
+
+        .floating-shape.circle {
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ffb366, #ffa726);
+        }
+
+        .floating-shape.triangle {
+            width: 0;
+            height: 0;
+            background: transparent;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #ffe0b2;
+        }
+
+        .floating-shape.square {
+            background: linear-gradient(45deg, #ffcc80, #fff3e0);
+            transform: rotate(45deg);
+        }
+
+        @keyframes floatShape {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ffb366;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 15s infinite linear;
+        }
+
+        .particle:nth-child(2n) {
+            background: #ffa726;
+            animation-duration: 20s;
+        }
+
+        .particle:nth-child(3n) {
+            background: #ffcc80;
+            animation-duration: 25s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-scroll {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Scroll reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal.left {
+            transform: translateX(-50px);
+        }
+
+        .reveal.right {
+            transform: translateX(50px);
+        }
+
+        .reveal.left.active,
+        .reveal.right.active {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Wave Background -->
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Floating Geometric Shapes -->
+    <div class="floating-shapes" id="floating-shapes"></div>
+
+    <!-- Back Button -->
+    <a href="dashboard.html" class="back-button" title="Back to Dashboard">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="logo">
+            <i class="fas fa-mountain"></i>
+            Zyra Travels
+        </div>
+        <h1 class="page-title">About Us</h1>
+        <p class="page-subtitle">Discover the story behind your trusted travel partner and the passionate team that makes your adventures possible</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- About Section -->
+        <section class="about-section reveal">
+            <div class="about-grid">
+                <div class="about-content reveal left">
+                    <div class="subtitle">Our Story</div>
+                    <h2>Crafting Dreams Into Reality</h2>
+                    <p>Founded in 2015, Zyra Travels has been at the forefront of creating exceptional travel experiences. What started as a small family business has grown into a trusted travel partner for thousands of adventurers worldwide.</p>
+                    <p>We believe that travel is not just about visiting places; it's about creating memories, building connections, and discovering the beauty of our diverse world. Every journey we craft is designed to inspire, educate, and transform our travelers.</p>
+                    <p>With our deep local knowledge, personalized service, and commitment to sustainable tourism, we ensure that every trip with us is not just a vacation, but a life-changing experience.</p>
+                </div>
+                <div class="about-image reveal right">
+                    <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="About Zyra Travels">
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section animate-on-scroll">
+            <div class="stats-header">
+                <div class="subtitle">Our Achievements</div>
+                <h3>Numbers That Tell Our Story</h3>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-number">15,000+</div>
+                    <div class="stat-label">Happy Travelers</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Destinations</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-award"></i>
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Awards Won</div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="stat-number">8+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission & Vision -->
+        <section class="mission-vision-section animate-on-scroll">
+            <div class="section-header">
+                <div class="subtitle">Our Purpose</div>
+                <h3>Mission & Vision</h3>
+            </div>
+            <div class="mission-vision-grid">
+                <div class="mission-card">
+                    <i class="fas fa-bullseye"></i>
+                    <h4>Our Mission</h4>
+                    <p>To provide exceptional travel experiences that inspire, educate, and create lasting memories while promoting sustainable and responsible tourism practices that benefit local communities and preserve our planet's natural beauty.</p>
+                </div>
+                <div class="vision-card">
+                    <i class="fas fa-eye"></i>
+                    <h4>Our Vision</h4>
+                    <p>To be the world's most trusted travel partner, known for our personalized service, innovative itineraries, and commitment to making travel accessible, meaningful, and transformative for every adventurer who chooses to explore with us.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="team-section animate-on-scroll">
+            <div class="section-header">
+                <div class="subtitle">Meet Our Team</div>
+                <h3>The People Behind Your Journey</h3>
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80" alt="Sarah Johnson">
+                    </div>
+                    <div class="member-info">
+                        <h4>Sarah Johnson</h4>
+                        <div class="member-role">Founder & CEO</div>
+                        <p>With over 15 years in the travel industry, Sarah's passion for exploration and cultural exchange drives our company's vision.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="Michael Chen">
+                    </div>
+                    <div class="member-info">
+                        <h4>Michael Chen</h4>
+                        <div class="member-role">Head of Operations</div>
+                        <p>Michael ensures every detail of your journey is perfectly planned and executed, bringing 12 years of operational excellence.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-member">
+                    <div class="member-image">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80" alt="Emily Rodriguez">
+                    </div>
+                    <div class="member-info">
+                        <h4>Emily Rodriguez</h4>
+                        <div class="member-role">Travel Experience Designer</div>
+                        <p>Emily crafts unique and personalized itineraries, combining her creative vision with deep destination knowledge.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="values-section animate-on-scroll">
+            <div class="section-header">
+                <div class="subtitle">Our Values</div>
+                <h3>What Drives Us Forward</h3>
+            </div>
+            <div class="values-grid">
+                <div class="value-item">
+                    <i class="fas fa-heart"></i>
+                    <h4>Passion</h4>
+                    <p>We are passionate about travel and sharing the world's wonders with our clients through authentic experiences.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Trust</h4>
+                    <p>Building lasting relationships through transparency, reliability, and delivering on our promises every time.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-leaf"></i>
+                    <h4>Sustainability</h4>
+                    <p>Committed to responsible tourism that protects environments and supports local communities.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-star"></i>
+                    <h4>Excellence</h4>
+                    <p>Striving for perfection in every detail, from planning to execution, ensuring exceptional experiences.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-users"></i>
+                    <h4>Community</h4>
+                    <p>Fostering connections between travelers and local communities for meaningful cultural exchanges.</p>
+                </div>
+                <div class="value-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <h4>Innovation</h4>
+                    <p>Continuously evolving our services and embracing new technologies to enhance your travel experience.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Create floating geometric shapes
+        function createFloatingShapes() {
+            const shapesContainer = document.getElementById('floating-shapes');
+            const shapeCount = 15;
+            const shapes = ['circle', 'triangle', 'square'];
+
+            for (let i = 0; i < shapeCount; i++) {
+                const shape = document.createElement('div');
+                const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
+                
+                shape.className = `floating-shape ${shapeType}`;
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.animationDelay = Math.random() * 20 + 's';
+                shape.style.animationDuration = (Math.random() * 15 + 20) + 's';
+                
+                if (shapeType === 'circle' || shapeType === 'square') {
+                    const size = Math.random() * 30 + 20;
+                    shape.style.width = size + 'px';
+                    shape.style.height = size + 'px';
+                }
+                
+                shapesContainer.appendChild(shape);
+            }
+        }
+
+
+
+        // Counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const originalText = counter.innerText;
+                const hasPlus = originalText.includes('+');
+                const hasComma = originalText.includes(',');
+                const target = parseInt(originalText.replace(/[^0-9]/g, ''));
+                
+                // Skip animation if already animated
+                if (counter.getAttribute('data-animated') === 'true') return;
+                counter.setAttribute('data-animated', 'true');
+                
+                let count = 0;
+                const inc = target / speed;
+
+                const updateCount = () => {
+                    if (count < target) {
+                        count += inc;
+                        let displayNumber = Math.ceil(count);
+                        let displayText = hasComma ? displayNumber.toLocaleString() : displayNumber.toString();
+                        if (hasPlus) displayText += '+';
+                        counter.innerText = displayText;
+                        setTimeout(updateCount, 10);
+                    } else {
+                        let finalText = hasComma ? target.toLocaleString() : target.toString();
+                        if (hasPlus) finalText += '+';
+                        counter.innerText = finalText;
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // Scroll reveal animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveal.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('stats-section')) {
+                        animateCounters();
+                    }
+                    entry.target.classList.add('animate-on-scroll');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.about-section, .stats-section, .mission-vision-section, .team-section, .values-section').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mouse parallax effect
+        document.addEventListener('mousemove', (e) => {
+            const particles = document.querySelectorAll('.particle');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            particles.forEach((particle, index) => {
+                const speed = (index % 5 + 1) * 0.5;
+                const xPos = (x - 0.5) * speed;
+                const yPos = (y - 0.5) * speed;
+                particle.style.transform += ` translate(${xPos}px, ${yPos}px)`;
+            });
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            createFloatingShapes();
+            revealOnScroll();
+        });
+
+        // Listen for scroll events
+        window.addEventListener('scroll', revealOnScroll);
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.stat-item, .team-member, .value-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform += ' scale(1.02)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = item.style.transform.replace(' scale(1.02)', '');
+            });
+        });
+    </script>
+</body>
+</html>

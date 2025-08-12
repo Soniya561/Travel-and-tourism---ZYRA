@@ -1,0 +1,26 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open Current HTML File",
+            "file": "${file}"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open about.html",
+            "file": "c:\\Users\\bhara\\OneDrive\\Desktop\\New folder (3)\\Travel-and-tourism---ZYRA\\about.html"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Open destinations.html",
+            "file": "c:\\Users\\bhara\\OneDrive\\Desktop\\New folder (3)\\Travel-and-tourism---ZYRA\\destinations.html"
+        }
+    ]
+}
