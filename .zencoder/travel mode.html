@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Modes - Zyra Travels</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #3CB371;
+            --accent-color: #98FB98;
+            --gold-color: #FFD700;
+            --dark-green: #1F5F3F;
+            --light-green: #F0FFF0;
+            --text-dark: #2F4F2F;
+            --text-light: #6B8E6B;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-flight: linear-gradient(135deg, #4A90E2, #7BB3F0);
+            --gradient-train: linear-gradient(135deg, #E94B3C, #F39C12);
+            --gradient-car: linear-gradient(135deg, #9B59B6, #8E44AD);
+            --gradient-cruise: linear-gradient(135deg, #1ABC9C, #16A085);
+            --gradient-bus: linear-gradient(135deg, #F39C12, #E67E22);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, rgba(240, 255, 240, 0.85), rgba(248, 255, 248, 0.85)), 
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover fixed;
+            min-height: 100vh;
+        }
+
+        /* Header & Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .book-now-btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        .book-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(46, 139, 87, 0.8), rgba(60, 179, 113, 0.6)),
+                        url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+            animation: heroFadeIn 1.5s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
+        }
+
+        .hero-description {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header .subtitle {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Travel Modes Grid */
+        .travel-modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            margin-bottom: 6rem;
+        }
+
+        .travel-mode-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .travel-mode-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+        }
+
+        .travel-mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-primary);
+            transition: all 0.3s ease;
+        }
+
+        .travel-mode-card.flight::before {
+            background: var(--gradient-flight);
+        }
+
+        .travel-mode-card.train::before {
+            background: var(--gradient-train);
+        }
+
+        .travel-mode-card.car::before {
+            background: var(--gradient-car);
+        }
+
+        .travel-mode-card.bus::before {
+            background: var(--gradient-bus);
+        }
+
+        .mode-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            color: var(--white);
+            background: var(--gradient-primary);
+            transition: all 0.3s ease;
+        }
+
+        .travel-mode-card.flight .mode-icon {
+            background: var(--gradient-flight);
+        }
+
+        .travel-mode-card.train .mode-icon {
+            background: var(--gradient-train);
+        }
+
+        .travel-mode-card.car .mode-icon {
+            background: var(--gradient-car);
+        }
+
+        .travel-mode-card.bus .mode-icon {
+            background: var(--gradient-bus);
+        }
+
+        .travel-mode-card:hover .mode-icon {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .mode-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .mode-description {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+            margin-bottom: 2rem;
+        }
+
+        .mode-features {
+            list-style: none;
+            margin-bottom: 2.5rem;
+        }
+
+        .mode-features li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .mode-features li i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+        .mode-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .price-range {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .price-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .explore-mode-btn {
+            width: 100%;
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            padding: 1.5rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            text-decoration: none;
+        }
+
+        .travel-mode-card.flight .explore-mode-btn {
+            background: var(--gradient-flight);
+        }
+
+        .travel-mode-card.train .explore-mode-btn {
+            background: var(--gradient-train);
+        }
+
+        .travel-mode-card.car .explore-mode-btn {
+            background: var(--gradient-car);
+        }
+
+        .travel-mode-card.bus .explore-mode-btn {
+            background: var(--gradient-bus);
+        }
+
+        .explore-mode-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Popular Destinations Section */
+        .popular-destinations {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 4rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(46, 139, 87, 0.1);
+            margin-bottom: 4rem;
+        }
+
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .destination-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .destination-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .destination-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .destination-content {
+            padding: 1.5rem;
+        }
+
+        .destination-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .destination-price {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Comparison Section */
+        .comparison-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 4rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 2px solid #E8F5E8;
+        }
+
+        .comparison-table th {
+            background: var(--light-green);
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+
+        .comparison-table td {
+            font-size: 1rem;
+            color: var(--text-dark);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(46, 139, 87, 0.05);
+        }
+
+        /* Animations */
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .hero-description {
+                font-size: 1.2rem;
+            }
+
+            .section-header h2 {
+                font-size: 3rem;
+            }
+
+            .travel-modes-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .travel-mode-card {
+                padding: 2rem;
+            }
+
+            .mode-title {
+                font-size: 1.8rem;
+            }
+
+            .destinations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 100px 1rem 2rem;
+            }
+
+            .popular-destinations,
+            .comparison-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-mountain-sun"></i>
+                Zyra Travels
+            </a>
+            <nav class="nav-menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#modes">Travel Modes</a></li>
+                <li><a href="#destinations">Destinations</a></li>
+                <li><a href="#comparison">Compare</a></li>
+            </nav>
+            <a href="booking.html" class="book-now-btn">Book Now</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-subtitle">Choose Your Journey</div>
+            <h1>Travel Your Way</h1>
+            <p class="hero-description">
+                Discover the world through your preferred mode of travel. Whether you love the freedom of the road, 
+                the romance of rail, or the speed of flight, we have the perfect journey waiting for you.
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Travel Modes Section -->
+        <section id="modes">
+            <div class="section-header fade-in">
+                <div class="subtitle">Explore Your Options</div>
+                <h2>Travel Modes</h2>
+                <p>Choose from our carefully curated travel experiences, each designed to offer unique perspectives and unforgettable memories.</p>
+            </div>
+
+            <div class="travel-modes-grid">
+                <!-- Flight Mode -->
+                <div class="travel-mode-card flight fade-in">
+                    <div class="mode-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h3 class="mode-title">Air Travel</h3>
+                    <p class="mode-description">
+                        Experience the world from above with our premium flight packages. Fast, comfortable, and efficient travel to destinations worldwide.
+                    </p>
+                    <ul class="mode-features">
+                        <li><i class="fas fa-clock"></i> Fastest travel option</li>
+                        <li><i class="fas fa-globe"></i> Global destinations</li>
+                        <li><i class="fas fa-star"></i> Premium airline partners</li>
+                        <li><i class="fas fa-shield-alt"></i> Travel insurance included</li>
+                    </ul>
+                    <div class="mode-price">
+                        <span class="price-range">$299 - $2,999</span>
+                        <span class="price-label">Per Person</span>
+                    </div>
+                    <a href="#destinations" class="explore-mode-btn">
+                        <i class="fas fa-plane"></i>
+                        Explore Flights
+                    </a>
+                </div>
+
+                <!-- Train Mode -->
+                <div class="travel-mode-card train fade-in">
+                    <div class="mode-icon">
+                        <i class="fas fa-train"></i>
+                    </div>
+                    <h3 class="mode-title">Rail Journey</h3>
+                    <p class="mode-description">
+                        Enjoy scenic routes and comfortable travel with our rail packages. Perfect for those who love the journey as much as the destination.
+                    </p>
+                    <ul class="mode-features">
+                        <li><i class="fas fa-mountain"></i> Scenic routes</li>
+                        <li><i class="fas fa-bed"></i> Comfortable seating</li>
+                        <li><i class="fas fa-utensils"></i> Onboard dining</li>
+                        <li><i class="fas fa-leaf"></i> Eco-friendly travel</li>
+                    </ul>
+                    <div class="mode-price">
+                        <span class="price-range">$199 - $1,599</span>
+                        <span class="price-label">Per Person</span>
+                    </div>
+                    <a href="#destinations" class="explore-mode-btn">
+                        <i class="fas fa-train"></i>
+                        Explore Trains
+                    </a>
+                </div>
+
+                <!-- Bus Mode -->
+                <div class="travel-mode-card bus fade-in">
+                    <div class="mode-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h3 class="mode-title">Coach Tours</h3>
+                    <p class="mode-description">
+                        Affordable group travel with expert guides. Perfect for social travelers who want to meet new people and explore together.
+                    </p>
+                    <ul class="mode-features">
+                        <li><i class="fas fa-users"></i> Group travel</li>
+                        <li><i class="fas fa-user-tie"></i> Expert guides</li>
+                        <li><i class="fas fa-dollar-sign"></i> Budget-friendly</li>
+                        <li><i class="fas fa-calendar"></i> Fixed schedules</li>
+                    </ul>
+                    <div class="mode-price">
+                        <span class="price-range">$99 - $799</span>
+                        <span class="price-label">Per Person</span>
+                    </div>
+                    <a href="#destinations" class="explore-mode-btn">
+                        <i class="fas fa-bus"></i>
+                        Explore Tours
+                    </a>
+                </div>
+
+                <!-- Car Mode -->
+                <div class="travel-mode-card car fade-in">
+                    <div class="mode-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3 class="mode-title">Road Trip</h3>
+                    <p class="mode-description">
+                        Freedom to explore at your own pace with our road trip packages. Discover hidden gems and create your own adventure.
+                    </p>
+                    <ul class="mode-features">
+                        <li><i class="fas fa-route"></i> Flexible itinerary</li>
+                        <li><i class="fas fa-car"></i> Premium rental cars</li>
+                        <li><i class="fas fa-map"></i> GPS navigation</li>
+                        <li><i class="fas fa-gas-pump"></i> Fuel included</li>
+                    </ul>
+                    <div class="mode-price">
+                        <span class="price-range">$149 - $999</span>
+                        <span class="price-label">Per Day</span>
+                    </div>
+                    <a href="#destinations" class="explore-mode-btn">
+                        <i class="fas fa-car"></i>
+                        Explore Road Trips
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Destinations Section -->
+        <section id="destinations" class="popular-destinations fade-in">
+            <div class="section-header">
+                <div class="subtitle">Top Picks</div>
+                <h2>Popular Destinations</h2>
+                <p>Discover our most loved destinations across all travel modes</p>
+            </div>
+
+            <div class="destinations-grid">
+                <div class="destination-card">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1431274172761-fca41d930114?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Flight</div>
+                    </div>
+                    <div class="destination-content">
+                        <h4 class="destination-title">Paris, France</h4>
+                        <p class="destination-price">From $1,599</p>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Train</div>
+                    </div>
+                    <div class="destination-content">
+                        <h4 class="destination-title">Swiss Alps</h4>
+                        <p class="destination-price">From $1,299</p>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Bus Tour</div>
+                    </div>
+                    <div class="destination-content">
+                        <h4 class="destination-title">European Capitals</h4>
+                        <p class="destination-price">From $699</p>
+                    </div>
+                </div>
+
+                <div class="destination-card">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Road Trip</div>
+                    </div>
+                    <div class="destination-content">
+                        <h4 class="destination-title">Amalfi Coast</h4>
+                        <p class="destination-price">From $899</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Section -->
+        <section id="comparison" class="comparison-section fade-in">
+            <div class="section-header">
+                <div class="subtitle">Make The Right Choice</div>
+                <h2>Travel Mode Comparison</h2>
+                <p>Compare different travel modes to find the perfect fit for your journey</p>
+            </div>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Travel Mode</th>
+                        <th>Speed</th>
+                        <th>Comfort</th>
+                        <th>Cost</th>
+                        <th>Flexibility</th>
+                        <th>Best For</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><i class="fas fa-plane"></i> Flight</td>
+                        <td>★★★★★</td>
+                        <td>★★★★☆</td>
+                        <td>★★★☆☆</td>
+                        <td>★★☆☆☆</td>
+                        <td>Long distances, time-sensitive travel</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-train"></i> Train</td>
+                        <td>★★★★☆</td>
+                        <td>★★★★★</td>
+                        <td>★★★★☆</td>
+                        <td>★★★☆☆</td>
+                        <td>Scenic routes, city-to-city travel</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-bus"></i> Bus</td>
+                        <td>★★☆☆☆</td>
+                        <td>★★★☆☆</td>
+                        <td>★★★★★</td>
+                        <td>★★☆☆☆</td>
+                        <td>Budget travel, group tours</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-car"></i> Car</td>
+                        <td>★★★☆☆</td>
+                        <td>★★★★☆</td>
+                        <td>★★★★☆</td>
+                        <td>★★★★★</td>
+                        <td>Road trips, remote destinations</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Travel mode card interactions
+        document.querySelectorAll('.travel-mode-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const mode = this.classList[1]; // Get the mode class (flight, train, etc.)
+                console.log(`Selected travel mode: ${mode}`);
+                
+                // Add a subtle animation
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+
+        // Explore mode button clicks
+        document.querySelectorAll('.explore-mode-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const card = this.closest('.travel-mode-card');
+                const mode = card.classList[1];
+                
+                // Simulate navigation to specific mode destinations
+                alert(`Exploring ${mode} destinations! This would navigate to a filtered destinations page.`);
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(255, 255, 255, 0.98)';
+                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const rate = scrolled * -0.3;
+            
+            if (hero) {
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
