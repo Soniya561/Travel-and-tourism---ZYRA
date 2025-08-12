@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Cities - Zyra Travels</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #3CB371;
+            --accent-color: #98FB98;
+            --gold-color: #FFD700;
+            --dark-green: #1F5F3F;
+            --light-green: #D4E6D4;
+            --text-dark: #2F4F2F;
+            --text-light: #6B8E6B;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --gradient-nature: linear-gradient(135deg, #228B22, #32CD32, #90EE90);
+            --gradient-city: linear-gradient(135deg, #228B22, #32CD32, #90EE90);
+            --gradient-urban: linear-gradient(135deg, #32CD32, #228B22, #90EE90);
+            --city-blue: #32CD32;
+            --city-purple: #228B22;
+            --city-dark: #1F5F3F;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* Back to Home Button */
+        .back-to-home {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 1000;
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            color: var(--primary-color);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(46, 139, 87, 0.2);
+        }
+
+        .back-btn:hover {
+            background: var(--gradient-nature);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(34, 139, 34, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .back-btn i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover i {
+            transform: translateX(-3px);
+        }
+
+        /* Hero Section with Green Nature Background */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(34, 139, 34, 0.8), rgba(50, 205, 50, 0.6)),
+                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+        }
+
+        .hero-content {
+            max-width: 1000px;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+            animation: heroFadeIn 1.5s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            line-height: 1.1;
+        }
+
+        .hero-description {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        /* Travel Mode Selection in Hero */
+        .hero-travel-modes {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-travel-mode {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 2rem 2.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            min-width: 140px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-travel-mode:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-travel-mode.active {
+            background: var(--gradient-nature);
+            color: var(--white);
+            border-color: var(--white);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(34, 139, 34, 0.4);
+        }
+
+        .hero-travel-mode i {
+            font-size: 3rem;
+            color: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .hero-travel-mode.active i {
+            transform: scale(1.2);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        .hero-travel-mode span {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--white);
+            transition: all 0.3s ease;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-travel-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .hero-travel-mode:hover::before {
+            left: 100%;
+        }
+
+        .explore-btn {
+            background: var(--gradient-nature);
+            color: var(--white);
+            padding: 1.5rem 4rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(34, 139, 34, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .explore-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(34, 139, 34, 0.4);
+            background: linear-gradient(135deg, #32CD32, #228B22, #90EE90);
+        }
+
+        /* Destinations Grid Section */
+        .destinations-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--light-green), #E0F0E0);
+            position: relative;
+        }
+
+        .destinations-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=50&q=10') repeat;
+            opacity: 0.03;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header .subtitle {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Travel Mode Filter */
+        .travel-mode-filter {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .mode-filter-btn {
+            background: var(--white);
+            border: 3px solid #D4E6D4;
+            color: var(--text-dark);
+            padding: 1.5rem 3rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .mode-filter-btn i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .mode-filter-btn:hover,
+        .mode-filter-btn.active {
+            background: var(--gradient-nature);
+            color: var(--white);
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(34, 139, 34, 0.3);
+        }
+
+        .mode-filter-btn.active i,
+        .mode-filter-btn:hover i {
+            color: var(--white);
+        }
+
+        /* Destination Cards */
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 3rem;
+        }
+
+        .destination-card {
+            background: var(--white);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            border: 3px solid transparent;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 70px rgba(34, 139, 34, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .destination-image {
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .destination-badge {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: var(--gradient-nature);
+            color: var(--white);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 700;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(34, 139, 34, 0.3);
+        }
+
+        .travel-mode-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary-color);
+            padding: 0.8rem;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            z-index: 2;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .destination-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: var(--white);
+            padding: 4rem 2.5rem 2.5rem;
+            transform: translateY(100%);
+            transition: all 0.4s ease;
+        }
+
+        .destination-card:hover .destination-overlay {
+            transform: translateY(0);
+        }
+
+        .destination-overlay h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .destination-overlay p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .destination-content {
+            padding: 2.5rem;
+        }
+
+        .destination-price {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .destination-price span {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .destination-features {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .feature i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .book-btn {
+            width: 100%;
+            background: var(--gradient-nature);
+            color: var(--white);
+            border: none;
+            padding: 1.5rem;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(34, 139, 34, 0.4);
+            background: linear-gradient(135deg, #32CD32, #228B22);
+        }
+
+        /* Animations */
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .back-to-home {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .back-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .hero-description {
+                font-size: 1.2rem;
+            }
+
+            .hero-travel-modes {
+                gap: 1rem;
+            }
+
+            .hero-travel-mode {
+                min-width: 120px;
+                padding: 1.5rem 2rem;
+            }
+
+            .hero-travel-mode i {
+                font-size: 2.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 3rem;
+            }
+
+            .destinations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .travel-mode-filter {
+                gap: 1rem;
+            }
+
+            .mode-filter-btn {
+                padding: 1.2rem 2rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .back-btn {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .destinations-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-travel-mode {
+                min-width: 100px;
+                padding: 1.2rem 1.5rem;
+            }
+
+            .hero-travel-mode i {
+                font-size: 2rem;
+            }
+        }
+
+        /* Hidden class for filtering */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back to Home Button -->
+    <div class="back-to-home">
+        <a href="complete_landing.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Home
+        </a>
+    </div>
+
+    <!-- Hero Section with Green Nature Background -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-subtitle">Urban Adventures Await</div>
+            <h1>Explore World Cities</h1>
+            <p class="hero-description">
+                Discover vibrant metropolises, iconic landmarks, and rich cultural experiences. From bustling city centers to historic districts, choose your preferred travel mode and explore the world's most exciting urban destinations.
+            </p>
+            
+            <!-- Travel Mode Selection in Hero -->
+            <div class="hero-travel-modes">
+                <div class="hero-travel-mode active" data-mode="flight">
+                    <i class="fas fa-plane"></i>
+                    <span>Fly There</span>
+                </div>
+                <div class="hero-travel-mode" data-mode="train">
+                    <i class="fas fa-train"></i>
+                    <span>City Express</span>
+                </div>
+                <div class="hero-travel-mode" data-mode="car">
+                    <i class="fas fa-car"></i>
+                    <span>City Drive</span>
+                </div>
+            </div>
+            
+            <a href="#destinations" class="explore-btn">
+                <i class="fas fa-city"></i>
+                Explore Cities
+            </a>
+        </div>
+    </section>
+
+    <!-- Destinations Section -->
+    <section class="destinations-section" id="destinations">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="subtitle">World's Greatest Cities</div>
+                <h2>Urban Destinations</h2>
+                <p>Experience the energy and culture of the world's most exciting cities. Filter by your preferred travel mode to find the perfect urban adventure that matches your journey style.</p>
+            </div>
+
+            <!-- Travel Mode Filter -->
+            <div class="travel-mode-filter fade-in">
+                <button class="mode-filter-btn active" data-mode="all">
+                    <i class="fas fa-globe"></i>
+                    All Cities
+                </button>
+                <button class="mode-filter-btn" data-mode="flight">
+                    <i class="fas fa-plane"></i>
+                    By Flight
+                </button>
+                <button class="mode-filter-btn" data-mode="train">
+                    <i class="fas fa-train"></i>
+                    By Train
+                </button>
+                <button class="mode-filter-btn" data-mode="car">
+                    <i class="fas fa-car"></i>
+                    By Car
+                </button>
+            </div>
+            
+            <div class="destinations-grid">
+                <!-- Flight Destinations -->
+                <div class="destination-card fade-in" data-mode="flight">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1431274172761-fca41d930114?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">City of Light</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Paris, France</h3>
+                            <p>The epitome of romance and culture. Explore iconic landmarks like the Eiffel Tower, Louvre Museum, and charming Montmartre district with world-class cuisine and art.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,599 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>5 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-10 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-plane"></i>
+                            Book Flight Package
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="train">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Historic Capital</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-train"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>London, England</h3>
+                            <p>Royal palaces, world-class museums, and vibrant neighborhoods. Experience Big Ben, Tower Bridge, and the British Museum via comfortable train connections.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,399 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>4 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-12 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-train"></i>
+                            Book Train Journey
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="car">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1485738422979-f5c462d49f74?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Eternal City</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Rome, Italy</h3>
+                            <p>Ancient history meets modern life. Drive through cobblestone streets to the Colosseum, Vatican City, and Trevi Fountain while enjoying authentic Italian cuisine.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,299 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>6 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-8 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.7 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-car"></i>
+                            Book Road Trip
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="flight">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Modern Metropolis</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Tokyo, Japan</h3>
+                            <p>Where tradition meets innovation. Experience bustling Shibuya, serene temples, cutting-edge technology, and incredible cuisine in this fascinating megacity.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,899 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>7 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-10 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-plane"></i>
+                            Book Flight Package
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="train">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Cultural Hub</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-train"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Barcelona, Spain</h3>
+                            <p>Gaudí's architectural masterpieces and vibrant street life. Explore the Gothic Quarter, Park Güell, and beautiful beaches via Spain's excellent rail network.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,199 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>5 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-12 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-train"></i>
+                            Book Train Journey
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="car">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Big Apple</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>New York City, USA</h3>
+                            <p>The city that never sleeps. Drive through iconic boroughs, visit Times Square, Central Park, and world-famous museums in America's greatest metropolis.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,699 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>6 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-8 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-car"></i>
+                            Book City Drive
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="flight">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Luxury Destination</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Dubai, UAE</h3>
+                            <p>Ultra-modern city of luxury and innovation. Experience towering skyscrapers, luxury shopping, desert adventures, and world-class hospitality.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,799 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>5 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-10 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-plane"></i>
+                            Book Flight Package
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="train">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Alpine City</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-train"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Zurich, Switzerland</h3>
+                            <p>Perfect blend of urban sophistication and natural beauty. Explore the old town, luxury shopping, and stunning lake views via Switzerland's pristine rail system.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,599 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>4 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-8 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-train"></i>
+                            Book Train Journey
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Additional Cities with FIXED IMAGES -->
+                <div class="destination-card fade-in" data-mode="flight">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1518684079-3c830dcef090?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Santorini Beauty</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Santorini, Greece</h3>
+                            <p>Stunning white-washed buildings perched on volcanic cliffs. Experience breathtaking sunsets, crystal-clear waters, and authentic Greek culture in this island paradise.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,499 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>6 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-12 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-plane"></i>
+                            Book Flight Package
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="car">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Coastal Drive</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Amalfi Coast, Italy</h3>
+                            <p>Scenic coastal drive through picturesque villages. Wind through dramatic cliffs, visit charming towns like Positano, and enjoy authentic Italian cuisine with stunning sea views.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,399 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>7 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-6 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-car"></i>
+                            Book Road Trip
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="flight">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Garden City</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Singapore</h3>
+                            <p>Ultra-modern city-state with incredible gardens and architecture. Explore Gardens by the Bay, Marina Bay Sands, and experience diverse cultures in this tropical metropolis.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,699 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>5 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-10 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-plane"></i>
+                            Book Flight Package
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="train">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1549144511-f099e773c147?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Imperial City</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-train"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Vienna, Austria</h3>
+                            <p>Imperial palaces and classical music heritage. Experience grand architecture, world-class museums, and traditional coffee houses via Austria's excellent rail connections.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,299 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>5 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-12 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.7 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-train"></i>
+                            Book Train Journey
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="car">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1541849546-216549ae216d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Bohemian Gem</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Prague, Czech Republic</h3>
+                            <p>Fairy-tale medieval city with stunning architecture. Drive through cobblestone streets, visit Prague Castle, and explore the charming Old Town Square.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$999 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>4 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-8 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.6 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-car"></i>
+                            Book City Drive
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="flight">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Harbour City</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Sydney, Australia</h3>
+                            <p>Iconic harbour city with stunning beaches and landmarks. Experience the Opera House, Harbour Bridge, and beautiful coastal walks in this vibrant metropolis.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$2,199 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>8 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-10 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-plane"></i>
+                            Book Flight Package
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-mode="train">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1534351590666-13e3e96b5017?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Canal City</div>
+                        <div class="travel-mode-badge">
+                            <i class="fas fa-train"></i>
+                        </div>
+                        <div class="destination-overlay">
+                            <h3>Amsterdam, Netherlands</h3>
+                            <p>Charming canal city with rich history and culture. Explore world-class museums, picturesque canals, and vibrant neighborhoods via Europe's efficient rail network.</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,199 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>4 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-12 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.7 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-train"></i>
+                            Book Train Journey
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Hero travel mode selection
+        document.querySelectorAll('.hero-travel-mode').forEach(mode => {
+            mode.addEventListener('click', function() {
+                // Remove active class from all modes
+                document.querySelectorAll('.hero-travel-mode').forEach(m => m.classList.remove('active'));
+                
+                // Add active class to clicked mode
+                this.classList.add('active');
+                
+                // Get selected mode
+                const selectedMode = this.dataset.mode;
+                
+                // Update filter to show matching destinations
+                filterDestinationsByMode(selectedMode);
+                
+                // Update filter buttons
+                document.querySelectorAll('.mode-filter-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`[data-mode="${selectedMode}"]`).classList.add('active');
+            });
+        });
+
+        // Travel mode filter buttons
+        document.querySelectorAll('.mode-filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.mode-filter-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const mode = this.dataset.mode;
+                filterDestinationsByMode(mode);
+                
+                // Update hero selection
+                document.querySelectorAll('.hero-travel-mode').forEach(m => m.classList.remove('active'));
+                if (mode !== 'all') {
+                    document.querySelector(`.hero-travel-mode[data-mode="${mode}"]`).classList.add('active');
+                }
+            });
+        });
+
+        function filterDestinationsByMode(mode) {
+            const destinationCards = document.querySelectorAll('.destination-card');
+            
+            destinationCards.forEach(card => {
+                if (mode === 'all' || card.dataset.mode === mode) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Book buttons
+        document.querySelectorAll('.book-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const card = this.closest('.destination-card');
+                const title = card.querySelector('.destination-overlay h3').textContent;
+                const price = card.querySelector('.destination-price').textContent;
+                const mode = card.dataset.mode;
+                
+                alert(`Booking initiated for ${title} at ${price} via ${mode}. You will be redirected to our secure booking platform.`);
+            });
+        });
+
+        // Parallax effect for hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const rate = scrolled * -0.3;
+            
+            if (hero) {
+                hero.style.transform = `translateY(${rate}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
