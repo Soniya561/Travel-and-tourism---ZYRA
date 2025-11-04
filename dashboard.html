@@ -1,1553 +1,592 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Travel Dashboard - Zyra Travels</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-color: #2E8B57;
-            --secondary-color: #3CB371;
-            --accent-color: #98FB98;
-            --gold-color: #FFD700;
-            --orange-color: #FF6B35;
-            --purple-color: #8A2BE2;
-            --blue-color: #1E90FF;
-            --pink-color: #FF69B4;
-            --red-color: #FF4757;
-            --dark-green: #1F5F3F;
-            --light-green: #F0FFF0;
-            --text-dark: #2F4F2F;
-            --text-light: #6B8E6B;
-            --white: #FFFFFF;
-            --gray-light: #F8F9FA;
-            --gray-medium: #E9ECEF;
-            --shadow: rgba(0, 0, 0, 0.1);
-            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            --gradient-gold: linear-gradient(135deg, var(--gold-color), #FFA500);
-            --gradient-blue: linear-gradient(135deg, var(--blue-color), #4169E1);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-dark);
-            background: 
-                linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-                url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: var(--gradient-primary);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .user-details h4 {
-            color: var(--text-dark);
-            margin-bottom: 0.2rem;
-        }
-
-        .user-details p {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .logout-btn {
-            background: var(--red-color);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
-        }
-
-        /* Dashboard Layout */
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 2rem;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            height: fit-content;
-            position: sticky;
-            top: 120px;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-        }
-
-        .sidebar-menu li {
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-menu a {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: 15px;
-            text-decoration: none;
-            color: var(--text-light);
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .sidebar-menu a:hover,
-        .sidebar-menu a.active {
-            background: var(--gradient-primary);
-            color: var(--white);
-            transform: translateX(5px);
-        }
-
-        .sidebar-menu i {
-            font-size: 1.2rem;
-            width: 20px;
-        }
-
-        /* Main Content */
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* Welcome Section */
-        .welcome-section {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 3rem;
-            border-radius: 25px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .welcome-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>');
-            transform: translate(50px, -50px);
-        }
-
-        .welcome-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .welcome-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .welcome-content p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* Stats Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient-primary);
-        }
-
-        .stat-card.trips::before {
-            background: var(--gradient-primary);
-        }
-
-        .stat-card.points::before {
-            background: var(--gradient-gold);
-        }
-
-        .stat-card.savings::before {
-            background: var(--gradient-blue);
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px var(--shadow);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--white);
-        }
-
-        .stat-card.trips .stat-icon {
-            background: var(--gradient-primary);
-        }
-
-        .stat-card.points .stat-icon {
-            background: var(--gradient-gold);
-        }
-
-        .stat-card.savings .stat-icon {
-            background: var(--gradient-blue);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        /* Content Sections */
-        .content-section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--gray-medium);
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .section-title i {
-            color: var(--primary-color);
-        }
-
-        .view-all-btn {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .view-all-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
-        }
-
-        /* Trip Cards */
-        .trips-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .trip-card {
-            border: 2px solid var(--gray-medium);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .trip-card:hover {
-            border-color: var(--primary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px var(--shadow);
-        }
-
-        .trip-status {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            z-index: 2;
-        }
-
-        .trip-status.upcoming {
-            background: var(--blue-color);
-            color: var(--white);
-        }
-
-        .trip-status.completed {
-            background: var(--primary-color);
-            color: var(--white);
-        }
-
-        .trip-status.cancelled {
-            background: var(--red-color);
-            color: var(--white);
-        }
-
-        .trip-image {
-            height: 150px;
-            background: var(--gradient-primary);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .trip-image i {
-            font-size: 3rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .trip-content {
-            padding: 1.5rem;
-        }
-
-        .trip-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .trip-details {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .trip-detail {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .trip-detail i {
-            color: var(--primary-color);
-            width: 16px;
-        }
-
-        .trip-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .trip-btn {
-            flex: 1;
-            padding: 0.5rem;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .trip-btn.primary {
-            background: var(--gradient-primary);
-            color: var(--white);
-        }
-
-        .trip-btn.secondary {
-            background: var(--gray-medium);
-            color: var(--text-dark);
-        }
-
-        .trip-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Documents Section */
-        .documents-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .document-card {
-            background: var(--gray-light);
-            border: 2px dashed var(--gray-medium);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .document-card:hover {
-            border-color: var(--primary-color);
-            background: var(--light-green);
-        }
-
-        .document-card.uploaded {
-            border-style: solid;
-            border-color: var(--primary-color);
-            background: var(--light-green);
-        }
-
-        .document-icon {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .document-title {
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .document-status {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .document-status.uploaded {
-            color: var(--primary-color);
-        }
-
-        /* Quick Actions */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .action-card {
-            background: var(--gradient-primary);
-            color: var(--white);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .action-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .action-card:hover::before {
-            transform: translateX(0);
-        }
-
-        .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(46, 139, 87, 0.3);
-        }
-
-        .action-card.book {
-            background: var(--gradient-gold);
-        }
-
-        .action-card.support {
-            background: var(--gradient-blue);
-        }
-
-        .action-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .action-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .dashboard-container {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .sidebar {
-                position: static;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .welcome-content h1 {
-                font-size: 2rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .trips-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zyra Travels — Dashboard</title>
+
+  <!-- Icons & Fonts -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --primary-color:#2E8B57;
+      --secondary-color:#3CB371;
+      --light-green:#F0FFF0;
+      --text-dark:#2F4F2F;
+      --text-light:#6B8E6B;
+      --white:#FFFFFF;
+      --gray-50:#FAFAFA;
+      --gray-100:#F2F4F6;
+      --gray-200:#E9ECEF;
+      --danger:#D9534F;
+      --warning:#F0AD4E;
+      --blue:#1E90FF;
+      --gold:#FFD700;
+
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Inter',sans-serif;
+      color:var(--text-dark);
+      background:
+        linear-gradient(rgba(46,139,87,.25), rgba(60,179,113,.25)),
+        url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2070&q=80') center/cover fixed no-repeat;
+      min-height:100vh;
+    }
+
+    /* Header */
+    .header{
+      position:sticky;top:0;z-index:1000;
+      background:rgba(255,255,255,.96);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(46,139,87,.12);
+      box-shadow:0 8px 24px rgba(0,0,0,.08);
+    }
+    .nav{
+      max-width:1300px;margin:0 auto;padding: .9rem 1.2rem;
+      display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    }
+    .brand{
+      display:flex;align-items:center;gap:.65rem;text-decoration:none;
+    }
+    .brand-logo{
+      font-family:'Playfair Display',serif;font-weight:700;font-size:1.6rem;color:var(--primary-color);
+    }
+    .brand small{color:var(--text-light)}
+    .nav-actions{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+    .search{
+      display:flex;align-items:center;gap:.5rem;background:#fff;border:1px solid var(--gray-200);
+      border-radius:999px;padding:.4rem .8rem;min-width:240px;
+    }
+    .search input{border:none;outline:none;width:160px;font-size:.95rem}
+    .pill{
+      padding:.35rem .7rem;border-radius:999px;font-weight:600;font-size:.85rem;border:1px solid #E8F5E8;color:var(--primary-color);background:#E8F5E8;
+    }
+    .avatar{
+      width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      color:#fff;background:var(--gradient-primary);font-weight:700
+    }
+
+    /* Shell layout */
+    .shell{
+      max-width:1300px;margin:1.2rem auto;display:grid;grid-template-columns:280px 1fr;gap:1.2rem;padding:0 1.2rem 1.6rem;
+    }
+    .card{
+      background:rgba(255,255,255,.96);border:1px solid rgba(46,139,87,.12);border-radius:16px;
+      box-shadow:0 16px 40px rgba(0,0,0,.08);
+    }
+
+    /* Sidebar */
+    .sidebar{position:sticky;top:84px;height:fit-content}
+    .menu{list-style:none;padding:.8rem}
+    .menu a{
+      display:flex;align-items:center;gap:.75rem;text-decoration:none;color:var(--text-light);
+      padding:.7rem .9rem;border-radius:12px;font-weight:600;
+    }
+    .menu a:hover{background:#F8FFFA;color:var(--primary-color);transform:translateX(2px)}
+    .menu a.active{background:var(--gradient-primary);color:#fff}
+    .menu i{width:20px;text-align:center}
+
+    /* Main content */
+    .main{display:flex;flex-direction:column;gap:1.2rem}
+
+    .hero{
+      padding:1.4rem 1.4rem 1.2rem;position:relative;overflow:hidden
+    }
+    .hero h1{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:.35rem}
+    .hero p{color:var(--text-light)}
+    .hero-cta{margin-top:.8rem;display:flex;gap:.6rem;flex-wrap:wrap}
+    .btn{
+      border:none;border-radius:10px;padding:.55rem .9rem;cursor:pointer;font-weight:700;
+      display:inline-flex;align-items:center;gap:.5rem
+    }
+    .btn.primary{background:var(--gradient-primary);color:#fff}
+    .btn.light{background:#E9F7EE;color:var(--primary-color);border:1px solid #cfe9d7}
+    .btn.red{background:var(--danger);color:#fff}
+
+    /* Stats */
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem}
+    .stat{padding:1rem}
+    .stat .k{font-size:1.6rem;font-weight:800}
+    .stat .l{color:var(--text-light)}
+    .stat .icon{
+      width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;margin-bottom:.6rem
+    }
+    .icon.green{background:var(--primary-color)}
+    .icon.gold{background:linear-gradient(135deg,#FFD700,#FFA500)}
+    .icon.blue{background:linear-gradient(135deg,#1E90FF,#4169E1)}
+    .icon.pink{background:linear-gradient(135deg,#FF69B4,#FF85C2)}
+
+    /* Grids */
+    .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:.9rem}
+    .section{padding:1rem}
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
+    .section-title{font-weight:800;color:var(--text-dark)}
+    .chip{font-size:.8rem;background:#F5FFF8;color:var(--primary-color);border:1px solid #dcefe4;padding:.25rem .5rem;border-radius:999px}
+
+    /* Lists */
+    .trip{display:grid;grid-template-columns:1fr auto;gap:.4rem;padding:.7rem;border:1px dashed #cfe9d7;border-radius:12px;margin-bottom:.5rem;background:#FAFFFC}
+    .trip strong{font-weight:700}
+    .muted{color:var(--text-light);font-size:.93rem}
+    .status{font-size:.8rem;font-weight:700;padding:.25rem .5rem;border-radius:8px}
+    .status.upcoming{background:#1E90FF;color:#fff}
+    .status.completed{background:var(--primary-color);color:#fff}
+    .status.delayed{background:#F0AD4E;color:#412400}
+    .row{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+    .row .btn{padding:.4rem .6rem;border-radius:8px}
+
+    /* Rewards */
+    .progress{height:10px;background:#f0f5f2;border-radius:999px;overflow:hidden}
+    .progress > div{height:100%;background:linear-gradient(135deg,#FFD700,#FFA500);width:0%;transition:width .6s ease}
+
+    /* Notifications */
+    .note{display:flex;gap:.6rem;padding:.6rem;border:1px solid var(--gray-200);border-radius:12px;margin-bottom:.5rem;background:#fff}
+    .note i{margin-top:.15rem}
+    .note.warn{border-color:#FFE4BF;background:#FFF8E9;color:#7b4b00}
+    .note.danger{border-color:#F7D6D4;background:#FDECEA;color:#8a2a28}
+    .note.info{border-color:#cfe9d7;background:#F5FFF8;color:#2F4F2F}
+
+    /* Quick links */
+    .quick{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem}
+    .ql{padding:1rem;display:flex;flex-direction:column;gap:.5rem}
+    .ql p{color:var(--text-light)}
+    .ql:hover{transform:translateY(-3px);transition:.2s ease}
+
+    /* Charts canvas */
+    canvas{max-width:100%}
+
+    /* Footer */
+    .footer{color:var(--text-light);text-align:center;margin-top:.6rem;font-size:.9rem}
+
+    /* Responsive */
+    @media (max-width:1100px){
+      .shell{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(2,1fr)}
+      .quick{grid-template-columns:repeat(2,1fr)}
+      .sidebar{position:relative;top:0}
+    }
+    @media (max-width:620px){
+      .stats{grid-template-columns:1fr}
+      .quick{grid-template-columns:1fr}
+      .search{min-width:0;width:100%}
+      .search input{width:100%}
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
-        <div class="nav-container">
-            <a href="landing.html" class="logo">
-                <i class="fas fa-globe-americas"></i>
-                Zyra Travels
-            </a>
-            <div class="user-info">
-                <div class="user-avatar">JD</div>
-                <div class="user-details">
-                    <h4>John Doe</h4>
-                    <p>Premium Member</p>
-                </div>
-                <a href="landing.html" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
+  <!-- Header -->
+  <header class="header">
+    <div class="nav">
+      <a href="index.html" class="brand">
+        <div class="brand-logo"><i class="fa-solid fa-location-dot"></i> Zyra</div>
+        <small>Smart travel, safer journeys</small>
+      </a>
+      <div class="nav-actions">
+        <div class="search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="globalSearch" placeholder="Search trips, bookings, places"/>
         </div>
-    </header>
-
-    <!-- Dashboard Container -->
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <ul class="sidebar-menu">
-                <li><a href="#" class="active" data-section="overview"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="#" data-section="trips"><i class="fas fa-suitcase"></i> My Trips</a></li>
-                <li><a href="#" data-section="bookings"><i class="fas fa-calendar-check"></i> Bookings</a></li>
-                <li><a href="#" data-section="documents"><i class="fas fa-file-alt"></i> Documents</a></li>
-                <li><a href="#" data-section="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
-                <li><a href="#" data-section="rewards"><i class="fas fa-gift"></i> Rewards</a></li>
-                <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="#" data-section="settings"><i class="fas fa-cog"></i> Settings</a></li>
-            </ul>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Overview Section -->
-            <div id="overview" class="content-view">
-                <!-- Welcome Section -->
-                <section class="welcome-section">
-                    <div class="welcome-content">
-                        <h1>Welcome back, Explorer!</h1>
-                        <p>Ready for your next adventure? Your Tokyo trip is coming up in 15 days!</p>
-                    </div>
-                </section>
-
-                <!-- Stats Grid -->
-                <div class="stats-grid">
-                    <div class="stat-card trips">
-                        <div class="stat-icon">
-                            <i class="fas fa-map-marked-alt"></i>
-                        </div>
-                        <div class="stat-number">12</div>
-                        <div class="stat-label">Total Trips</div>
-                    </div>
-                    <div class="stat-card points">
-                        <div class="stat-icon">
-                            <i class="fas fa-star"></i>
-                        </div>
-                        <div class="stat-number">2,450</div>
-                        <div class="stat-label">Reward Points</div>
-                    </div>
-                    <div class="stat-card savings">
-                        <div class="stat-icon">
-                            <i class="fas fa-piggy-bank"></i>
-                        </div>
-                        <div class="stat-number">$1,200</div>
-                        <div class="stat-label">Total Savings</div>
-                    </div>
-                </div>
-
-                <!-- Recent Trips -->
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-suitcase"></i>
-                            Recent Trips
-                        </h2>
-                        <a href="#" class="view-all-btn">View All</a>
-                    </div>
-                    <div class="trips-grid">
-                        <div class="trip-card">
-                            <div class="trip-status upcoming">Upcoming</div>
-                            <div class="trip-image">
-                                <i class="fas fa-torii-gate"></i>
-                            </div>
-                            <div class="trip-content">
-                                <h3 class="trip-title">Tokyo Adventure</h3>
-                                <div class="trip-details">
-                                    <div class="trip-detail">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Jan 15 - Jan 22, 2025</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-users"></i>
-                                        <span>2 Travelers</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>$2,800</span>
-                                    </div>
-                                </div>
-                                <div class="trip-actions">
-                                    <button class="trip-btn primary">View Details</button>
-                                    <button class="trip-btn secondary">Modify</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="trip-card">
-                            <div class="trip-status completed">Completed</div>
-                            <div class="trip-image">
-                                <i class="fas fa-tower"></i>
-                            </div>
-                            <div class="trip-content">
-                                <h3 class="trip-title">Paris Getaway</h3>
-                                <div class="trip-details">
-                                    <div class="trip-detail">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Nov 10 - Nov 17, 2024</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-users"></i>
-                                        <span>2 Travelers</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-star"></i>
-                                        <span>5.0 Rating</span>
-                                    </div>
-                                </div>
-                                <div class="trip-actions">
-                                    <button class="trip-btn primary">Leave Review</button>
-                                    <button class="trip-btn secondary">Photos</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Quick Actions -->
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-bolt"></i>
-                            Quick Actions
-                        </h2>
-                    </div>
-                    <div class="quick-actions">
-                        <a href="booking.html" class="action-card book">
-                            <div class="action-icon">
-                                <i class="fas fa-plus-circle"></i>
-                            </div>
-                            <div class="action-title">Book New Trip</div>
-                        </a>
-                        <a href="contact.html" class="action-card support">
-                            <div class="action-icon">
-                                <i class="fas fa-headset"></i>
-                            </div>
-                            <div class="action-title">Contact Support</div>
-                        </a>
-                        <a href="#" class="action-card">
-                            <div class="action-icon">
-                                <i class="fas fa-file-upload"></i>
-                            </div>
-                            <div class="action-title">Upload Documents</div>
-                        </a>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Documents Section -->
-            <div id="documents" class="content-view hidden">
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-file-alt"></i>
-                            Travel Documents
-                        </h2>
-                        <button class="view-all-btn" onclick="uploadDocument()">Upload New</button>
-                    </div>
-                    <div class="documents-grid">
-                        <div class="document-card uploaded">
-                            <div class="document-icon">
-                                <i class="fas fa-passport"></i>
-                            </div>
-                            <div class="document-title">Passport</div>
-                            <div class="document-status uploaded">✓ Uploaded</div>
-                        </div>
-                        <div class="document-card">
-                            <div class="document-icon">
-                                <i class="fas fa-id-card"></i>
-                            </div>
-                            <div class="document-title">Driver's License</div>
-                            <div class="document-status">Click to upload</div>
-                        </div>
-                        <div class="document-card">
-                            <div class="document-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <div class="document-title">Travel Insurance</div>
-                            <div class="document-status">Click to upload</div>
-                        </div>
-                        <div class="document-card uploaded">
-                            <div class="document-icon">
-                                <i class="fas fa-syringe"></i>
-                            </div>
-                            <div class="document-title">Vaccination Card</div>
-                            <div class="document-status uploaded">✓ Uploaded</div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- My Trips Section -->
-            <div id="trips" class="content-view hidden">
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-suitcase"></i>
-                            My Trips
-                        </h2>
-                        <a href="booking.html" class="view-all-btn">Book New Trip</a>
-                    </div>
-                    <div class="trips-grid">
-                        <div class="trip-card">
-                            <div class="trip-status upcoming">Upcoming</div>
-                            <div class="trip-image" style="background: linear-gradient(135deg, #FF6B35, #FF8C42);">
-                                <i class="fas fa-torii-gate"></i>
-                            </div>
-                            <div class="trip-content">
-                                <h3 class="trip-title">Tokyo Adventure</h3>
-                                <div class="trip-details">
-                                    <div class="trip-detail">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Jan 15 - Jan 22, 2025</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-users"></i>
-                                        <span>2 Travelers</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>$2,800</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-plane"></i>
-                                        <span>Flight: AA1234</span>
-                                    </div>
-                                </div>
-                                <div class="trip-actions">
-                                    <button class="trip-btn primary">View Itinerary</button>
-                                    <button class="trip-btn secondary">Modify</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="trip-card">
-                            <div class="trip-status completed">Completed</div>
-                            <div class="trip-image" style="background: linear-gradient(135deg, #8A2BE2, #9A4BE8);">
-                                <i class="fas fa-tower"></i>
-                            </div>
-                            <div class="trip-content">
-                                <h3 class="trip-title">Paris Getaway</h3>
-                                <div class="trip-details">
-                                    <div class="trip-detail">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Nov 10 - Nov 17, 2024</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-users"></i>
-                                        <span>2 Travelers</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-star"></i>
-                                        <span>5.0 Rating Given</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-camera"></i>
-                                        <span>24 Photos</span>
-                                    </div>
-                                </div>
-                                <div class="trip-actions">
-                                    <button class="trip-btn primary">View Photos</button>
-                                    <button class="trip-btn secondary">Download Receipt</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="trip-card">
-                            <div class="trip-status completed">Completed</div>
-                            <div class="trip-image" style="background: linear-gradient(135deg, #1E90FF, #4169E1);">
-                                <i class="fas fa-umbrella-beach"></i>
-                            </div>
-                            <div class="trip-content">
-                                <h3 class="trip-title">Bali Wellness Retreat</h3>
-                                <div class="trip-details">
-                                    <div class="trip-detail">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Aug 5 - Aug 15, 2024</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-users"></i>
-                                        <span>1 Traveler</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-star"></i>
-                                        <span>4.8 Rating Given</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-spa"></i>
-                                        <span>10 Day Retreat</span>
-                                    </div>
-                                </div>
-                                <div class="trip-actions">
-                                    <button class="trip-btn primary">Book Again</button>
-                                    <button class="trip-btn secondary">Share Experience</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="trip-card">
-                            <div class="trip-status cancelled">Cancelled</div>
-                            <div class="trip-image" style="background: linear-gradient(135deg, #FF4757, #FF6B7A); opacity: 0.7;">
-                                <i class="fas fa-mountain"></i>
-                            </div>
-                            <div class="trip-content">
-                                <h3 class="trip-title">Swiss Alps Adventure</h3>
-                                <div class="trip-details">
-                                    <div class="trip-detail">
-                                        <i class="fas fa-calendar"></i>
-                                        <span>Dec 20 - Dec 27, 2024</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-users"></i>
-                                        <span>4 Travelers</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>$4,200 Refunded</span>
-                                    </div>
-                                    <div class="trip-detail">
-                                        <i class="fas fa-info-circle"></i>
-                                        <span>Weather Cancellation</span>
-                                    </div>
-                                </div>
-                                <div class="trip-actions">
-                                    <button class="trip-btn primary">Rebook</button>
-                                    <button class="trip-btn secondary">View Refund</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Bookings Section -->
-            <div id="bookings" class="content-view hidden">
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-calendar-check"></i>
-                            Booking Management
-                        </h2>
-                        <a href="booking.html" class="view-all-btn">New Booking</a>
-                    </div>
-                    
-                    <!-- Booking Timeline -->
-                    <div style="margin-bottom: 2rem;">
-                        <h3 style="margin-bottom: 1rem; color: var(--text-dark);">Upcoming Booking Timeline</h3>
-                        <div style="position: relative; padding-left: 2rem;">
-                            <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gradient-primary);"></div>
-                            
-                            <div style="position: relative; margin-bottom: 2rem; background: var(--white); padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px var(--shadow); margin-left: 1rem;">
-                                <div style="position: absolute; left: -1.75rem; top: 1.5rem; width: 15px; height: 15px; background: var(--primary-color); border-radius: 50%; border: 3px solid var(--white);"></div>
-                                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
-                                    <h4 style="color: var(--primary-color);">Tokyo Adventure - Departure</h4>
-                                    <span style="background: var(--blue-color); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">15 days left</span>
-                                </div>
-                                <p style="color: var(--text-light); margin-bottom: 1rem;">Flight AA1234 • Jan 15, 2025 at 8:30 AM</p>
-                                <div style="display: flex; gap: 1rem;">
-                                    <button class="trip-btn primary" style="flex: none; padding: 0.5rem 1rem;">Check-in Online</button>
-                                    <button class="trip-btn secondary" style="flex: none; padding: 0.5rem 1rem;">View Boarding Pass</button>
-                                </div>
-                            </div>
-
-                            <div style="position: relative; margin-bottom: 2rem; background: var(--light-green); padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px var(--shadow); margin-left: 1rem;">
-                                <div style="position: absolute; left: -1.75rem; top: 1.5rem; width: 15px; height: 15px; background: var(--gold-color); border-radius: 50%; border: 3px solid var(--white);"></div>
-                                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 0.5rem;">
-                                    <h4 style="color: var(--gold-color);">Hotel Check-in</h4>
-                                    <span style="background: var(--gold-color); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">15 days left</span>
-                                </div>
-                                <p style="color: var(--text-light); margin-bottom: 1rem;">Grand Tokyo Hotel • Jan 15, 2025 at 3:00 PM</p>
-                                <div style="display: flex; gap: 1rem;">
-                                    <button class="trip-btn primary" style="flex: none; padding: 0.5rem 1rem;">Early Check-in</button>
-                                    <button class="trip-btn secondary" style="flex: none; padding: 0.5rem 1rem;">Special Requests</button>
-                                </div>
-                            </div>
-
-                            <div style="position: relative; background: var(--gray-light); padding: 1.5rem; border-radius: 15px; box-shadow: 0 5px 15px var(--shadow); margin-left: 1rem; opacity: 0.7;">
-                                <div style="position: absolute; left: -1.75rem; top: 1.5rem; width: 15px; height: 15px; background: var(--gray-medium); border-radius: 50%; border: 3px solid var(--white);"></div>
-                                <h4 style="color: var(--text-light);">Return Flight</h4>
-                                <p style="color: var(--text-light);">Flight AA5678 • Jan 22, 2025 at 6:45 PM</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Booking Actions -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-                        <div style="background: var(--gradient-primary); color: var(--white); padding: 2rem; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <i class="fas fa-edit" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                            <h4>Modify Booking</h4>
-                            <p style="opacity: 0.9; font-size: 0.9rem;">Change dates, travelers, or preferences</p>
-                        </div>
-                        <div style="background: var(--gradient-gold); color: var(--white); padding: 2rem; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <i class="fas fa-plus-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                            <h4>Add Services</h4>
-                            <p style="opacity: 0.9; font-size: 0.9rem;">Airport transfers, tours, activities</p>
-                        </div>
-                        <div style="background: var(--gradient-blue); color: var(--white); padding: 2rem; border-radius: 15px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <i class="fas fa-times-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                            <h4>Cancel Booking</h4>
-                            <p style="opacity: 0.9; font-size: 0.9rem;">View cancellation policy & refunds</p>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Payments Section -->
-            <div id="payments" class="content-view hidden">
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-credit-card"></i>
-                            Payment History
-                        </h2>
-                        <button class="view-all-btn" onclick="downloadStatement()">Download Statement</button>
-                    </div>
-
-                    <!-- Payment Summary Cards -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                        <div style="background: var(--gradient-primary); color: var(--white); padding: 1.5rem; border-radius: 15px; text-align: center;">
-                            <i class="fas fa-dollar-sign" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                            <h3>$8,450</h3>
-                            <p style="opacity: 0.9;">Total Spent</p>
-                        </div>
-                        <div style="background: var(--gradient-gold); color: var(--white); padding: 1.5rem; border-radius: 15px; text-align: center;">
-                            <i class="fas fa-piggy-bank" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                            <h3>$1,200</h3>
-                            <p style="opacity: 0.9;">Total Saved</p>
-                        </div>
-                        <div style="background: var(--gradient-blue); color: var(--white); padding: 1.5rem; border-radius: 15px; text-align: center;">
-                            <i class="fas fa-calendar-alt" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                            <h3>$2,800</h3>
-                            <p style="opacity: 0.9;">Upcoming Payment</p>
-                        </div>
-                    </div>
-
-                    <!-- Payment History Table -->
-                    <div style="background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px var(--shadow);">
-                        <div style="background: var(--gradient-primary); color: var(--white); padding: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; font-weight: 600;">
-                            <div>Trip</div>
-                            <div>Date</div>
-                            <div>Amount</div>
-                            <div>Status</div>
-                            <div>Action</div>
-                        </div>
-                        
-                        <div style="padding: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: center; border-bottom: 1px solid var(--gray-medium);">
-                            <div>
-                                <strong>Tokyo Adventure</strong>
-                                <br><small style="color: var(--text-light);">Booking #TK2025001</small>
-                            </div>
-                            <div>Dec 1, 2024</div>
-                            <div style="color: var(--primary-color); font-weight: 600;">$2,800</div>
-                            <div><span style="background: var(--blue-color); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Pending</span></div>
-                            <div><button class="trip-btn secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Pay Now</button></div>
-                        </div>
-
-                        <div style="padding: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: center; border-bottom: 1px solid var(--gray-medium);">
-                            <div>
-                                <strong>Paris Getaway</strong>
-                                <br><small style="color: var(--text-light);">Booking #PR2024003</small>
-                            </div>
-                            <div>Oct 15, 2024</div>
-                            <div style="color: var(--primary-color); font-weight: 600;">$2,450</div>
-                            <div><span style="background: var(--primary-color); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Paid</span></div>
-                            <div><button class="trip-btn secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Receipt</button></div>
-                        </div>
-
-                        <div style="padding: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: center; border-bottom: 1px solid var(--gray-medium);">
-                            <div>
-                                <strong>Bali Wellness Retreat</strong>
-                                <br><small style="color: var(--text-light);">Booking #BL2024002</small>
-                            </div>
-                            <div>Jul 20, 2024</div>
-                            <div style="color: var(--primary-color); font-weight: 600;">$1,950</div>
-                            <div><span style="background: var(--primary-color); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Paid</span></div>
-                            <div><button class="trip-btn secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Receipt</button></div>
-                        </div>
-
-                        <div style="padding: 1rem; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 1rem; align-items: center;">
-                            <div>
-                                <strong>Swiss Alps Adventure</strong>
-                                <br><small style="color: var(--text-light);">Booking #SW2024004 (Cancelled)</small>
-                            </div>
-                            <div>Dec 18, 2024</div>
-                            <div style="color: var(--red-color); font-weight: 600;">-$4,200</div>
-                            <div><span style="background: var(--primary-color); color: var(--white); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Refunded</span></div>
-                            <div><button class="trip-btn secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">Details</button></div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Rewards Section -->
-            <div id="rewards" class="content-view hidden">
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-gift"></i>
-                            Rewards & Loyalty
-                        </h2>
-                        <button class="view-all-btn" onclick="redeemPoints()">Redeem Points</button>
-                    </div>
-
-                    <!-- Loyalty Status -->
-                    <div style="background: var(--gradient-gold); color: var(--white); padding: 2rem; border-radius: 20px; margin-bottom: 2rem; text-align: center; position: relative; overflow: hidden;">
-                        <div style="position: absolute; top: -50px; right: -50px; width: 100px; height: 100px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-                        <div style="position: absolute; bottom: -30px; left: -30px; width: 60px; height: 60px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
-                        <i class="fas fa-crown" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <h2>Premium Member</h2>
-                        <p style="opacity: 0.9; margin-bottom: 1rem;">Member since 2022 • Next tier: Elite (500 points away)</p>
-                        <div style="background: rgba(255,255,255,0.2); border-radius: 10px; padding: 0.5rem; margin: 0 auto; width: 80%;">
-                            <div style="background: var(--white); height: 8px; border-radius: 4px; width: 75%;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Points Balance -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                        <div style="background: var(--white); padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px var(--shadow); border-top: 4px solid var(--primary-color);">
-                            <i class="fas fa-coins" style="font-size: 2.5rem; color: var(--gold-color); margin-bottom: 1rem;"></i>
-                            <h3 style="color: var(--text-dark);">2,450</h3>
-                            <p style="color: var(--text-light);">Available Points</p>
-                        </div>
-                        <div style="background: var(--white); padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px var(--shadow); border-top: 4px solid var(--blue-color);">
-                            <i class="fas fa-calendar-check" style="font-size: 2.5rem; color: var(--blue-color); margin-bottom: 1rem;"></i>
-                            <h3 style="color: var(--text-dark);">850</h3>
-                            <p style="color: var(--text-light);">Points This Year</p>
-                        </div>
-                        <div style="background: var(--white); padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 5px 15px var(--shadow); border-top: 4px solid var(--purple-color);">
-                            <i class="fas fa-trophy" style="font-size: 2.5rem; color: var(--purple-color); margin-bottom: 1rem;"></i>
-                            <h3 style="color: var(--text-dark);">5,200</h3>
-                            <p style="color: var(--text-light);">Lifetime Points</p>
-                        </div>
-                    </div>
-
-                    <!-- Rewards Catalog -->
-                    <h3 style="margin-bottom: 1rem; color: var(--text-dark);">Redeem Your Points</h3>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-                        <div style="background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px var(--shadow); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="background: var(--gradient-primary); color: var(--white); padding: 1.5rem; text-align: center;">
-                                <i class="fas fa-percentage" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                                <h4>10% Trip Discount</h4>
-                            </div>
-                            <div style="padding: 1.5rem;">
-                                <p style="color: var(--text-light); margin-bottom: 1rem;">Get 10% off your next booking</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                    <span style="color: var(--gold-color); font-weight: 600;">500 Points</span>
-                                    <span style="color: var(--primary-color); font-size: 0.9rem;">✓ Available</span>
-                                </div>
-                                <button class="trip-btn primary" style="width: 100%;">Redeem Now</button>
-                            </div>
-                        </div>
-
-                        <div style="background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px var(--shadow); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="background: var(--gradient-blue); color: var(--white); padding: 1.5rem; text-align: center;">
-                                <i class="fas fa-plane" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                                <h4>Free Airport Transfer</h4>
-                            </div>
-                            <div style="padding: 1.5rem;">
-                                <p style="color: var(--text-light); margin-bottom: 1rem;">Complimentary airport pickup/drop-off</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                    <span style="color: var(--gold-color); font-weight: 600;">800 Points</span>
-                                    <span style="color: var(--primary-color); font-size: 0.9rem;">✓ Available</span>
-                                </div>
-                                <button class="trip-btn primary" style="width: 100%;">Redeem Now</button>
-                            </div>
-                        </div>
-
-                        <div style="background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px var(--shadow); transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="background: linear-gradient(135deg, var(--purple-color), var(--pink-color)); color: var(--white); padding: 1.5rem; text-align: center;">
-                                <i class="fas fa-bed" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                                <h4>Hotel Upgrade</h4>
-                            </div>
-                            <div style="padding: 1.5rem;">
-                                <p style="color: var(--text-light); margin-bottom: 1rem;">Upgrade to premium room category</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                    <span style="color: var(--gold-color); font-weight: 600;">1,200 Points</span>
-                                    <span style="color: var(--primary-color); font-size: 0.9rem;">✓ Available</span>
-                                </div>
-                                <button class="trip-btn primary" style="width: 100%;">Redeem Now</button>
-                            </div>
-                        </div>
-
-                        <div style="background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px var(--shadow); transition: all 0.3s ease; opacity: 0.7;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
-                            <div style="background: var(--gradient-gold); color: var(--white); padding: 1.5rem; text-align: center;">
-                                <i class="fas fa-gift" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-                                <h4>Free Trip</h4>
-                            </div>
-                            <div style="padding: 1.5rem;">
-                                <p style="color: var(--text-light); margin-bottom: 1rem;">Complete 3-day domestic trip</p>
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                    <span style="color: var(--gold-color); font-weight: 600;">5,000 Points</span>
-                                    <span style="color: var(--red-color); font-size: 0.9rem;">Need 2,550 more</span>
-                                </div>
-                                <button class="trip-btn secondary" style="width: 100%;" disabled>Not Available</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Settings Section -->
-            <div id="settings" class="content-view hidden">
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-cog"></i>
-                            Account Settings
-                        </h2>
-                        <button class="view-all-btn" onclick="saveSettings()">Save Changes</button>
-                    </div>
-
-                    <div style="display: grid; gap: 2rem;">
-                        <!-- Profile Settings -->
-                        <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px var(--shadow);">
-                            <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-user" style="color: var(--primary-color);"></i>
-                                Profile Information
-                            </h3>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 500;">Full Name</label>
-                                    <input type="text" value="John Doe" style="width: 100%; padding: 0.8rem; border: 2px solid var(--gray-medium); border-radius: 10px; font-size: 1rem;">
-                                </div>
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 500;">Email Address</label>
-                                    <input type="email" value="john.doe@email.com" style="width: 100%; padding: 0.8rem; border: 2px solid var(--gray-medium); border-radius: 10px; font-size: 1rem;">
-                                </div>
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 500;">Phone Number</label>
-                                    <input type="tel" value="+1 (555) 123-4567" style="width: 100%; padding: 0.8rem; border: 2px solid var(--gray-medium); border-radius: 10px; font-size: 1rem;">
-                                </div>
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 500;">Date of Birth</label>
-                                    <input type="date" value="1990-05-15" style="width: 100%; padding: 0.8rem; border: 2px solid var(--gray-medium); border-radius: 10px; font-size: 1rem;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Travel Preferences -->
-                        <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px var(--shadow);">
-                            <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-heart" style="color: var(--red-color);"></i>
-                                Travel Preferences
-                            </h3>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 500;">Preferred Trip Type</label>
-                                    <select style="width: 100%; padding: 0.8rem; border: 2px solid var(--gray-medium); border-radius: 10px; font-size: 1rem;">
-                                        <option>Adventure & Outdoor</option>
-                                        <option>Cultural & Historical</option>
-                                        <option>Relaxation & Wellness</option>
-                                        <option>City & Urban</option>
-                                        <option>Beach & Coastal</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 500;">Budget Range</label>
-                                    <select style="width: 100%; padding: 0.8rem; border: 2px solid var(--gray-medium); border-radius: 10px; font-size: 1rem;">
-                                        <option>$1,000 - $2,500</option>
-                                        <option>$2,500 - $5,000</option>
-                                        <option>$5,000 - $10,000</option>
-                                        <option>$10,000+</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 500;">Accommodation Type</label>
-                                    <select style="width: 100%; padding: 0.8rem; border: 2px solid var(--gray-medium); border-radius: 10px; font-size: 1rem;">
-                                        <option>Luxury Hotels</option>
-                                        <option>Boutique Hotels</option>
-                                        <option>Resorts</option>
-                                        <option>Vacation Rentals</option>
-                                        <option>Hostels</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Notification Settings -->
-                        <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px var(--shadow);">
-                            <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-bell" style="color: var(--blue-color);"></i>
-                                Notification Preferences
-                            </h3>
-                            <div style="display: grid; gap: 1rem;">
-                                <label style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 1rem; background: var(--gray-light); border-radius: 10px; transition: all 0.3s ease;" onmouseover="this.style.background='var(--light-green)'" onmouseout="this.style.background='var(--gray-light)'">
-                                    <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--primary-color);">
-                                    <div>
-                                        <strong style="color: var(--text-dark);">Booking Confirmations</strong>
-                                        <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">Get notified when bookings are confirmed</p>
-                                    </div>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 1rem; background: var(--gray-light); border-radius: 10px; transition: all 0.3s ease;" onmouseover="this.style.background='var(--light-green)'" onmouseout="this.style.background='var(--gray-light)'">
-                                    <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--primary-color);">
-                                    <div>
-                                        <strong style="color: var(--text-dark);">Trip Reminders</strong>
-                                        <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">Reminders about upcoming trips and check-ins</p>
-                                    </div>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 1rem; background: var(--gray-light); border-radius: 10px; transition: all 0.3s ease;" onmouseover="this.style.background='var(--light-green)'" onmouseout="this.style.background='var(--gray-light)'">
-                                    <input type="checkbox" style="width: 20px; height: 20px; accent-color: var(--primary-color);">
-                                    <div>
-                                        <strong style="color: var(--text-dark);">Promotional Offers</strong>
-                                        <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">Special deals and discounts on trips</p>
-                                    </div>
-                                </label>
-                                <label style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 1rem; background: var(--gray-light); border-radius: 10px; transition: all 0.3s ease;" onmouseover="this.style.background='var(--light-green)'" onmouseout="this.style.background='var(--gray-light)'">
-                                    <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: var(--primary-color);">
-                                    <div>
-                                        <strong style="color: var(--text-dark);">Travel Updates</strong>
-                                        <p style="color: var(--text-light); font-size: 0.9rem; margin: 0;">Flight delays, gate changes, weather alerts</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Security Settings -->
-                        <div style="background: var(--white); padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px var(--shadow);">
-                            <h3 style="color: var(--text-dark); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fas fa-shield-alt" style="color: var(--purple-color);"></i>
-                                Security & Privacy
-                            </h3>
-                            <div style="display: grid; gap: 1rem;">
-                                <button style="background: var(--gradient-primary); color: var(--white); padding: 1rem 2rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="changePassword()">
-                                    <i class="fas fa-key" style="margin-right: 0.5rem;"></i>
-                                    Change Password
-                                </button>
-                                <button style="background: var(--gradient-blue); color: var(--white); padding: 1rem 2rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="enable2FA()">
-                                    <i class="fas fa-mobile-alt" style="margin-right: 0.5rem;"></i>
-                                    Enable Two-Factor Authentication
-                                </button>
-                                <button style="background: var(--gray-medium); color: var(--text-dark); padding: 1rem 2rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'" onclick="downloadData()">
-                                    <i class="fas fa-download" style="margin-right: 0.5rem;"></i>
-                                    Download My Data
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Profile Section -->
-            <div id="profile" class="content-view hidden">
-                <section class="content-section">
-                    <div class="section-header">
-                        <h2 class="section-title">
-                            <i class="fas fa-user"></i>
-                            My Profile
-                        </h2>
-                        <button class="view-all-btn" onclick="editProfile()">Edit Profile</button>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; align-items: start;">
-                        <div style="text-align: center;">
-                            <div style="width: 150px; height: 150px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; margin: 0 auto 1rem;">JD</div>
-                            <h3>John Doe</h3>
-                            <p style="color: var(--text-light);">Premium Member since 2022</p>
-                        </div>
-                        <div>
-                            <div style="display: grid; gap: 1rem;">
-                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 1rem; background: var(--gray-light); border-radius: 10px;">
-                                    <strong>Email:</strong>
-                                    <span>john.doe@email.com</span>
-                                </div>
-                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 1rem; background: var(--gray-light); border-radius: 10px;">
-                                    <strong>Phone:</strong>
-                                    <span>+1 (555) 123-4567</span>
-                                </div>
-                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 1rem; background: var(--gray-light); border-radius: 10px;">
-                                    <strong>Address:</strong>
-                                    <span>123 Main St, New York, NY 10001</span>
-                                </div>
-                                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center; padding: 1rem; background: var(--gray-light); border-radius: 10px;">
-                                    <strong>Emergency Contact:</strong>
-                                    <span>Jane Doe - +1 (555) 987-6543</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </main>
+        <span id="greet" class="pill">Welcome</span>
+        <div class="avatar">ZT</div>
+      </div>
     </div>
+  </header>
 
-    <script>
-        // Sidebar navigation
-        document.querySelectorAll('.sidebar-menu a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Remove active class from all links
-                document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
-                // Add active class to clicked link
-                this.classList.add('active');
-                
-                // Hide all content views
-                document.querySelectorAll('.content-view').forEach(view => view.classList.add('hidden'));
-                
-                // Show selected content view
-                const section = this.getAttribute('data-section');
-                const targetView = document.getElementById(section);
-                if (targetView) {
-                    targetView.classList.remove('hidden');
-                }
-            });
+  <div class="shell">
+    <!-- Sidebar -->
+    <aside class="sidebar card">
+      <ul class="menu">
+        <li><a class="active" href="dashboard.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+        <li><a href="booking.html"><i class="fa-solid fa-ticket"></i> Bookings</a></li>
+        <li><a href="hotel-booking.html"><i class="fa-solid fa-bed"></i> Hotels</a></li>
+        <li><a href="services.html"><i class="fa-solid fa-compass"></i> Services</a></li>
+        <li><a href="reviews.html"><i class="fa-solid fa-star"></i> Reviews</a></li>
+        <li><a href="weather-standalone.html"><i class="fa-solid fa-cloud-sun"></i> Weather</a></li>
+        <li><a href="geofencing.html"><i class="fa-solid fa-map-location-dot"></i> Geofencing</a></li>
+        <li><a href="digital-id.html"><i class="fa-solid fa-id-card"></i> Digital ID</a></li>
+        <li><a href="faq.html"><i class="fa-solid fa-circle-question"></i> FAQ</a></li>
+        <li><a href="contact.html"><i class="fa-solid fa-headset"></i> Support</a></li>
+        <li><a href="login.html"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+      <!-- Hero -->
+      <section class="hero card">
+        <h1 id="welcomeTitle">Good day, Traveler</h1>
+        <p>Plan, track and optimize your trips with Zyra. Your loyalty benefits and safety tools are just a click away.</p>
+        <div class="hero-cta">
+          <a href="booking.html" class="btn primary"><i class="fa-solid fa-plus"></i> Plan a new trip</a>
+          <a href="geofencing.html" class="btn light"><i class="fa-solid fa-bell"></i> Enable geofencing alerts</a>
+          <a href="weather-standalone.html" class="btn light"><i class="fa-solid fa-cloud-sun"></i> Check weather</a>
+        </div>
+      </section>
+
+      <!-- Stats -->
+      <section class="stats">
+        <div class="stat card">
+          <div class="icon green"><i class="fa-solid fa-suitcase-rolling"></i></div>
+          <div class="k" id="statUpcoming">3</div>
+          <div class="l">Upcoming Trips</div>
+        </div>
+        <div class="stat card">
+          <div class="icon gold"><i class="fa-solid fa-coins"></i></div>
+          <div class="k" id="statPoints">1,250</div>
+          <div class="l">Reward Points</div>
+        </div>
+        <div class="stat card">
+          <div class="icon blue"><i class="fa-solid fa-piggy-bank"></i></div>
+          <div class="k" id="statSavings">$312</div>
+          <div class="l">Savings this year</div>
+        </div>
+        <div class="stat card">
+          <div class="icon pink"><i class="fa-solid fa-shield-heart"></i></div>
+          <div class="k" id="statSafety">On</div>
+          <div class="l">Safety Tools</div>
+        </div>
+      </section>
+
+      <!-- Charts -->
+      <section class="grid-2">
+        <div class="section card">
+          <div class="section-head">
+            <h3 class="section-title"><i class="fa-solid fa-chart-pie" style="color:var(--primary-color)"></i> Trip Categories</h3>
+            <span class="chip">Last 12 months</span>
+          </div>
+          <canvas id="chartTrips" height="140"></canvas>
+        </div>
+
+        <div class="section card">
+          <div class="section-head">
+            <h3 class="section-title"><i class="fa-solid fa-chart-column" style="color:var(--primary-color)"></i> Monthly Spend</h3>
+            <span class="chip">USD</span>
+          </div>
+          <canvas id="chartSpend" height="140"></canvas>
+        </div>
+      </section>
+
+      <!-- Trips + Rewards -->
+      <section class="grid-2">
+        <div class="section card">
+          <div class="section-head">
+            <h3 class="section-title"><i class="fa-solid fa-route" style="color:var(--primary-color)"></i> Upcoming Trips</h3>
+            <a href="booking.html" class="btn light"><i class="fa-solid fa-plus"></i> Add</a>
+          </div>
+
+          <div id="tripsList">
+            <!-- Trip 1 -->
+            <div class="trip">
+              <div>
+                <strong>Paris Getaway</strong>
+                <div class="muted"><i class="fa-regular fa-calendar"></i> 18–22 Oct • <i class="fa-solid fa-plane-departure"></i> SFO → CDG</div>
+              </div>
+              <div class="row">
+                <span class="status upcoming">Upcoming</span>
+                <a class="btn light" href="booking.html"><i class="fa-solid fa-eye"></i> View</a>
+                <a class="btn primary" href="hotel-booking.html"><i class="fa-solid fa-bed"></i> Hotel</a>
+              </div>
+            </div>
+            <!-- Trip 2 -->
+            <div class="trip">
+              <div>
+                <strong>Goa Beach Break</strong>
+                <div class="muted"><i class="fa-regular fa-calendar"></i> 08–12 Nov • <i class="fa-solid fa-plane-departure"></i> HYD → GOI</div>
+              </div>
+              <div class="row">
+                <span class="status upcoming">Upcoming</span>
+                <a class="btn light" href="booking.html"><i class="fa-solid fa-eye"></i> View</a>
+                <a class="btn primary" href="services.html"><i class="fa-solid fa-compass"></i> Explore</a>
+              </div>
+            </div>
+            <!-- Trip 3 -->
+            <div class="trip">
+              <div>
+                <strong>Kyoto Culture Trail</strong>
+                <div class="muted"><i class="fa-regular fa-calendar"></i> 01–06 Dec • <i class="fa-solid fa-plane-departure"></i> DEL → KIX</div>
+              </div>
+              <div class="row">
+                <span class="status delayed">Date Hold</span>
+                <a class="btn light" href="booking.html"><i class="fa-solid fa-pen"></i> Edit</a>
+                <a class="btn primary" href="weather-standalone.html"><i class="fa-solid fa-cloud"></i> Weather</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section card">
+          <div class="section-head">
+            <h3 class="section-title"><i class="fa-solid fa-crown" style="color:var(--primary-color)"></i> Rewards & Benefits</h3>
+            <span class="chip" id="tierChip">Silver</span>
+          </div>
+          <div class="muted" style="margin-bottom:.5rem">Points to next tier</div>
+          <div class="progress" style="margin-bottom:.6rem">
+            <div id="progressBar"></div>
+          </div>
+          <div class="row" style="margin-bottom:.6rem">
+            <span class="pill"><i class="fa-solid fa-gift"></i> 1,250 pts</span>
+            <span class="pill" style="background:#FFF8E9;border-color:#FFE4BF;color:#7b4b00"><i class="fa-solid fa-bolt"></i> Tier Boost</span>
+          </div>
+          <ul style="list-style:none;display:grid;gap:.5rem">
+            <li class="note info"><i class="fa-solid fa-check"></i> 10% off on hotels via Zyra</li>
+            <li class="note info"><i class="fa-solid fa-check"></i> Priority support on travel changes</li>
+            <li class="note info"><i class="fa-solid fa-check"></i> Free geofencing alerts & safety tools</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Notifications + Quick links -->
+      <section class="grid-2">
+        <div class="section card">
+          <div class="section-head">
+            <h3 class="section-title"><i class="fa-solid fa-bell" style="color:var(--primary-color)"></i> Notifications</h3>
+            <button id="clearNotes" class="btn light"><i class="fa-solid fa-xmark"></i> Clear</button>
+          </div>
+          <div id="notes">
+            <div class="note warn"><i class="fa-solid fa-triangle-exclamation"></i> Passport expiring in 45 days. Consider renewal.</div>
+            <div class="note info"><i class="fa-solid fa-circle-info"></i> Deal: Save up to 20% on autumn stays.</div>
+            <div class="note danger"><i class="fa-solid fa-circle-exclamation"></i> Weather alert for Goa on 9 Nov.</div>
+          </div>
+        </div>
+
+        <div class="section card">
+          <div class="section-head">
+            <h3 class="section-title"><i class="fa-solid fa-bolt" style="color:var(--primary-color)"></i> Quick Links</h3>
+          </div>
+          <div class="quick">
+            <a class="ql card" href="booking.html">
+              <strong><i class="fa-solid fa-plus"></i> New Booking</strong>
+              <p>Flights, hotels, packages</p>
+            </a>
+            <a class="ql card" href="services.html">
+              <strong><i class="fa-solid fa-compass"></i> Explore</strong>
+              <p>Top destinations & tours</p>
+            </a>
+            <a class="ql card" href="geofencing.html">
+              <strong><i class="fa-solid fa-shield-halved"></i> Safety</strong>
+              <p>Boundary alerts & tracking</p>
+            </a>
+            <a class="ql card" href="weather-standalone.html">
+              <strong><i class="fa-solid fa-cloud-sun"></i> Weather</strong>
+              <p>Plan with live conditions</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer">© <span id="year"></span> Zyra Travels — Travel smarter, stay safer.</div>
+    </main>
+  </div>
+
+  <script>
+    // Basic brand state (could be replaced by real data later)
+    const state = {
+      points: Number(localStorage.getItem('zyra_points') || 1250),
+      upcomingTrips: 3,
+      savingsUSD: 312,
+      safetyOn: true,
+      spendMonthly: [420, 280, 350, 500, 620, 410, 300, 540, 480, 530, 610, 580],
+      tripCategories: { Leisure: 9, Business: 4, Adventure: 5, Family: 3 }
+    };
+
+    // Helpers
+    const $ = (sel) => document.querySelector(sel);
+    const setText = (sel, text) => { const el = $(sel); if (el) el.textContent = text; };
+
+    function humanNumber(n){
+      // Format numbers like 1,250 or 1.2k
+      if (n >= 1000) return (n/1000).toFixed(n % 1000 === 0 ? 0 : 1) + 'k';
+      return n.toLocaleString();
+    }
+
+    function greet(){
+      const h = new Date().getHours();
+      return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+    }
+
+    async function updateHeader(){
+      setText('#greet', greet());
+
+      // Try to fetch user data from backend first
+      try {
+        const response = await fetch('/api/auth/me');
+        if (response.ok) {
+          const userData = await response.json();
+          const name = userData.name || localStorage.getItem('zyra_name') || 'Traveler';
+          setText('#welcomeTitle', `${greet()}, ${name}`);
+          // Update localStorage with fresh data
+          localStorage.setItem('zyra_name', name);
+          localStorage.setItem('zyra_email', userData.email);
+        } else {
+          // Fallback to localStorage
+          const name = localStorage.getItem('zyra_name') || 'Traveler';
+          setText('#welcomeTitle', `${greet()}, ${name}`);
+        }
+      } catch (error) {
+        // Fallback to localStorage if API fails
+        const name = localStorage.getItem('zyra_name') || 'Traveler';
+        setText('#welcomeTitle', `${greet()}, ${name}`);
+      }
+
+      setText('#year', new Date().getFullYear());
+    }
+
+    function updateStats(){
+      setText('#statUpcoming', state.upcomingTrips);
+      setText('#statPoints', humanNumber(state.points));
+      setText('#statSavings', '$' + state.savingsUSD.toLocaleString());
+      setText('#statSafety', state.safetyOn ? 'On' : 'Off');
+
+      // Rewards tier logic
+      const tierChip = $('#tierChip');
+      const bar = $('#progressBar');
+      // Example thresholds
+      const tiers = [{name:'Bronze',min:0},{name:'Silver',min:1000},{name:'Gold',min:2000},{name:'Platinum',min:4000}];
+      let tier = tiers[0].name, nextMin = tiers[1].min;
+      for (let i=0;i<tiers.length;i++){
+        if (state.points >= tiers[i].min){
+          tier = tiers[i].name;
+          nextMin = tiers[i+1]?.min ?? tiers[i].min;
+        }
+      }
+      const progress = Math.max(5, Math.min(100, Math.round( ( (state.points - (nextMin === state.points ? state.points : (tiers.find(t => t.name===tier).min)) ) / Math.max(1, nextMin - tiers.find(t => t.name===tier).min) ) * 100 )));
+      tierChip.textContent = tier;
+      bar.style.width = (tier === 'Platinum' ? 100 : progress) + '%';
+    }
+
+    function initCharts(){
+      const cs = getComputedStyle(document.documentElement);
+      const primary = cs.getPropertyValue('--primary-color').trim();
+      const secondary = cs.getPropertyValue('--secondary-color').trim();
+
+      // Trip categories pie
+      const ctx1 = document.getElementById('chartTrips');
+      if (ctx1){
+        new Chart(ctx1, {
+          type: 'doughnut',
+          data: {
+            labels: Object.keys(state.tripCategories),
+            datasets: [{
+              data: Object.values(state.tripCategories),
+              backgroundColor: [
+                primary,
+                '#1E90FF',
+                '#8A2BE2',
+                '#FF6B35'
+              ],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            plugins: {
+              legend: { display: true, position: 'bottom' }
+            },
+            cutout: '60%'
+          }
         });
+      }
 
-        // Trip action buttons
-        document.querySelectorAll('.trip-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const action = this.textContent.trim();
-                const tripTitle = this.closest('.trip-card').querySelector('.trip-title').textContent;
-                
-                switch(action) {
-                    case 'View Details':
-                        alert(`Opening detailed itinerary for ${tripTitle}`);
-                        break;
-                    case 'Modify':
-                        alert(`Opening modification options for ${tripTitle}`);
-                        break;
-                    case 'Leave Review':
-                        alert(`Opening review form for ${tripTitle}`);
-                        break;
-                    case 'Photos':
-                        alert(`Opening photo gallery for ${tripTitle}`);
-                        break;
-                }
-            });
+      // Monthly spend bar
+      const ctx2 = document.getElementById('chartSpend');
+      if (ctx2){
+        new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            datasets: [{
+              label: 'Spend (USD)',
+              data: state.spendMonthly,
+              backgroundColor: secondary,
+              borderRadius: 8
+            }]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true, ticks: { callback: (v) => '$' + v } }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
         });
+      }
+    }
 
-        // Document upload
-        function uploadDocument() {
-            alert('Document upload feature coming soon!\n\nYou will be able to:\n• Upload passport copies\n• Add travel insurance documents\n• Store vaccination records\n• Keep emergency contact info');
-        }
-
-        // Profile edit
-        function editProfile() {
-            alert('Profile editing feature coming soon!\n\nYou will be able to:\n• Update personal information\n• Change contact details\n• Modify emergency contacts\n• Update travel preferences');
-        }
-
-        // Payment functions
-        function downloadStatement() {
-            alert('Downloading payment statement...\n\nYour complete payment history will be downloaded as a PDF file.');
-        }
-
-        // Rewards functions
-        function redeemPoints() {
-            alert('Points Redemption Center\n\nSelect from available rewards:\n• 10% Trip Discount (500 points)\n• Free Airport Transfer (800 points)\n• Hotel Upgrade (1,200 points)\n• Free Trip (5,000 points)');
-        }
-
-        // Settings functions
-        function saveSettings() {
-            alert('Settings saved successfully!\n\nYour preferences have been updated.');
-        }
-
-        function changePassword() {
-            alert('Change Password\n\nYou will receive an email with instructions to reset your password.');
-        }
-
-        function enable2FA() {
-            alert('Two-Factor Authentication\n\nWe will send you a setup guide to enable 2FA on your account for enhanced security.');
-        }
-
-        function downloadData() {
-            alert('Download Personal Data\n\nYour complete account data will be prepared and sent to your email within 24 hours.');
-        }
-
-        // Document card clicks
-        document.querySelectorAll('.document-card:not(.uploaded)').forEach(card => {
-            card.addEventListener('click', function() {
-                const docType = this.querySelector('.document-title').textContent;
-                alert(`Upload ${docType}\n\nFeature coming soon!`);
-            });
+    function wireUp(){
+      // Clear notifications
+      const clearBtn = document.getElementById('clearNotes');
+      if (clearBtn){
+        clearBtn.addEventListener('click', () => {
+          const box = document.getElementById('notes');
+          box.innerHTML = '<div class="note info"><i class="fa-solid fa-circle-info"></i> All caught up. No new alerts.</div>';
         });
+      }
 
-        // Quick action cards
-        document.querySelectorAll('.action-card').forEach(card => {
-            card.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#') {
-                    e.preventDefault();
-                    const action = this.querySelector('.action-title').textContent;
-                    alert(`${action} feature coming soon!`);
-                }
-            });
+      // Simple search navigation helper (client-side)
+      const search = document.getElementById('globalSearch');
+      if (search){
+        search.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter'){
+            const q = (search.value||'').toLowerCase().trim();
+            if (!q) return;
+            if (q.includes('book')) location.href = 'booking.html';
+            else if (q.includes('hotel')) location.href = 'hotel-booking.html';
+            else if (q.includes('weather')) location.href = 'weather-standalone.html';
+            else if (q.includes('geo')) location.href = 'geofencing.html';
+            else if (q.includes('id')) location.href = 'digital-id.html';
+            else if (q.includes('support') || q.includes('contact')) location.href = 'contact.html';
+            else if (q.includes('review')) location.href = 'reviews.html';
+            else location.href = 'services.html';
+          }
         });
+      }
+    }
 
-        // Stats card animations
-        document.querySelectorAll('.stat-card').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                const number = this.querySelector('.stat-number');
-                const originalText = number.textContent;
-                
-                // Add a subtle pulse effect
-                number.style.transform = 'scale(1.1)';
-                setTimeout(() => {
-                    number.style.transform = 'scale(1)';
-                }, 200);
-            });
+    // Init
+    (async () => {
+      await updateHeader();
+      updateStats();
+      initCharts();
+      wireUp();
+    })();
+  </script>
+ 
+<script src="/js/location.js"></script>
+<script>
+(function(){
+  function sendLocation() {
+    const token = localStorage.getItem('token');
+    if (!navigator.geolocation || !token) return;
+
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      try {
+        await fetch('http://localhost:3000/users/me/location', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ lat, lng })
         });
-    </script>
+      } catch (e) { /* ignore */ }
+    });
+  }
+  setInterval(sendLocation, 60000); // every 1 min
+  sendLocation();
+})();
+</script>
+
 </body>
 </html>
+
+

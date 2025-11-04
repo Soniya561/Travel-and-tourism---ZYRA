@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zyra Travel & Tourism - Home</title>
+  <!-- Auto-redirect removed to allow manual navigation from index -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #2E8B57;
+      --secondary-color: #3CB371;
+      --light-green: #F0FFF0;
+      --text-dark: #2F4F2F;
+      --text-light: #6B8E6B;
+      --white: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      background: linear-gradient(135deg, rgba(46, 139, 87, 0.8), rgba(60, 179, 113, 0.6)),
+                  url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=2070&q=80') center/cover fixed;
+      display: flex; align-items: center; justify-content: center; padding: 2rem;
+    }
+    .container {
+      width: 100%; max-width: 900px; background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(16px); border-radius: 18px; padding: 2rem 2rem 2.5rem;
+      border: 1px solid rgba(46,139,87,0.12); box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+    .header { text-align: center; margin-bottom: 1.25rem; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--primary-color); }
+    .subtitle { color: var(--text-light); margin-top: 0.35rem; }
+    .redirect-note { margin-top: 0.75rem; color: var(--text-light); font-size: 0.95rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+    .card { background: var(--white); border: 1px solid #E8F5E8; border-radius: 12px; padding: 1rem; display: flex; gap: 0.75rem; align-items: center; text-decoration: none; color: var(--text-dark); transition: all .25s ease; }
+    .card:hover { border-color: var(--primary-color); transform: translateY(-2px); background: var(--light-green); }
+    .card i { color: var(--secondary-color); }
+    .footer { margin-top: 1.5rem; text-align: center; font-size: .95rem; color: var(--text-light); }
+    .btn { display: inline-block; margin-top: .75rem; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+           color: #fff; padding: .7rem 1.2rem; border-radius: 10px; text-decoration: none; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo"><i class="fa-solid fa-leaf"></i> Zyra</div>
+      <p class="subtitle">Welcome! You will be redirected to the main site shortly.</p>
+      <p class="redirect-note">If you are not redirected, use the links below.</p>
+      <a class="btn" href="landing.html">Go to Landing Now</a>
+    </div>
+
+    <div class="grid" aria-label="Site Map">
+      <a class="card" href="login.html"><i class="fa-solid fa-right-to-bracket"></i> <span>Login / Sign Up</span></a>
+      <a class="card" href="landing.html"><i class="fa-solid fa-house"></i> <span>Landing (Home)</span></a>
+       <a class="card" href="dashboard.html"><i class="fa-solid fa-gauge-high"></i><span>  Dashboard</span></a>
+      <a class="card" href="landing.html"><i class="fa-solid fa-map-location-dot"></i> <span>Destinations</span></a>
+      <a class="card" href="explore.html"><i class="fa-solid fa-compass"></i> <span>Explore</span></a>
+      <a class="card" href="travel mode.html"><i class="fa-solid fa-plane"></i> <span>Travel Mode</span></a>
+      <a class="card" href="booking.html"><i class="fa-solid fa-ticket"></i> <span>Book Now</span></a>
+      <a class="card" href="hotel-booking.html"><i class="fa-solid fa-hotel"></i> <span>Hotel Booking</span></a>
+      <a class="card" href="weather-standalone.html"><i class="fa-solid fa-cloud"></i> <span>Weather (Standalone)</span></a>      
+      <a class="card" href="geofencing.html"><i class="fa-solid fa-cash-register"></i><span>Geofencing</span></a>
+      <a class="card" href="checkout.html"><i class="fa-solid fa-cash-register"></i> <span>Checkout</span></a>
+      <a class="card" href="faq.html"><i class="fa-solid fa-circle-question"></i> <span>FAQ</span></a>    
+      <a class="card" href="terms.html"><i class="fa-solid fa-scale-balanced"></i> <span>Terms & Conditions</span></a>
+      <a class="card" href="services.html"><i class="fa-solid fa-briefcase"></i> <span>Services</span></a>
+      <a class="card" href="reviews.html"><i class="fa-solid fa-star"></i> <span>Reviews</span></a>
+      <a class="card" href="about.html"><i class="fa-solid fa-circle-info"></i> <span>About</span></a>
+      <a class="card" href="contact.html"><i class="fa-solid fa-envelope"></i> <span>Contact</span></a>
+    </div>
+
+    <div class="footer">
+      <p>Set your server/root to this folder so index.html is the entry point. You’ll be redirected to landing.html automatically.</p>
+    </div>
+  </div>
+
+
+</body>
+</html>

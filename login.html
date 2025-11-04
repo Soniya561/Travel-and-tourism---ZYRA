@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Zyra Travel & Tourism</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Theme Variables */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-color: #2E8B57;
+      --secondary-color: #3CB371;
+      --accent-color: #98FB98;
+      --gold-color: #FFD700;
+      --dark-green: #1F5F3F;
+      --light-green: #F0FFF0;
+      --text-dark: #2F4F2F;
+      --text-light: #6B8E6B;
+      --white: #FFFFFF;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: var(--text-dark);
+      overflow-x: hidden;
+      min-height: 100vh;
+      background: linear-gradient(135deg, rgba(46, 139, 87, 0.8), rgba(60, 179, 113, 0.6)),
+                  url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=2070&q=80') center/cover fixed;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      z-index: 1000;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(46, 139, 87, 0.12);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      font-size: 2rem;
+      color: var(--secondary-color);
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--text-dark);
+      font-weight: 600;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .nav-menu a:hover,
+    .nav-menu a.active {
+      color: var(--primary-color);
+    }
+
+    .nav-menu a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      left: 0;
+      bottom: -5px;
+      background: var(--primary-color);
+      transition: width 0.3s ease;
+    }
+
+    .nav-menu a:hover::after,
+    .nav-menu a.active::after {
+      width: 100%;
+    }
+
+    .book-now-btn {
+      background: var(--gradient-primary);
+      color: #fff;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .book-now-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+    }
+
+    /* Main Content */
+    .main-content {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 2rem 2rem;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(46, 139, 87, 0.1);
+      width: 100%;
+      max-width: 450px;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .auth-toggle {
+      display: flex;
+      background: #F0FFF0;
+      border-radius: 12px;
+      padding: 0.3rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .auth-toggle-btn {
+      flex: 1;
+      padding: 0.8rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-light);
+      position: relative;
+      z-index: 2;
+    }
+
+    .auth-toggle-btn.active {
+      color: var(--white);
+      background: var(--gradient-primary);
+      box-shadow: 0 2px 10px rgba(46, 139, 87, 0.3);
+    }
+
+    .login-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .login-subtitle {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      position: relative;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 2px solid #E8F5E8;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      color: var(--text-dark);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+    }
+
+    .form-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      font-size: 1.1rem;
+    }
+
+    .form-group.has-label .form-icon {
+      top: calc(50% + 12px);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--text-light);
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+    }
+
+    .form-group.has-label .password-toggle {
+      top: calc(50% + 12px);
+    }
+
+    .password-toggle:hover {
+      color: var(--primary-color);
+    }
+
+    .form-options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0.5rem 0;
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+
+    .remember-me input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary-color);
+    }
+
+    .forgot-password {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password:hover {
+      color: var(--secondary-color);
+      text-decoration: underline;
+    }
+
+    .login-btn {
+      background: var(--gradient-primary);
+      color: var(--white);
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+      margin-top: 1rem;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 2rem 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #E8F5E8;
+    }
+
+    .divider span {
+      padding: 0 1rem;
+    }
+
+    .social-login {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .social-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem;
+      border: 2px solid #E8F5E8;
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .social-btn:hover {
+      border-color: var(--primary-color);
+      background: var(--light-green);
+      transform: translateY(-1px);
+    }
+
+    .auth-info {
+      text-align: center;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #E8F5E8;
+      color: var(--text-light);
+    }
+
+    .auth-info span {
+      transition: color 0.3s ease;
+    }
+
+    .auth-info span:hover {
+      color: var(--secondary-color);
+      text-decoration: underline;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .login-container {
+        margin: 1rem;
+        padding: 2rem;
+      }
+
+      .login-title {
+        font-size: 2rem;
+      }
+
+      .form-options {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .social-login {
+        flex-direction: column;
+      }
+    }
+
+    /* Loading State */
+    .login-btn.loading {
+      position: relative;
+      color: transparent;
+    }
+
+    .login-btn.loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top: 2px solid var(--white);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav-container">
+      <a class="logo" href="index.html"><i class="fa-solid fa-leaf"></i> Zyra</a>
+      <ul class="nav-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="landing.html">Destinations</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a class="book-now-btn" href="booking.html">Book Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <div class="login-container">
+      <div class="login-header">
+        <div class="auth-toggle">
+          <button type="button" class="auth-toggle-btn active" id="loginToggle">Login</button>
+          <button type="button" class="auth-toggle-btn" id="signupToggle">Sign Up</button>
+        </div>
+        <h1 class="login-title" id="authTitle">Welcome Back</h1>
+        <p class="login-subtitle" id="authSubtitle">Sign in to your Zyra Travel account</p>
+      </div>
+
+      <form class="login-form" id="authForm">
+        <!-- Sign Up Only Fields -->
+        <div class="form-group has-label signup-field">
+          <label class="form-label" for="fullName">Full Name</label>
+          <i class="fa-solid fa-user form-icon"></i>
+          <input 
+            type="text" 
+            id="fullName" 
+            name="fullName" 
+            class="form-input" 
+            placeholder="Enter your full name"
+          />
+        </div>
+
+        <div class="form-group has-label signup-field">
+          <label class="form-label" for="phone">Phone Number</label>
+          <i class="fa-solid fa-phone form-icon"></i>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="phone" 
+            class="form-input" 
+            placeholder="Enter your phone number"
+          />
+        </div>
+
+        <!-- Common Fields -->
+        <div class="form-group has-label">
+          <label class="form-label" for="email">Email Address</label>
+          <i class="fa-solid fa-envelope form-icon"></i>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-input" 
+            placeholder="Enter your email address"
+            required
+          />
+        </div>
+
+        <div class="form-group has-label">
+          <label class="form-label" for="password">Password</label>
+          <i class="fa-solid fa-lock form-icon"></i>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="form-input" 
+            placeholder="Enter your password"
+            required
+          />
+          <i class="fa-solid fa-eye password-toggle" id="passwordToggle"></i>
+        </div>
+
+        <!-- Sign Up Only Fields -->
+        <div class="form-group has-label signup-field">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <i class="fa-solid fa-lock form-icon"></i>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            name="confirmPassword" 
+            class="form-input" 
+            placeholder="Confirm your password"
+          />
+          <i class="fa-solid fa-eye password-toggle" id="confirmPasswordToggle"></i>
+        </div>
+
+        <!-- Login Options -->
+        <div class="form-options login-options">
+          <label class="remember-me">
+            <input type="checkbox" id="rememberMe" name="rememberMe" />
+            Remember me
+          </label>
+          <a href="#" class="forgot-password">Forgot Password?</a>
+        </div>
+
+        <!-- Sign Up Options -->
+        <div class="form-options signup-options">
+          <label class="remember-me">
+            <input type="checkbox" id="agreeTerms" name="agreeTerms" />
+            I agree to the <a href="terms.html">Terms & Conditions</a>
+          </label>
+        </div>
+
+        <button type="submit" class="login-btn" id="authBtn">
+          Sign In
+        </button>
+      </form>
+      <div class="auth-info" id="authInfo">
+        <p>New to Zyra Travel? <span class="signup-link" onclick="switchToSignup()">Create an account</span>
+</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Global variables
+    let isSignupMode = false;
+    const loginToggle = document.getElementById('loginToggle');
+    const signupToggle = document.getElementById('signupToggle');
+    const authTitle = document.getElementById('authTitle');
+    const authSubtitle = document.getElementById('authSubtitle');
+    const authBtn = document.getElementById('authBtn');
+    const authInfo = document.getElementById('authInfo');
+    const authForm = document.getElementById('authForm');
+
+    // Toggle between login and signup
+    function switchToLogin() {
+      isSignupMode = false;
+      
+      // Update toggle buttons
+      loginToggle.classList.add('active');
+      signupToggle.classList.remove('active');
+      
+      // Update title and subtitle
+      authTitle.textContent = 'Welcome Back';
+      authSubtitle.textContent = 'Sign in to your Zyra Travel account';
+      
+      // Update button text
+      authBtn.textContent = 'Sign In';
+      
+      // Show/hide form fields
+      const signupFields = document.querySelectorAll('.signup-field');
+      const loginOptions = document.querySelector('.login-options');
+      const signupOptions = document.querySelector('.signup-options');
+      
+      signupFields.forEach(field => {
+        field.style.display = 'none';
+        const input = field.querySelector('input');
+        if (input) input.required = false;
+      });
+      
+      loginOptions.style.display = 'flex';
+      signupOptions.style.display = 'none';
+      
+      // Update bottom text
+      authInfo.innerHTML = '<p>New to Zyra Travel? <span style="color: var(--primary-color); cursor: pointer; font-weight: 600;" onclick="switchToSignup()">Create an account</span></p>';
+      
+      // Clear form
+      authForm.reset();
+    }
+
+    function switchToSignup() {
+      isSignupMode = true;
+
+      // Update toggle buttons
+      signupToggle.classList.add('active');
+      loginToggle.classList.remove('active');
+
+      // Update title and subtitle
+      authTitle.textContent = 'Join Zyra Travel';
+      authSubtitle.textContent = 'Create your account and start exploring';
+
+      // Update button text
+      authBtn.textContent = 'Create Account';
+
+      // Show all signup fields
+      const signupFields = document.querySelectorAll('.signup-field');
+      const loginOptions = document.querySelector('.login-options');
+      const signupOptions = document.querySelector('.signup-options');
+
+      signupFields.forEach(field => {
+        field.style.display = 'block';
+        const input = field.querySelector('input');
+        if (input) input.required = true;
+      });
+
+      loginOptions.style.display = 'none';
+      signupOptions.style.display = 'block';
+
+      // Update bottom text
+      authInfo.innerHTML = '<p>Already have an account? <span style="color: var(--primary-color); cursor: pointer; font-weight: 600;" onclick="switchToLogin()">Sign in here</span></p>';
+
+      // Clear form
+      authForm.reset();
+    }
+
+    // Event listeners for toggle buttons
+    loginToggle.addEventListener('click', switchToLogin);
+    signupToggle.addEventListener('click', switchToSignup);
+
+    // Password toggle functionality
+    function setupPasswordToggle(toggleId, inputId) {
+      const toggle = document.getElementById(toggleId);
+      const input = document.getElementById(inputId);
+      
+      if (toggle && input) {
+        toggle.addEventListener('click', function() {
+          const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+          input.setAttribute('type', type);
+          
+          // Toggle icon
+          this.classList.toggle('fa-eye');
+          this.classList.toggle('fa-eye-slash');
+        });
+      }
+    }
+
+    // Setup password toggles
+    setupPasswordToggle('passwordToggle', 'password');
+    setupPasswordToggle('confirmPasswordToggle', 'confirmPassword');
+
+    // Form submission
+    authForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      if (!validateForm()) {
+        return;
+      }
+
+      // Add loading state
+      authBtn.classList.add('loading');
+      authBtn.disabled = true;
+
+      // Get form data
+      const formData = new FormData(authForm);
+
+      try {
+        if (isSignupMode) {
+          // Handle signup with all details
+          const fullName = formData.get('fullName');
+          const phone = formData.get('phone');
+          const email = formData.get('email');
+          const password = formData.get('password');
+          const confirmPassword = formData.get('confirmPassword');
+
+          const response = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: fullName,
+              phone: phone,
+              email: email,
+              password: password,
+              confirmPassword: confirmPassword
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Store user info in localStorage for dashboard
+            localStorage.setItem('zyra_email', email);
+            localStorage.setItem('zyra_name', fullName);
+
+            // Redirect to dashboard after successful signup
+            window.location.href = 'dashboard.html';
+          } else {
+            alert(data.error || 'Signup failed');
+          }
+        } else {
+          // Handle login
+          const email = formData.get('email');
+          const password = formData.get('password');
+
+          const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email,
+              password: password
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Store user email in localStorage for dashboard
+            localStorage.setItem('zyra_email', email);
+            localStorage.setItem('zyra_name', email.split('@')[0]); // Use email prefix as name initially
+
+            // Redirect to dashboard after successful login
+            window.location.href = 'dashboard.html';
+          } else {
+            alert(data.error || 'Login failed');
+          }
+        }
+      } catch (error) {
+        console.error('Auth error:', error);
+        alert('Network error. Please try again.');
+      } finally {
+        // Remove loading state
+        authBtn.classList.remove('loading');
+        authBtn.disabled = false;
+      }
+    });
+
+
+
+
+
+    // Input focus effects
+    const formInputs = document.querySelectorAll('.form-input');
+    formInputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.classList.add('focused');
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.classList.remove('focused');
+      });
+    });
+
+    // Form validation functions
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(email);
+    }
+
+    function validatePhone(phone) {
+      const re = /^[\+]?[1-9][\d]{0,15}$/;
+      return re.test(phone.replace(/\s/g, ''));
+    }
+
+    function validateForm() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Common validation
+      if (!email || !validateEmail(email)) {
+        alert('Please enter a valid email address');
+        return false;
+      }
+      
+      if (!password || password.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return false;
+      }
+      
+      // Signup specific validation
+      if (isSignupMode) {
+        const fullName = document.getElementById('fullName').value;
+        const phone = document.getElementById('phone').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+
+        if (!fullName || fullName.trim().length < 2) {
+          alert('Please enter a valid full name');
+          return false;
+        }
+
+        if (!phone || !validatePhone(phone)) {
+          alert('Please enter a valid phone number');
+          return false;
+        }
+
+        if (!agreeTerms) {
+          alert('Please agree to the Terms & Conditions');
+          return false;
+        }
+      }
+      
+      return true;
+    }
+
+    // Real-time validation
+    document.getElementById('email').addEventListener('blur', function() {
+      if (this.value && !validateEmail(this.value)) {
+        this.style.borderColor = '#e74c3c';
+      } else {
+        this.style.borderColor = '#E8F5E8';
+      }
+    });
+
+    document.getElementById('password').addEventListener('input', function() {
+      if (this.value.length > 0 && this.value.length < 6) {
+        this.style.borderColor = '#e74c3c';
+      } else {
+        this.style.borderColor = '#E8F5E8';
+      }
+    });
+
+    // Signup specific validation
+    document.getElementById('fullName').addEventListener('blur', function() {
+      if (this.value && this.value.trim().length < 2) {
+        this.style.borderColor = '#e74c3c';
+      } else {
+        this.style.borderColor = '#E8F5E8';
+      }
+    });
+
+    document.getElementById('phone').addEventListener('blur', function() {
+      if (this.value && !validatePhone(this.value)) {
+        this.style.borderColor = '#e74c3c';
+      } else {
+        this.style.borderColor = '#E8F5E8';
+      }
+    });
+
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+      const password = document.getElementById('password').value;
+      if (this.value && this.value !== password) {
+        this.style.borderColor = '#e74c3c';
+      } else {
+        this.style.borderColor = '#E8F5E8';
+      }  
+    });
+
+    // Initialize in login mode
+    switchToLogin();
+  </script>
+</body>
+</html>

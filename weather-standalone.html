@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zyra Travels — Destination Weather (Standalone)</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary-color:#2E8B57; --secondary-color:#3CB371; --dark-green:#1F5F3F;
+      --light-green:#F0FFF0; --text-dark:#2F4F2F; --text-light:#6B8E6B; --white:#fff;
+      --shadow:rgba(0,0,0,.1); --gradient-primary:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+      --danger:#B00020; --ok:#1F5F3F; --bg-bad:#FFF0F0; --bg-good:#ECFFF2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;color:var(--text-dark);line-height:1.6;background:#FAFFFE}
+
+    .header{position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);z-index:1000;border-bottom:1px solid rgba(46,139,87,0.12)}
+    .nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.6rem;color:var(--primary-color);text-decoration:none;display:flex;gap:.5rem;align-items:center}
+    .logo i{color:var(--secondary-color)}
+    .nav-actions{display:flex;gap:.6rem;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:999px;text-decoration:none;font-weight:700;cursor:pointer;transition:.25s}
+    .btn-primary{background:var(--gradient-primary);color:#fff;padding:.65rem 1rem}
+    .btn-link{color:var(--primary-color);padding:.4rem .75rem}
+
+    .hero{background:linear-gradient(135deg,rgba(46,139,87,.78),rgba(60,179,113,.55)), url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat; color:#fff;text-align:center;padding:4rem 1.25rem}
+    .hero h1{font-family:'Playfair Display',serif;font-size:2.4rem;line-height:1.15;margin-bottom:.6rem;text-shadow:0 4px 20px rgba(0,0,0,.28)}
+
+    .container{max-width:1100px;margin:1.5rem auto;padding:0 1.25rem}
+    .panel{background:#fff;border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.12);padding:1rem}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media (max-width:820px){.grid{grid-template-columns:1fr}}
+
+    .field{display:flex;flex-direction:column;gap:.4rem}
+    .field label{font-weight:700;color:var(--text-dark);display:flex;gap:.45rem;align-items:center}
+    .field input,.field select{padding:.8rem;border:2px solid #E8F5E8;border-radius:12px;background:#FAFFFE}
+
+    .actions{display:flex;gap:.6rem;align-items:end}
+    .btn-ghost{padding:.85rem 1rem;background:#F5FFF8;border:2px solid #E8F5E8;border-radius:12px;color:var(--primary-color);font-weight:700}
+
+    .summary{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center}
+    .badge{background:#ECFFF2;color:var(--dark-green);padding:.35rem .6rem;border-radius:999px;font-weight:800;font-size:.85rem}
+
+    .card{background:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.12);padding:1rem}
+    .status{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .6rem;border-radius:999px;font-weight:800}
+
+    footer{margin:2rem 0 3rem;color:#6c8f6c;text-align:center}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <a class="logo" href="#"><i class="fa-solid fa-leaf"></i> Zyra Travels</a>
+      <div class="nav-actions">
+        <a class="btn btn-link" href="#">Standalone</a>
+        <a class="btn btn-primary" href="#weather">Check Weather</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Destination Weather & Suitability</h1>
+    <p>This standalone page works without any backend. Just type a city and check.</p>
+  </section>
+
+  <div class="container" id="weather">
+    <div class="panel">
+      <div class="grid">
+        <div class="field">
+          <label><i class="fa-solid fa-location-dot"></i> Destination City</label>
+          <input id="cityInput" list="cityList" placeholder="Type a city (e.g., Paris, Tokyo, Dubai)" />
+          <datalist id="cityList">
+            <option>New York</option><option>Paris</option><option>Tokyo</option>
+            <option>Dubai</option><option>London</option><option>Singapore</option>
+            <option>Rome</option><option>Bangkok</option>
+          </datalist>
+        </div>
+        <div class="actions">
+          <button id="btnCheck" class="btn-ghost"><i class="fa-solid fa-cloud-bolt"></i> Check Weather</button>
+          <button id="btnUseGeo" class="btn-ghost"><i class="fa-solid fa-location-crosshairs"></i> Use My Location</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: .75rem"></div>
+
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin-bottom:.6rem"><i class="fa-solid fa-cloud-sun" style="color:#f39c12"></i> Current Weather</h3>
+        <div class="summary">
+          <span id="sumMain">Weather: n/a</span>
+          <span id="sumSuit" class="badge" style="display:none"></span>
+        </div>
+        <div style="margin-top: .8rem; color: var(--text-light)" id="sumReason"></div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:.6rem"><i class="fa-solid fa-circle-info" style="color:#3CB371"></i> Details</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">
+          <div><strong>Temperature</strong><div id="dTemp">—</div></div>
+          <div><strong>Condition</strong><div id="dCond">—</div></div>
+          <div><strong>Humidity</strong><div id="dHum">—</div></div>
+          <div><strong>Wind</strong><div id="dWind">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>© <span id="year"></span> Zyra Travels — Weather insights for smarter trips.</footer>
+
+  <script>
+    const cityInput = document.getElementById('cityInput');
+    const btnCheck = document.getElementById('btnCheck');
+    const btnUseGeo = document.getElementById('btnUseGeo');
+
+    const sumMain = document.getElementById('sumMain');
+    const sumSuit = document.getElementById('sumSuit');
+    const sumReason = document.getElementById('sumReason');
+    const dTemp = document.getElementById('dTemp');
+    const dCond = document.getElementById('dCond');
+    const dHum = document.getElementById('dHum');
+    const dWind = document.getElementById('dWind');
+
+    async function fetchWeather(city){
+      function render(w){
+        sumMain.textContent = `Weather: ${w.city} • ${w.tempC}°C • ${w.condition}`;
+        sumSuit.textContent = w.suitable ? 'Suitable' : 'Not suitable';
+        sumSuit.style.background = w.suitable ? 'var(--bg-good)' : 'var(--bg-bad)';
+        sumSuit.style.color = w.suitable ? 'var(--ok)' : 'var(--danger)';
+        sumSuit.style.display = 'inline-flex';
+        sumSuit.title = w.reason || '';
+        sumReason.textContent = w.reason || '';
+        dTemp.textContent = `${w.tempC} °C`;
+        dCond.textContent = w.condition;
+        dHum.textContent = `${w.humidity}%`;
+        dWind.textContent = `${w.windKph} km/h`;
+      }
+
+      function assessWeather(info){
+        const temp = Number(info.tempC || 0);
+        const cond = String(info.condition || '').toLowerCase();
+        const humidity = Number(info.humidity || 0);
+        const wind = Number(info.windKph || 0);
+        const unsuitable = ["thunderstorm","tornado","squall","ash","dust","sand"];
+        let suitable = true;
+        const reasons = [];
+        if(!(temp >= 18 && temp <= 32)){
+          suitable = false;
+          reasons.push(`Temperature ${temp}°C is outside the ideal 18–32°C range`);
+        }
+        if(unsuitable.some(w => cond.includes(w))){
+          suitable = false;
+          reasons.push(`Condition '${info.condition}' is not suitable for travel`);
+        }
+        if(humidity > 85){ suitable = false; reasons.push(`High humidity (${humidity}%)`); }
+        if(wind > 40){ suitable = false; reasons.push(`Strong winds (${wind} km/h)`); }
+        if(suitable && reasons.length === 0){ reasons.push('Great weather for travel'); }
+        return { suitable, reason: reasons.join('; ') };
+      }
+
+      if(!city){
+        sumMain.textContent = 'Weather: n/a';
+        sumSuit.style.display = 'none';
+        sumReason.textContent = '';
+        dTemp.textContent = dCond.textContent = dHum.textContent = dWind.textContent = '—';
+        return;
+      }
+      sumMain.textContent = 'Weather: checking...';
+      sumSuit.style.display = 'none';
+      sumReason.textContent = '';
+
+      try{
+        // Geocode city → lat/lon
+        const gr = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
+        const g = await gr.json();
+        if(!g.results || !g.results.length){ throw new Error('City not found'); }
+        const lat = g.results[0].latitude;
+        const lon = g.results[0].longitude;
+        const resolved = g.results[0].name || city;
+
+        // Current weather
+        const wr = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&wind_speed_unit=kmh`);
+        const wj = await wr.json();
+        const curr = wj.current || {};
+        const code = Number(curr.weather_code || 0);
+        const codeMap = {
+          0: 'Clear', 1: 'Mainly Clear', 2: 'Partly Cloudy', 3: 'Cloudy',
+          45: 'Fog', 48: 'Depositing Rime Fog',
+          51: 'Drizzle', 53: 'Drizzle', 55: 'Drizzle',
+          56: 'Freezing Drizzle', 57: 'Freezing Drizzle',
+          61: 'Rain', 63: 'Rain', 65: 'Rain',
+          66: 'Freezing Rain', 67: 'Freezing Rain',
+          71: 'Snow', 73: 'Snow', 75: 'Snow',
+          77: 'Snow Grains',
+          80: 'Rain Showers', 81: 'Rain Showers', 82: 'Rain Showers',
+          85: 'Snow Showers', 86: 'Snow Showers',
+          95: 'Thunderstorm', 96: 'Thunderstorm', 99: 'Thunderstorm',
+        };
+        const condition = codeMap[code] || 'Clouds';
+        const info = {
+          city: resolved,
+          tempC: Math.round(Number(curr.temperature_2m || 0) * 10) / 10,
+          condition,
+          humidity: Math.round(Number(curr.relative_humidity_2m || 0)),
+          windKph: Math.round(Number(curr.wind_speed_10m || 0) * 10) / 10,
+        };
+        const assessment = assessWeather(info);
+        render({ ...info, ...assessment, source: 'open-meteo' });
+      }catch(e){
+        console.error(e);
+        sumMain.textContent = 'Weather: unavailable';
+        sumSuit.style.display = 'none';
+        sumReason.textContent = 'Please try again later.';
+      }
+    }
+
+    // Optional: reverse geocode by client IP or geolocation
+    btnUseGeo.addEventListener('click', async () => {
+      if(!navigator.geolocation){
+        alert('Geolocation not supported');
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(async pos => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+          const j = await resp.json();
+          const city = j.address && (j.address.city || j.address.town || j.address.village || j.address.state);
+          if(city){
+            cityInput.value = city;
+            fetchWeather(city);
+          } else {
+            alert('Could not determine city from your location');
+          }
+        } catch(err){
+          console.error(err);
+          alert('Failed to determine your city');
+        }
+      }, () => alert('Location permission denied'));
+    });
+
+    btnCheck.addEventListener('click', () => fetchWeather(cityInput.value.trim()));
+    cityInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ fetchWeather(cityInput.value.trim()); }});
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

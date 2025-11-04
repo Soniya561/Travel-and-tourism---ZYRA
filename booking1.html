@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traveler Information - Zyra Travels</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #3CB371;
+            --accent-color: #98FB98;
+            --gold-color: #FFD700;
+            --dark-green: #1F5F3F;
+            --light-green: #F0FFF0;
+            --text-dark: #2F4F2F;
+            --text-light: #6B8E6B;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, rgba(240, 255, 240, 0.85), rgba(248, 255, 248, 0.85)), 
+                        url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80') center/cover fixed;
+            min-height: 100vh;
+        }
+
+        /* Header & Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--secondary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-menu a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .book-now-btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        .book-now-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        /* Main Container */
+        .booking-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .booking-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .booking-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: #E8F5E8;
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #E8F5E8;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-circle {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .step.completed .step-circle {
+            background: var(--success-color);
+            color: var(--white);
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Booking Form */
+        .booking-form {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(46, 139, 87, 0.1);
+        }
+
+        .step-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid #E8F5E8;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.1);
+            background: var(--white);
+        }
+
+        .form-group.error input,
+        .form-group.error select {
+            border-color: var(--error-color);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        /* Traveler Sections */
+        .traveler-section {
+            border: 2px solid #E8F5E8;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .traveler-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #E8F5E8;
+        }
+
+        .traveler-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .traveler-number {
+            background: var(--gradient-primary);
+            color: var(--white);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .remove-traveler-btn {
+            background: var(--error-color);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .remove-traveler-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .add-traveler-section {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .add-traveler-btn {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0 auto;
+        }
+
+        .add-traveler-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        /* Special Sections */
+        .primary-traveler {
+            border-color: var(--primary-color);
+            background: rgba(46, 139, 87, 0.02);
+        }
+
+        .primary-traveler .traveler-title {
+            color: var(--primary-color);
+        }
+
+        /* Navigation Buttons */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+        }
+
+        .nav-btn {
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-prev {
+            background: #f8f9fa;
+            color: var(--text-dark);
+            border: 2px solid #E8F5E8;
+        }
+
+        .btn-prev:hover {
+            background: var(--light-green);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-next {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: 0 4px 15px rgba(46, 139, 87, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(46, 139, 87, 0.4);
+        }
+
+        /* Travel Summary */
+        .travel-summary {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .summary-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #E8F5E8;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .booking-container {
+                padding: 100px 1rem 2rem;
+            }
+
+            .booking-header h1 {
+                font-size: 2rem;
+            }
+
+            .booking-form {
+                padding: 2rem 1.5rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .progress-steps {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+
+            .progress-steps::before {
+                display: none;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .form-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .traveler-section {
+                padding: 1.5rem;
+            }
+
+            .traveler-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="landing.html" class="logo">
+                <i class="fas fa-globe-americas"></i>
+                Zyra Travels
+            </a>
+            <nav class="nav-menu">
+                <a href="landing.html">Home</a>
+                <a href="landing.html#destinations">Destinations</a>
+                <a href="services.html">Services</a>
+                <a href="reviews.html">Reviews</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <a href="booking.html" class="book-now-btn active">Book Now</a>
+        </div>
+    </header>
+
+    <!-- Main Booking Container -->
+    <div class="booking-container">
+        <!-- Header -->
+        <div class="booking-header">
+            <h1>Traveler Information</h1>
+            <p>Please provide details for all travelers</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step completed" data-step="1">
+                <div class="step-circle"><i class="fas fa-check"></i></div>
+                <div class="step-label">Select Package</div>
+            </div>
+            <div class="step completed" data-step="2">
+                <div class="step-circle"><i class="fas fa-check"></i></div>
+                <div class="step-label">Travel Details</div>
+            </div>
+            <div class="step active" data-step="3">
+                <div class="step-circle">3</div>
+                <div class="step-label">Traveler Info</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-circle">4</div>
+                <div class="step-label">Payment</div>
+            </div>
+        </div>
+
+        <!-- Travel Summary -->
+        <div class="travel-summary">
+            <div class="summary-title">
+                <i class="fas fa-info-circle"></i>
+                Travel Summary
+            </div>
+            <div class="summary-item">
+                <span>Package:</span>
+                <span id="summary-package">Bali Paradise</span>
+            </div>
+            <div class="summary-item">
+                <span>Departure:</span>
+                <span id="summary-departure">-</span>
+            </div>
+            <div class="summary-item">
+                <span>Return:</span>
+                <span id="summary-return">-</span>
+            </div>
+            <div class="summary-item">
+                <span>Travelers:</span>
+                <span id="summary-travelers">1</span>
+            </div>
+        </div>
+
+        <!-- Booking Form -->
+        <div class="booking-form">
+            <h2 class="step-title">Traveler Details</h2>
+            
+            <div id="travelers-container">
+                <!-- Primary Traveler -->
+                <div class="traveler-section primary-traveler" data-traveler="1">
+                    <div class="traveler-header">
+                        <div class="traveler-title">
+                            <div class="traveler-number">1</div>
+                            Primary Traveler (Lead Passenger)
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="first-name-1">First Name *</label>
+                            <input type="text" id="first-name-1" name="first-name-1" required>
+                            <div class="error-message">Please enter first name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name-1">Last Name *</label>
+                            <input type="text" id="last-name-1" name="last-name-1" required>
+                            <div class="error-message">Please enter last name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email-1">Email Address *</label>
+                            <input type="email" id="email-1" name="email-1" required>
+                            <div class="error-message">Please enter a valid email</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone-1">Phone Number *</label>
+                            <input type="tel" id="phone-1" name="phone-1" required>
+                            <div class="error-message">Please enter phone number</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dob-1">Date of Birth *</label>
+                            <input type="date" id="dob-1" name="dob-1" required>
+                            <div class="error-message">Please enter date of birth</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="gender-1">Gender</label>
+                            <select id="gender-1" name="gender-1">
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="passport-1">Passport Number *</label>
+                            <input type="text" id="passport-1" name="passport-1" required>
+                            <div class="error-message">Please enter passport number</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="passport-expiry-1">Passport Expiry Date *</label>
+                            <input type="date" id="passport-expiry-1" name="passport-expiry-1" required>
+                            <div class="error-message">Please enter passport expiry date</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nationality-1">Nationality *</label>
+                            <select id="nationality-1" name="nationality-1" required>
+                                <option value="">Select nationality</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <option value="DE">Germany</option>
+                                <option value="FR">France</option>
+                                <option value="IT">Italy</option>
+                                <option value="ES">Spain</option>
+                                <option value="JP">Japan</option>
+                                <option value="KR">South Korea</option>
+                                <option value="CN">China</option>
+                                <option value="IN">India</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div class="error-message">Please select nationality</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Traveler Button -->
+            <div class="add-traveler-section">
+                <button type="button" class="add-traveler-btn" onclick="addTraveler()">
+                    <i class="fas fa-plus"></i>
+                    Add Another Traveler
+                </button>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="form-navigation">
+                <button type="button" class="nav-btn btn-prev" onclick="goToPreviousStep()">
+                    <i class="fas fa-arrow-left"></i> Back to Travel Details
+                </button>
+                <button type="button" class="nav-btn btn-next" onclick="goToNextStep()">
+                    Continue to Payment <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let travelerCount = 1;
+        let maxTravelers = 1;
+
+        // Load travel details and set max travelers
+        window.addEventListener('load', function() {
+            const travelDetails = localStorage.getItem('travelDetails');
+            if (travelDetails) {
+                const details = JSON.parse(travelDetails);
+                maxTravelers = parseInt(details.travelers) || 1;
+                
+                // Update summary
+                document.getElementById('summary-departure').textContent = details.departureDate || '-';
+                document.getElementById('summary-return').textContent = details.returnDate || '-';
+                document.getElementById('summary-travelers').textContent = maxTravelers;
+                
+                // Add additional traveler forms if needed
+                for (let i = 2; i <= maxTravelers; i++) {
+                    addTraveler();
+                }
+            }
+
+            // Load package info
+            const packageInfo = localStorage.getItem('selectedPackage');
+            if (packageInfo) {
+                const pkg = JSON.parse(packageInfo);
+                document.getElementById('summary-package').textContent = pkg.name;
+            }
+
+            // Load saved traveler data
+            loadSavedTravelerData();
+        });
+
+        function addTraveler() {
+            if (travelerCount >= maxTravelers) {
+                alert(`Maximum ${maxTravelers} travelers allowed for this booking.`);
+                return;
+            }
+
+            travelerCount++;
+            const container = document.getElementById('travelers-container');
+            
+            const travelerSection = document.createElement('div');
+            travelerSection.className = 'traveler-section';
+            travelerSection.setAttribute('data-traveler', travelerCount);
+            
+            travelerSection.innerHTML = `
+                <div class="traveler-header">
+                    <div class="traveler-title">
+                        <div class="traveler-number">${travelerCount}</div>
+                        Traveler ${travelerCount}
+                    </div>
+                    <button type="button" class="remove-traveler-btn" onclick="removeTraveler(${travelerCount})">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="first-name-${travelerCount}">First Name *</label>
+                        <input type="text" id="first-name-${travelerCount}" name="first-name-${travelerCount}" required>
+                        <div class="error-message">Please enter first name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name-${travelerCount}">Last Name *</label>
+                        <input type="text" id="last-name-${travelerCount}" name="last-name-${travelerCount}" required>
+                        <div class="error-message">Please enter last name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email-${travelerCount}">Email Address</label>
+                        <input type="email" id="email-${travelerCount}" name="email-${travelerCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-${travelerCount}">Phone Number</label>
+                        <input type="tel" id="phone-${travelerCount}" name="phone-${travelerCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="dob-${travelerCount}">Date of Birth *</label>
+                        <input type="date" id="dob-${travelerCount}" name="dob-${travelerCount}" required>
+                        <div class="error-message">Please enter date of birth</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender-${travelerCount}">Gender</label>
+                        <select id="gender-${travelerCount}" name="gender-${travelerCount}">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-to-say">Prefer not to say</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="passport-${travelerCount}">Passport Number *</label>
+                        <input type="text" id="passport-${travelerCount}" name="passport-${travelerCount}" required>
+                        <div class="error-message">Please enter passport number</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="passport-expiry-${travelerCount}">Passport Expiry Date *</label>
+                        <input type="date" id="passport-expiry-${travelerCount}" name="passport-expiry-${travelerCount}" required>
+                        <div class="error-message">Please enter passport expiry date</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nationality-${travelerCount}">Nationality *</label>
+                        <select id="nationality-${travelerCount}" name="nationality-${travelerCount}" required>
+                            <option value="">Select nationality</option>
+                            <option value="US">United States</option>
+                            <option value="CA">Canada</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="AU">Australia</option>
+                            <option value="DE">Germany</option>
+                            <option value="FR">France</option>
+                            <option value="IT">Italy</option>
+                            <option value="ES">Spain</option>
+                            <option value="JP">Japan</option>
+                            <option value="KR">South Korea</option>
+                            <option value="CN">China</option>
+                            <option value="IN">India</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="error-message">Please select nationality</div>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(travelerSection);
+            
+            // Show remove button for additional travelers
+            travelerSection.querySelector('.remove-traveler-btn').style.display = 'block';
+            
+            // Add event listeners for auto-save
+            addAutoSaveListeners(travelerCount);
+            
+            // Hide add button if max reached
+            if (travelerCount >= maxTravelers) {
+                document.querySelector('.add-traveler-btn').style.display = 'none';
+            }
+        }
+
+        function removeTraveler(travelerNumber) {
+            const travelerSection = document.querySelector(`[data-traveler="${travelerNumber}"]`);
+            if (travelerSection && travelerNumber > 1) {
+                travelerSection.remove();
+                travelerCount--;
+                
+                // Show add button if below max
+                if (travelerCount < maxTravelers) {
+                    document.querySelector('.add-traveler-btn').style.display = 'flex';
+                }
+                
+                // Renumber remaining travelers
+                renumberTravelers();
+                saveTravelerData();
+            }
+        }
+
+        function renumberTravelers() {
+            const travelerSections = document.querySelectorAll('.traveler-section');
+            travelerSections.forEach((section, index) => {
+                const newNumber = index + 1;
+                section.setAttribute('data-traveler', newNumber);
+                
+                // Update traveler number display
+                const numberDisplay = section.querySelector('.traveler-number');
+                if (numberDisplay) {
+                    numberDisplay.textContent = newNumber;
+                }
+                
+                // Update title
+                const title = section.querySelector('.traveler-title');
+                if (title && newNumber > 1) {
+                    title.innerHTML = `
+                        <div class="traveler-number">${newNumber}</div>
+                        Traveler ${newNumber}
+                    `;
+                }
+                
+                // Update form field IDs and names
+                const inputs = section.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    const oldId = input.id;
+                    const fieldName = oldId.replace(/-\d+$/, '');
+                    const newId = `${fieldName}-${newNumber}`;
+                    
+                    input.id = newId;
+                    input.name = newId;
+                    
+                    // Update corresponding label
+                    const label = section.querySelector(`label[for="${oldId}"]`);
+                    if (label) {
+                        label.setAttribute('for', newId);
+                    }
+                });
+                
+                // Update remove button onclick
+                const removeBtn = section.querySelector('.remove-traveler-btn');
+                if (removeBtn && newNumber > 1) {
+                    removeBtn.setAttribute('onclick', `removeTraveler(${newNumber})`);
+                }
+            });
+            
+            travelerCount = travelerSections.length;
+        }
+
+        function addAutoSaveListeners(travelerNumber) {
+            const inputs = document.querySelectorAll(`[id*="-${travelerNumber}"]`);
+            inputs.forEach(input => {
+                input.addEventListener('change', saveTravelerData);
+            });
+        }
+
+        function saveTravelerData() {
+            const travelerData = {};
+            const travelerSections = document.querySelectorAll('.traveler-section');
+            
+            travelerSections.forEach((section, index) => {
+                const travelerNumber = index + 1;
+                const inputs = section.querySelectorAll('input, select');
+                
+                travelerData[`traveler${travelerNumber}`] = {};
+                inputs.forEach(input => {
+                    const fieldName = input.name.replace(`-${travelerNumber}`, '');
+                    travelerData[`traveler${travelerNumber}`][fieldName] = input.value;
+                });
+            });
+            
+            localStorage.setItem('travelerData', JSON.stringify(travelerData));
+        }
+
+        function loadSavedTravelerData() {
+            const savedData = localStorage.getItem('travelerData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                
+                Object.keys(data).forEach(travelerKey => {
+                    const travelerNumber = travelerKey.replace('traveler', '');
+                    const travelerData = data[travelerKey];
+                    
+                    Object.keys(travelerData).forEach(fieldName => {
+                        const input = document.getElementById(`${fieldName}-${travelerNumber}`);
+                        if (input) {
+                            input.value = travelerData[fieldName];
+                        }
+                    });
+                });
+            }
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const travelerSections = document.querySelectorAll('.traveler-section');
+            
+            travelerSections.forEach((section, index) => {
+                const travelerNumber = index + 1;
+                const requiredFields = [
+                    `first-name-${travelerNumber}`,
+                    `last-name-${travelerNumber}`,
+                    `dob-${travelerNumber}`,
+                    `passport-${travelerNumber}`,
+                    `passport-expiry-${travelerNumber}`,
+                    `nationality-${travelerNumber}`
+                ];
+                
+                // Email and phone required only for primary traveler
+                if (travelerNumber === 1) {
+                    requiredFields.push(`email-${travelerNumber}`, `phone-${travelerNumber}`);
+                }
+                
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    const formGroup = field?.closest('.form-group');
+                    
+                    if (field && !field.value) {
+                        formGroup?.classList.add('error');
+                        isValid = false;
+                    } else if (formGroup) {
+                        formGroup.classList.remove('error');
+                    }
+                });
+                
+                // Validate passport expiry date
+                const passportExpiry = document.getElementById(`passport-expiry-${travelerNumber}`);
+                if (passportExpiry && passportExpiry.value) {
+                    const expiryDate = new Date(passportExpiry.value);
+                    const sixMonthsFromNow = new Date();
+                    sixMonthsFromNow.setMonth(sixMonthsFromNow.getMonth() + 6);
+                    
+                    if (expiryDate < sixMonthsFromNow) {
+                        passportExpiry.closest('.form-group').classList.add('error');
+                        passportExpiry.closest('.form-group').querySelector('.error-message').textContent = 'Passport should be valid for at least 6 months';
+                        isValid = false;
+                    }
+                }
+            });
+            
+            return isValid;
+        }
+
+        function goToPreviousStep() {
+            saveTravelerData();
+            window.location.href = 'booking-step2.html';
+        }
+
+        function goToNextStep() {
+            if (validateForm()) {
+                saveTravelerData();
+                window.location.href = 'booking-step4.html';
+            }
+        }
+
+        // Auto-save on input change
+        document.addEventListener('change', function(e) {
+            if (e.target.matches('input, select')) {
+                saveTravelerData();
+            }
+        });
+
+        // Set maximum date for passport expiry (10 years from now)
+        const maxPassportDate = new Date();
+        maxPassportDate.setFullYear(maxPassportDate.getFullYear() + 10);
+        const maxDateString = maxPassportDate.toISOString().split('T')[0];
+
+        // Set minimum date for passport expiry (today)
+        const minDateString = new Date().toISOString().split('T')[0];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const passportExpiryInputs = document.querySelectorAll('[id*="passport-expiry"]');
+            passportExpiryInputs.forEach(input => {
+                input.min = minDateString;
+                input.max = maxDateString;
+            });
+        });
+    </script>
+</body>
+</html>

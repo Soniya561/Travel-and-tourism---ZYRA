@@ -146,8 +146,8 @@
         /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(135deg, rgba(46, 139, 87, 0.8), rgba(60, 179, 113, 0.6)),
-                        url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
+            background: linear-gradient(135deg, rgba(46, 139, 87, 0.7), rgba(60, 179, 113, 0.5)),
+                        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -342,6 +342,101 @@
         .search-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(46, 139, 87, 0.3);
+        }
+
+        /* Travel Mode Selection */
+        .travel-modes {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .travel-mode {
+            background: var(--white);
+            border: 2px solid #E8F5E8;
+            border-radius: 20px;
+            padding: 1.5rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+            min-width: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .travel-mode:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(46, 139, 87, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .travel-mode.active {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(46, 139, 87, 0.3);
+        }
+
+        .travel-mode i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .travel-mode.active i {
+            color: var(--white);
+            transform: scale(1.1);
+        }
+
+        .travel-mode span {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .travel-mode.active span {
+            color: var(--white);
+        }
+
+        .travel-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .travel-mode:hover::before {
+            left: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .travel-modes {
+                flex-wrap: wrap;
+                gap: 0.8rem;
+            }
+
+            .travel-mode {
+                min-width: 100px;
+                padding: 1.2rem 1.5rem;
+            }
+
+            .travel-mode i {
+                font-size: 2rem;
+            }
+
+            .travel-mode span {
+                font-size: 0.9rem;
+            }
         }
 
         /* Destinations Section */
@@ -886,9 +981,9 @@
     <section class="hero" id="home">
         <div class="hero-content">
             <div class="hero-subtitle">Welcome to Adventure</div>
-            <h1>Explore Amazing Destinations</h1>
+            <h1>Discover Serene Destinations</h1>
             <p class="hero-description">
-                Discover the world's most incredible destinations - from vibrant cities like Paris and Tokyo to pristine natural wonders like Bali and the Swiss Alps. Create unforgettable memories with expertly crafted travel experiences.
+                Journey to breathtaking lakeside destinations and pristine natural wonders. From crystal-clear mountain lakes to vibrant cities and tropical paradises. Choose your perfect way to travel and create unforgettable memories.
             </p>
             <div class="hero-buttons">
                 <a href="#destinations" class="btn-primary">
@@ -909,25 +1004,35 @@
             <h3>Plan Your Perfect Journey</h3>
             <p>Find and book your dream destination with our easy search</p>
         </div>
+        
+        <!-- Travel Mode Selection -->
+        <div class="travel-modes">
+            <div class="travel-mode active" data-mode="flight">
+                <i class="fas fa-plane"></i>
+                <span>Flights</span>
+            </div>
+            <div class="travel-mode" data-mode="train">
+                <i class="fas fa-train"></i>
+                <span>Trains</span>
+            </div>
+            <div class="travel-mode" data-mode="car">
+                <i class="fas fa-car"></i>
+                <span>Cars</span>
+            </div>
+        </div>
+        
         <form class="search-form" id="search-form">
-            <div class="form-group">
+            <div class="form-group" style="position: relative;">
                 <label for="destination">
                     <i class="fas fa-map-marker-alt"></i>
                     Destination
                 </label>
-                <select id="destination" required>
-                    <option value="">Choose Destination</option>
-                    <option value="paris">Paris, France</option>
-                    <option value="bali">Bali, Indonesia</option>
-                    <option value="tokyo">Tokyo, Japan</option>
-                    <option value="santorini">Santorini, Greece</option>
-                    <option value="swiss-alps">Swiss Alps</option>
-                    <option value="maldives">Maldives</option>
-                    <option value="new-york">New York, USA</option>
-                    <option value="iceland">Iceland</option>
-                    <option value="dubai">Dubai, UAE</option>
-                    <option value="thailand">Thailand</option>
-                </select>
+                <div class="autocomplete" style="position:relative;">
+                    <input id="destination" type="text" required autocomplete="off" placeholder="Search worldwide (city, landmark, address)" />
+                    <div id="dest-suggestions" style="position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid #E8F5E8;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.08);display:none;max-height:260px;overflow:auto;z-index:1000"></div>
+                    <input type="hidden" id="destination-lat" />
+                    <input type="hidden" id="destination-lon" />
+                </div>
             </div>
             <div class="form-group">
                 <label for="checkin">
@@ -1263,6 +1368,161 @@
                         </button>
                     </div>
                 </div>
+
+                <div class="destination-card fade-in" data-category="nature">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Ancient Wonder</div>
+                        <div class="destination-overlay">
+                            <h3>Machu Picchu, Peru</h3>
+                            <p>Ancient Incan citadel high in the Andes Mountains</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,899 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>7 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>4-16 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                            Book This Trip
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-category="beaches">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Tropical Escape</div>
+                        <div class="destination-overlay">
+                            <h3>Seychelles</h3>
+                            <p>Pristine beaches and unique granite formations</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$2,599 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>6 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-8 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.9 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                            Book This Trip
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-category="cities">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Historic Charm</div>
+                        <div class="destination-overlay">
+                            <h3>Prague, Czech Republic</h3>
+                            <p>Medieval architecture and rich cultural heritage</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$999 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>4 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-15 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.7 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                            Book This Trip
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-category="nature">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Safari Adventure</div>
+                        <div class="destination-overlay">
+                            <h3>Serengeti, Tanzania</h3>
+                            <p>Witness the Great Migration and Big Five wildlife</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$2,199 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>8 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>4-12 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.8 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                            Book This Trip
+                        </button>
+                    </div>
+                </div>
+
+                <div class="destination-card fade-in" data-category="cities">
+                    <div class="destination-image" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')">
+                        <div class="destination-badge">Vibrant Culture</div>
+                        <div class="destination-overlay">
+                            <h3>London, England</h3>
+                            <p>Royal palaces, world-class museums, and rich history</p>
+                        </div>
+                    </div>
+                    <div class="destination-content">
+                        <div class="destination-price">$1,399 <span>per person</span></div>
+                        <div class="destination-features">
+                            <div class="feature">
+                                <i class="fas fa-clock"></i>
+                                <span>5 Days</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-users"></i>
+                                <span>2-20 People</span>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-star"></i>
+                                <span>4.6 Rating</span>
+                            </div>
+                        </div>
+                        <button class="book-btn">
+                            <i class="fas fa-calendar-plus"></i>
+                            Book This Trip
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1538,28 +1798,92 @@
             observer.observe(el);
         });
 
-        // Form submission
-        document.getElementById('search-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const destination = document.getElementById('destination').value;
-            const checkin = document.getElementById('checkin').value;
-            const checkout = document.getElementById('checkout').value;
-            const travelers = document.getElementById('travelers').value;
-            
-            if (destination && checkin && checkout && travelers) {
-                // Get destination name for display
-                const destinationText = document.getElementById('destination').options[document.getElementById('destination').selectedIndex].text;
-                
-                // Simulate search results
-                alert(`Searching for ${destinationText} from ${checkin} to ${checkout} for ${travelers} travelers. Our travel experts will contact you shortly with the best packages!`);
-                
-                // Reset form
-                this.reset();
-            } else {
-                alert('Please fill in all fields to search for your perfect destination.');
+        // Global destination autocomplete (Nominatim) + form submission
+        (function(){
+            const destInput = document.getElementById('destination');
+            const suggBox = document.getElementById('dest-suggestions');
+            const latEl = document.getElementById('destination-lat');
+            const lonEl = document.getElementById('destination-lon');
+            let debounce;
+
+            function hideSuggestions(){ suggBox.style.display = 'none'; suggBox.innerHTML = ''; }
+            function showSuggestions(items){
+                if (!items || !items.length){ hideSuggestions(); return; }
+                suggBox.innerHTML = '';
+                items.forEach(item => {
+                    const row = document.createElement('div');
+                    row.style.padding = '.6rem .8rem';
+                    row.style.cursor = 'pointer';
+                    row.style.display = 'grid';
+                    row.style.gridTemplateColumns = '20px 1fr';
+                    row.style.gap = '.5rem';
+                    row.innerHTML = `<i class="fas fa-location-dot" style="color:#2E8B57;margin-top:.2rem"></i><div><strong>${item.display_name.split(',')[0]}</strong><div style="color:#6B8E6B;font-size:.9rem">${item.display_name}</div></div>`;
+                    row.addEventListener('click', () => {
+                        destInput.value = item.display_name;
+                        latEl.value = item.lat;
+                        lonEl.value = item.lon;
+                        hideSuggestions();
+                    });
+                    suggBox.appendChild(row);
+                });
+                suggBox.style.display = 'block';
             }
-        });
+
+            destInput.addEventListener('input', () => {
+                latEl.value = '';
+                lonEl.value = '';
+                const q = destInput.value.trim();
+                clearTimeout(debounce);
+                if (q.length < 2){ hideSuggestions(); return; }
+                debounce = setTimeout(async () => {
+                    try {
+                        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=6&q=${encodeURIComponent(q)}`;
+                        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                        const data = await res.json();
+                        showSuggestions(data);
+                    } catch (e) { hideSuggestions(); }
+                }, 300);
+            });
+            // Close suggestions when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!suggBox.contains(e.target) && e.target !== destInput){ hideSuggestions(); }
+            });
+
+            // Updated form submission
+            document.getElementById('search-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const destinationText = destInput.value.trim();
+                const checkin = document.getElementById('checkin').value;
+                const checkout = document.getElementById('checkout').value;
+                const travelers = document.getElementById('travelers').value;
+
+                if (!destinationText || !checkin || !checkout || !travelers){
+                    alert('Please fill in all fields to search for your perfect destination.');
+                    return;
+                }
+
+                let lat = latEl.value, lon = lonEl.value;
+                if (!lat || !lon){
+                    // Try resolving the typed text to a place (first match)
+                    try {
+                        const url = `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q=${encodeURIComponent(destinationText)}`;
+                        const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                        const data = await res.json();
+                        if (data && data[0]){ lat = data[0].lat; lon = data[0].lon; }
+                    } catch (err) { /* ignore */ }
+                }
+
+                // Simulate search results
+                const coordsInfo = lat && lon ? ` (lat: ${Number(lat).toFixed(4)}, lon: ${Number(lon).toFixed(4)})` : '';
+                alert(`Searching for ${destinationText}${coordsInfo} from ${checkin} to ${checkout} for ${travelers} travelers. Our travel experts will contact you shortly with the best packages!`);
+
+                // Reset form and UI
+                this.reset();
+                latEl.value = '';
+                lonEl.value = '';
+                hideSuggestions();
+            });
+        })();
 
         // Book buttons
         document.querySelectorAll('.book-btn').forEach(btn => {
@@ -1597,6 +1921,48 @@
             }, 2000);
         });
 
+        // Travel mode selection
+        document.querySelectorAll('.travel-mode').forEach(mode => {
+            mode.addEventListener('click', function() {
+                // Remove active class from all modes
+                document.querySelectorAll('.travel-mode').forEach(m => m.classList.remove('active'));
+                
+                // Add active class to clicked mode
+                this.classList.add('active');
+                
+                // Get selected mode
+                const selectedMode = this.dataset.mode;
+                
+                // Update form labels and placeholders based on selected mode
+                updateFormForTravelMode(selectedMode);
+            });
+        });
+
+        function updateFormForTravelMode(mode) {
+            const destinationLabel = document.querySelector('label[for="destination"]');
+            const destinationSelect = document.getElementById('destination');
+            const checkinLabel = document.querySelector('label[for="checkin"]');
+            const checkoutLabel = document.querySelector('label[for="checkout"]');
+            
+            switch(mode) {
+                case 'flight':
+                    destinationLabel.innerHTML = '<i class="fas fa-map-marker-alt"></i> Destination';
+                    checkinLabel.innerHTML = '<i class="fas fa-calendar-alt"></i> Departure Date';
+                    checkoutLabel.innerHTML = '<i class="fas fa-calendar-check"></i> Return Date';
+                    break;
+                case 'train':
+                    destinationLabel.innerHTML = '<i class="fas fa-train"></i> Destination Station';
+                    checkinLabel.innerHTML = '<i class="fas fa-calendar-alt"></i> Departure Date';
+                    checkoutLabel.innerHTML = '<i class="fas fa-calendar-check"></i> Return Date';
+                    break;
+                case 'car':
+                    destinationLabel.innerHTML = '<i class="fas fa-car"></i> Pick-up Location';
+                    checkinLabel.innerHTML = '<i class="fas fa-calendar-alt"></i> Pick-up Date';
+                    checkoutLabel.innerHTML = '<i class="fas fa-calendar-check"></i> Drop-off Date';
+                    break;
+            }
+        }
+
         // Parallax effect for hero section
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
@@ -1608,25 +1974,5 @@
             }
         });
     </script>
-
-    <!-- Floating Dashboard Button -->
-    <div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000;">
-        <a href="dashboard.html" style="
-            background: linear-gradient(135deg, #2E8B57, #3CB371);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 4px 20px rgba(46, 139, 87, 0.4);
-            transition: all 0.3s ease;
-            font-size: 1.5rem;
-        " onmouseover="this.style.transform='scale(1.1) translateY(-5px)'; this.style.boxShadow='0 8px 30px rgba(46, 139, 87, 0.6)'" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='0 4px 20px rgba(46, 139, 87, 0.4)'">
-            <i class="fas fa-user-circle"></i>
-        </a>
-    </div>
 </body>
 </html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zyra Travels — Hotel Booking</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary-color:#2E8B57;
+      --secondary-color:#3CB371;
+      --accent-color:#98FB98;
+      --gold-color:#FFD700;
+      --dark-green:#1F5F3F;
+      --light-green:#F0FFF0;
+      --text-dark:#2F4F2F;
+      --text-light:#6B8E6B;
+      --white:#FFFFFF;
+      --shadow:rgba(0,0,0,0.1);
+      --gradient-primary:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',sans-serif;color:var(--text-dark);line-height:1.6;background:#FAFFFE;overflow-x:hidden}
+
+    /* Header */
+    .header{position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(16px);z-index:1000;border-bottom:1px solid rgba(46,139,87,0.12)}
+    .nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.8rem;color:var(--primary-color);text-decoration:none;display:flex;gap:.5rem;align-items:center}
+    .logo i{color:var(--secondary-color)}
+    .nav-actions{display:flex;gap:.75rem;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:999px;text-decoration:none;font-weight:600;cursor:pointer;transition:.25s}
+    .btn-primary{background:var(--gradient-primary);color:#fff;padding:.7rem 1.1rem;box-shadow:0 4px 16px rgba(46,139,87,.25)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(46,139,87,.35)}
+    .btn-link{color:var(--primary-color);padding:.4rem .75rem}
+    .btn-link:hover{color:var(--dark-green)}
+
+    /* Hero */
+    .hero{
+      background:linear-gradient(135deg,rgba(46,139,87,.75),rgba(60,179,113,.55)), url('https://images.unsplash.com/photo-1501117716987-c8e53778d2b0?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat;
+      color:#fff;text-align:center;padding:5rem 1.25rem
+    }
+    .hero h1{font-family:'Playfair Display',serif;font-size:3rem;line-height:1.15;margin-bottom:.75rem;text-shadow:0 3px 18px rgba(0,0,0,.28)}
+    .hero p{font-size:1.15rem;opacity:.98;max-width:820px;margin:0 auto 1.5rem}
+
+    /* Filters Panel */
+    .filters{
+      max-width:1200px;margin:-48px auto 1.5rem;background:#fff;padding:1rem;border-radius:18px;box-shadow:0 18px 48px rgba(0,0,0,.12);
+      display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr .8fr;gap:.8rem;align-items:end
+    }
+    .field{display:flex;flex-direction:column;gap:.45rem}
+    .field label{font-weight:600;color:var(--text-dark);display:flex;gap:.45rem;align-items:center}
+    .field input,.field select{padding:.85rem;border:2px solid #E8F5E8;border-radius:12px;font-size:.95rem;background:#FAFFFE;transition:.2s}
+    .field input:focus,.field select:focus{outline:none;border-color:var(--primary-color);box-shadow:0 0 0 3px rgba(46,139,87,.12);background:#fff}
+    .actions{display:flex;gap:.6rem}
+    .btn-ghost{padding:.85rem 1rem;background:#F5FFF8;border:2px solid #E8F5E8;border-radius:12px;color:var(--primary-color);font-weight:600}
+    .btn-ghost:hover{background:#ECFFF2}
+    .btn-search{padding:1rem 1.1rem;border:none;border-radius:12px;background:var(--gradient-primary);color:#fff;font-weight:700;box-shadow:0 10px 26px rgba(46,139,87,.28)}
+    .btn-search:hover{transform:translateY(-2px)}
+
+    /* Hotels Grid */
+    .container{max-width:1200px;margin:1.5rem auto;padding:0 1.25rem}
+    .toolbar{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+    .toolbar .left{display:flex;gap:.75rem;align-items:center}
+    .badge{background:#ECFFF2;color:var(--dark-green);padding:.35rem .6rem;border-radius:999px;font-weight:700;font-size:.8rem}
+    .sort{display:flex;gap:.5rem;align-items:center}
+    .sort select{padding:.5rem .7rem;border:2px solid #E8F5E8;border-radius:10px;background:#fff}
+
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    @media (max-width:1000px){.filters{grid-template-columns:1fr 1fr 1fr}.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:700px){.filters{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
+
+    .card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 14px 38px rgba(0,0,0,.12);display:flex;flex-direction:column}
+    .card .img-wrap{position:relative;height:200px;overflow:hidden}
+    .card img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+    .card:hover img{transform:scale(1.06)}
+    .fav{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.85);backdrop-filter:blur(6px);border:none;border-radius:999px;padding:.45rem .55rem;cursor:pointer}
+    .fav .fa{color:#e63946}
+
+    .card-body{padding:1rem 1rem 1.1rem;display:flex;flex-direction:column;gap:.5rem}
+    .name{font-weight:800;font-size:1.05rem}
+    .location{color:#557a57;font-size:.92rem;display:flex;gap:.4rem;align-items:center}
+    .rating{display:flex;align-items:center;gap:.4rem}
+    .rating .fa-star,.rating .fa-star-half{color:#f4b400}
+    .amenities{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.35rem}
+    .amenity{background:#F5FFF8;border:1px solid #E8F5E8;color:#2c6e49;border-radius:999px;padding:.25rem .55rem;font-size:.8rem}
+    .price{margin-top:.35rem;font-weight:800;font-size:1.05rem}
+    .card-footer{margin-top:.35rem;display:flex;gap:.6rem}
+    .btn-outline{border:2px solid #E8F5E8;background:#fff;color:var(--primary-color);font-weight:700;border-radius:12px;padding:.6rem .85rem;flex:1;text-align:center}
+    .btn-outline:hover{background:#ECFFF2}
+    .btn-book{background:var(--gradient-primary);color:#fff;font-weight:800;border:none;border-radius:12px;padding:.65rem .95rem;flex:1}
+    .btn-book:hover{transform:translateY(-1px)}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.35);display:none;align-items:center;justify-content:center;z-index:2000;padding:1rem}
+    .modal{width:100%;max-width:640px;background:#fff;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.25);overflow:hidden}
+    .modal-header{padding:1rem 1.2rem;background:var(--light-green);border-bottom:1px solid #E8F5E8;display:flex;justify-content:space-between;align-items:center}
+    .modal-header h3{font-family:'Playfair Display',serif}
+    .modal-body{padding:1rem 1.2rem;display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    .modal .field input,.modal .field select{width:100%}
+    .modal-footer{padding:1rem 1.2rem;border-top:1px solid #E8F5E8;display:flex;justify-content:flex-end;gap:.6rem}
+    .close{background:#fff;border:2px solid #E8F5E8;border-radius:10px;padding:.6rem .9rem}
+    .confirm{background:var(--gradient-primary);color:#fff;border:none;border-radius:10px;padding:.6rem 1rem;font-weight:800}
+
+    footer{margin:2rem 0 3rem;color:#6c8f6c;text-align:center}
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <nav class="nav">
+      <a class="logo" href="#"><i class="fa-solid fa-leaf"></i> Zyra Travels</a>
+      <div class="nav-actions">
+        <a class="btn btn-link" href="landing.html">Home</a>
+        <a class="btn btn-primary" href="#hotels"><i class="fa-solid fa-hotel"></i> Find Hotels</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Find Your Perfect Stay</h1>
+    <p>Discover handpicked stays across world-class destinations. Filter by city, compare top hotels, and book securely with Zyra Travels.</p>
+  </section>
+
+  <!-- Filters -->
+  <section class="filters" id="filters">
+    <div class="field">
+      <label><i class="fa-solid fa-location-dot"></i> Destination</label>
+      <select id="citySelect"><option value="All">All Cities</option></select>
+    </div>
+    <div class="field">
+      <label><i class="fa-solid fa-calendar-days"></i> Check-in</label>
+      <input type="date" id="checkIn"/>
+    </div>
+    <div class="field">
+      <label><i class="fa-solid fa-calendar-day"></i> Check-out</label>
+      <input type="date" id="checkOut"/>
+    </div>
+    <div class="field">
+      <label><i class="fa-solid fa-user-group"></i> Guests</label>
+      <select id="guests">
+        <option value="1">1 guest</option>
+        <option value="2" selected>2 guests</option>
+        <option value="3">3 guests</option>
+        <option value="4">4 guests</option>
+        <option value="5">5 guests</option>
+      </select>
+    </div>
+    <div class="actions">
+      <button class="btn-ghost" id="resetBtn"><i class="fa-solid fa-rotate-right"></i></button>
+      <button class="btn-search" id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+  </section>
+
+  <!-- Toolbar -->
+  <div class="container">
+    <div class="toolbar">
+      <div class="left">
+        <span class="badge" id="resultCount">0 hotels</span>
+        <div class="field" style="flex-direction:row;align-items:center;gap:.5rem;">
+          <i class="fa-solid fa-magnifying-glass" style="color:var(--primary-color)"></i>
+          <input id="searchText" type="text" placeholder="Search hotel name..." style="min-width:220px;padding:.55rem .7rem;border:2px solid #E8F5E8;border-radius:10px;">
+        </div>
+      </div>
+      <div class="sort">
+        <label for="sortBy"><i class="fa-solid fa-arrow-down-wide-short"></i> Sort</label>
+        <select id="sortBy">
+          <option value="featured">Featured</option>
+          <option value="priceAsc">Price: Low to High</option>
+          <option value="priceDesc">Price: High to Low</option>
+          <option value="ratingDesc">Rating: High to Low</option>
+        </select>
+      </div>
+    </div>
+    <!-- Hotels Grid -->
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- Booking Modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 id="modalTitle">Book Hotel</h3>
+        <button class="close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="field"><label>Hotel</label><input type="text" id="mHotel" readonly></div>
+        <div class="field"><label>City</label><input type="text" id="mCity" readonly></div>
+        <div class="field"><label>Check-in</label><input type="date" id="mCheckIn"></div>
+        <div class="field"><label>Check-out</label><input type="date" id="mCheckOut"></div>
+        <div class="field"><label>Guests</label>
+          <select id="mGuests"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>
+        </div>
+        <div class="field"><label>Rooms</label>
+          <select id="mRooms"><option>1</option><option>2</option><option>3</option></select>
+        </div>
+        <div class="field"><label>Room Type</label>
+          <select id="mRoomType"><option value="Standard">Standard</option><option value="Deluxe">Deluxe (+10%)</option><option value="Suite">Suite (+25%)</option></select>
+        </div>
+        <div class="field"><label>Price/Night (USD)</label><input type="text" id="mPrice" readonly></div>
+      </div>
+      <div class="modal-footer">
+        <button class="close" id="cancelModal">Cancel</button>
+        <button class="confirm" id="confirmBooking"><i class="fa-solid fa-shield-heart"></i> Confirm Booking</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>© <span id="year"></span> Zyra Travels — Crafted for memorable stays.</footer>
+
+  <script>
+    // Stable fallback image (hotel room)
+    const FALLBACK_IMG = 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=1200&q=80';
+
+    // Helper to build a safe image tag with fallback
+    function imgTag(src, alt){
+      return `<img loading="lazy" decoding="async" src="${src}" alt="${alt}"
+               onerror="this.src='${FALLBACK_IMG}'; this.onerror=null;">`;
+    }
+
+    // Real-world hotels (images are fixed Unsplash IDs for reliability)
+    const hotels = [
+      // New York
+      { city:"New York", name:"The Plaza Hotel", rating:4.7, price:650,
+        address:"Fifth Avenue at Central Park South, New York",
+        image:"https://images.unsplash.com/photo-1551776235-dde6d4829808?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","gym","breakfast"] },
+      { city:"New York", name:"The Langham, Fifth Avenue", rating:4.6, price:520,
+        address:"400 Fifth Ave, New York",
+        image:"https://images.unsplash.com/photo-1496412705862-e0088f16f791?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","gym","restaurant"] },
+
+      // Paris
+      { city:"Paris", name:"Hôtel Ritz Paris", rating:4.8, price:750,
+        address:"15 Place Vendôme, Paris",
+        image:"https://images.unsplash.com/photo-1505691723518-36a5ac3b2d8d?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","bar","butler"] },
+      { city:"Paris", name:"Le Bristol Paris", rating:4.8, price:690,
+        address:"112 Rue du Faubourg Saint-Honoré, Paris",
+        image:"https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","restaurant","garden"] },
+
+      // Tokyo
+      { city:"Tokyo", name:"Park Hyatt Tokyo", rating:4.7, price:580,
+        address:"3-7-1-2 Nishi-Shinjuku, Tokyo",
+        image:"https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","gym"] },
+      { city:"Tokyo", name:"The Peninsula Tokyo", rating:4.8, price:620,
+        address:"1-8-1 Yurakucho, Tokyo",
+        image:"https://images.unsplash.com/photo-1507149833265-60c372daea22?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","bar","restaurant"] },
+
+      // Dubai
+      { city:"Dubai", name:"Burj Al Arab Jumeirah", rating:4.9, price:1400,
+        address:"Jumeirah St, Dubai",
+        image:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","butler","beach"] },
+      { city:"Dubai", name:"Atlantis The Palm", rating:4.7, price:520,
+        address:"Crescent Rd, The Palm Jumeirah, Dubai",
+        image:"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","waterpark","pool","beach","restaurant"] },
+
+      // London
+      { city:"London", name:"The Savoy", rating:4.7, price:620,
+        address:"Strand, London",
+        image:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","gym","bar","butler"] },
+      { city:"London", name:"The Ritz London", rating:4.8, price:690,
+        address:"150 Piccadilly, London",
+        image:"https://images.unsplash.com/photo-1520880867055-1e30d1cb001c?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","afternoontea","spa","restaurant"] },
+
+      // Singapore
+      { city:"Singapore", name:"Marina Bay Sands", rating:4.7, price:520,
+        address:"10 Bayfront Ave, Singapore",
+        image:"https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","infinitypool","spa","casino","mall"] },
+      { city:"Singapore", name:"Raffles Singapore", rating:4.8, price:650,
+        address:"1 Beach Rd, Singapore",
+        image:"https://images.unsplash.com/photo-1470123808288-1e59739e95a1?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","bar","butler","restaurant"] },
+
+      // Rome
+      { city:"Rome", name:"Hotel de Russie", rating:4.7, price:540,
+        address:"Via del Babuino 9, Rome",
+        image:"https://images.unsplash.com/photo-1505692794403-34d4982c4b19?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","garden","restaurant"] },
+      { city:"Rome", name:"The St. Regis Rome", rating:4.7, price:560,
+        address:"Via Vittorio E. Orlando, Rome",
+        image:"https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","bar","gym"] },
+
+      // Bangkok
+      { city:"Bangkok", name:"Mandarin Oriental, Bangkok", rating:4.8, price:420,
+        address:"48 Oriental Ave, Bangkok",
+        image:"https://images.unsplash.com/photo-1541976076758-347942db1970?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","boat","restaurant"] },
+      { city:"Bangkok", name:"The Siam", rating:4.7, price:390,
+        address:"3/2 Thanon Khao, Bangkok",
+        image:"https://images.unsplash.com/photo-1542314831-07e1a953f1a2?auto=format&fit=crop&w=1200&q=80",
+        amenities:["wifi","spa","pool","boutique"] }
+    ];
+
+    const grid = document.getElementById('grid');
+    const citySelect = document.getElementById('citySelect');
+    const resultCount = document.getElementById('resultCount');
+    const sortBy = document.getElementById('sortBy');
+    const searchText = document.getElementById('searchText');
+    const checkIn = document.getElementById('checkIn');
+    const checkOut = document.getElementById('checkOut');
+    const resetBtn = document.getElementById('resetBtn');
+    const searchBtn = document.getElementById('searchBtn');
+
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalTitle = document.getElementById('modalTitle');
+    const mHotel = document.getElementById('mHotel');
+    const mCity = document.getElementById('mCity');
+    const mCheckIn = document.getElementById('mCheckIn');
+    const mCheckOut = document.getElementById('mCheckOut');
+    const mGuests = document.getElementById('mGuests');
+    const mRooms = document.getElementById('mRooms');
+    const mRoomType = document.getElementById('mRoomType');
+    const mPrice = document.getElementById('mPrice');
+    const confirmBooking = document.getElementById('confirmBooking');
+    const closeModal = document.getElementById('closeModal');
+    const cancelModal = document.getElementById('cancelModal');
+
+    // Cities
+    const uniqueCities = Array.from(new Set(hotels.map(h => h.city))).sort();
+    uniqueCities.forEach(c => {
+      const opt = document.createElement('option'); opt.value = c; opt.textContent = c; citySelect.appendChild(opt);
+    });
+
+    function nightsBetween(ci, co){
+      const inD = new Date(ci), outD = new Date(co);
+      const ms = outD - inD;
+      return Number.isFinite(ms) ? Math.max(0, Math.round(ms/86400000)) : 0;
+    }
+
+    function stars(r){
+      const full = Math.floor(r);
+      const half = r - full >= 0.25 && r - full < 0.75;
+      const extra = r - full >= 0.75 ? 1 : 0;
+      let html = '';
+      for(let i=0;i<full;i++) html += '<i class="fa-solid fa-star"></i>';
+      if(half) html += '<i class="fa-solid fa-star-half"></i>';
+      const total = full + (half?1:0) + extra;
+      for(let i=total;i<5;i++) html += '<i class="fa-regular fa-star"></i>';
+      return html;
+    }
+
+    function prettyAmenity(a){
+      const map = {
+        wifi:"Wi‑Fi", spa:"Spa", pool:"Pool", gym:"Gym", bar:"Bar", restaurant:"Restaurant",
+        garden:"Garden", butler:"Butler", infinitypool:"Infinity Pool", casino:"Casino",
+        mall:"Mall Access", boat:"Boat", waterpark:"Waterpark", breakfast:"Breakfast", boutique:"Boutique", afternoontea:"Afternoon Tea"
+      };
+      return map[a] || a;
+    }
+
+    // Render
+    let filtered = [...hotels];
+    function render(list){
+      grid.innerHTML = '';
+      list.forEach((h, idx) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="img-wrap">
+            ${imgTag(h.image, h.name)}
+            <button class="fav" title="Add to favorites"><i class="fa-solid fa-heart"></i></button>
+          </div>
+          <div class="card-body">
+            <div class="name">${h.name}</div>
+            <div class="location"><i class="fa-solid fa-location-dot"></i> ${h.address || h.city}</div>
+            <div class="rating">${stars(h.rating)} <span>${h.rating.toFixed(1)}</span></div>
+            <div class="amenities">${(h.amenities||[]).slice(0,5).map(a=>`<span class="amenity">${prettyAmenity(a)}</span>`).join('')}</div>
+            <div class="price">$${h.price.toLocaleString()} <span style="font-weight:500;color:#6b8e6b">/ night</span></div>
+            <div class="card-footer">
+              <a class="btn-outline" href="https://www.google.com/maps/search/${encodeURIComponent(h.name + ' ' + h.city)}" target="_blank" rel="noreferrer"><i class="fa-solid fa-map-location-dot"></i> Map</a>
+              <button class="btn-book" data-index="${idx}"><i class="fa-solid fa-bed"></i> Book</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+      resultCount.textContent = `${list.length} hotel${list.length!==1?'s':''}`;
+      // Attach events using current 'list' scope
+      grid.querySelectorAll('.btn-book').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const i = Number(e.currentTarget.getAttribute('data-index'));
+          openModal(list[i]);
+        });
+      });
+    }
+
+    // Filter + Sort
+    function applyFilters(){
+      const city = citySelect.value;
+      const q = searchText.value.trim().toLowerCase();
+      filtered = hotels.filter(h => (city === 'All' || h.city === city))
+                       .filter(h => !q || h.name.toLowerCase().includes(q));
+      const s = sortBy.value;
+      if(s === 'priceAsc') filtered.sort((a,b)=>a.price-b.price);
+      else if(s === 'priceDesc') filtered.sort((a,b)=>b.price-a.price);
+      else if(s === 'ratingDesc') filtered.sort((a,b)=>b.rating-a.rating);
+      render(filtered);
+    }
+
+    // Booking modal
+    function openModal(h){
+      modalTitle.textContent = `Book: ${h.name}`;
+      mHotel.value = h.name; mCity.value = h.city; mPrice.value = `$${h.price.toLocaleString()}`;
+      const ci = checkIn.value || new Date().toISOString().slice(0,10);
+      const co = checkOut.value || new Date(Date.now()+86400000).toISOString().slice(0,10);
+      mCheckIn.value = ci; mCheckOut.value = co;
+      mGuests.value = document.getElementById('guests').value;
+      mRooms.value = '1'; mRoomType.value = 'Standard';
+      modalBackdrop.style.display = 'flex';
+      modalBackdrop.setAttribute('aria-hidden','false');
+    }
+    function closeModalFn(){
+      modalBackdrop.style.display = 'none';
+      modalBackdrop.setAttribute('aria-hidden','true');
+    }
+    closeModal.addEventListener('click', closeModalFn);
+    cancelModal.addEventListener('click', closeModalFn);
+    modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) closeModalFn(); });
+
+    function computeTotal(base, nights, rooms, type){
+      let multiplier = 1;
+      if(type==='Deluxe') multiplier = 1.10;
+      if(type==='Suite') multiplier = 1.25;
+      return Math.max(1, nights) * rooms * base * multiplier;
+    }
+
+    confirmBooking.addEventListener('click', ()=>{
+      const ci = mCheckIn.value, co = mCheckOut.value;
+      const n = nightsBetween(ci, co);
+      if(n<=0){ alert('Please select valid dates (at least 1 night).'); return; }
+      const rooms = Number(mRooms.value||1);
+      const type = mRoomType.value;
+      const base = Number(mPrice.value.replace(/[^0-9.]/g,'')) || 0;
+      const total = computeTotal(base, n, rooms, type);
+      alert(`Booking confirmed!\n\nHotel: ${mHotel.value}\nCity: ${mCity.value}\nNights: ${n}\nRooms: ${rooms} (${type})\nTotal: $${Math.round(total).toLocaleString()}`);
+      closeModalFn();
+    });
+
+    // Events
+    citySelect.addEventListener('change', applyFilters);
+    sortBy.addEventListener('change', applyFilters);
+    searchText.addEventListener('input', applyFilters);
+    resetBtn.addEventListener('click', ()=>{
+      citySelect.value = 'All'; searchText.value = ''; sortBy.value = 'featured';
+      checkIn.value = ''; checkOut.value = '';
+      applyFilters();
+    });
+    searchBtn.addEventListener('click', applyFilters);
+
+    // Init
+    document.getElementById('year').textContent = new Date().getFullYear();
+    applyFilters();
+  </script>
+</body>
+</html>

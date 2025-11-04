@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <input id="docFile" type="file" accept=".pdf,.png,.jpg,.jpeg,.docx">
+  <input id="title" placeholder="Title">
+  <input id="tags" placeholder="comma,separated,tags">
+  <button onclick="uploadDoc()">Upload</button>
+
+  <script>
+  async function uploadDoc() {
+    const token = localStorage.getItem("access"); // set after login
+    const fd = new FormData();
+    fd.append("title", document.getElementById("title").value || "");
+    fd.append("tags", document.getElementById("tags").value || "");
+    fd.append("file", document.getElementById("docFile").files[0]);
+    const r = await fetch("http://localhost:8080/api/docs/", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${token}` }, // don't set Content-Type manually
+      body: fd
+    });
+    const data = await r.json();
+    if (!r.ok) return alert(data.detail || "Upload failed");
+    alert("Uploaded!");
+  }
+  </script>
+</body>
+</html>
+
+

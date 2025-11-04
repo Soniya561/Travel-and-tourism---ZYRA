@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - Zyra Travels</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base and Theme (aligned with booking0.html) */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-color: #2E8B57;
+            --secondary-color: #3CB371;
+            --accent-color: #98FB98;
+            --gold-color: #FFD700;
+            --dark-green: #1F5F3F;
+            --light-green: #F0FFF0;
+            --text-dark: #2F4F2F;
+            --text-light: #6B8E6B;
+            --white: #FFFFFF;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, rgba(240, 255, 240, 0.85), rgba(248, 255, 248, 0.85)),
+                        url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2071&q=80') center/cover fixed;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); z-index: 1000; padding: 1rem 0; transition: all .3s ease; border-bottom: 1px solid rgba(46,139,87,.1); }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--primary-color); text-decoration: none; display: flex; align-items: center; gap: .5rem; }
+        .logo i { font-size: 2rem; color: var(--secondary-color); }
+        .nav-menu { display: flex; list-style: none; gap: 2.5rem; align-items: center; }
+        .nav-menu a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 1rem; transition: all .3s ease; position: relative; }
+        .nav-menu a:hover { color: var(--primary-color); }
+        .nav-menu a.active { color: var(--primary-color); }
+        .nav-menu a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--primary-color); transition: width .3s ease; }
+        .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+        .book-now-btn { background: var(--gradient-primary); color: var(--white); padding: .8rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600; transition: all .3s ease; box-shadow: 0 4px 15px rgba(46,139,87,.3); }
+        .book-now-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(46,139,87,.4); }
+
+        /* Main container */
+        .page { max-width: 1200px; margin: 0 auto; padding: 120px 2rem 4rem; }
+        .page h1 { font-family: 'Playfair Display', serif; font-size: 2.4rem; margin-bottom: .5rem; text-align: center; }
+        .subtitle { text-align: center; color: var(--text-light); margin-bottom: 2rem; }
+
+        /* Progress */
+        .progress-steps { display: flex; justify-content: center; gap: 3rem; margin-bottom: 2rem; position: relative; }
+        .progress-steps::before { content: ''; position: absolute; top: 25px; left: 50%; transform: translateX(-50%); width: 60%; height: 2px; background: #E8F5E8; z-index: 1; }
+        .step { display: flex; flex-direction: column; align-items: center; z-index: 2; }
+        .step-circle { width: 50px; height: 50px; border-radius: 50%; background: #E8F5E8; color: var(--text-light); display: grid; place-items: center; font-weight: 600; margin-bottom: .4rem; }
+        .step-label { font-size: .9rem; color: var(--text-light); }
+        .step.completed .step-circle { background: var(--success-color); color: #fff; }
+        .step.active .step-circle { background: var(--gradient-primary); color: #fff; }
+        .step.active .step-label { color: var(--primary-color); font-weight: 600; }
+
+        /* Layout */
+        .checkout-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        @media (max-width: 900px) { .checkout-grid { grid-template-columns: 1fr; } }
+
+        .card { background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border: 1px solid rgba(46,139,87,.1); border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,.08); }
+        .card-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid #eef6ef; display: flex; align-items: center; gap: .75rem; }
+        .card-header h3 { font-size: 1.1rem; }
+        .card-body { padding: 1.5rem; }
+
+        .section-title { font-weight: 700; margin-bottom: 1rem; color: var(--text-dark); }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+
+        /* Inputs */
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; font-weight: 600; margin-bottom: .5rem; color: var(--text-dark); }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select {
+            width: 100%; padding: .9rem 1rem; border: 2px solid #E8F5E8; border-radius: 12px; background: #FAFFFE; transition: .2s; font-size: .95rem;
+        }
+        input:focus, select:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(46,139,87,.1); background: #fff; }
+        .hint { color: var(--text-light); font-size: .85rem; margin-top: .4rem; }
+
+        /* Payment methods */
+        .pay-methods { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .75rem; margin-bottom: 1rem; }
+        .pay-pill { border: 2px solid #E8F5E8; border-radius: 12px; padding: .85rem 1rem; display: flex; align-items: center; gap: .6rem; cursor: pointer; user-select: none; background: rgba(255,255,255,0.9); }
+        .pay-pill i { color: var(--primary-color); }
+        .pay-pill.active { border-color: var(--primary-color); background: var(--light-green); color: var(--primary-color); }
+        .pay-section { display: none; }
+        .pay-section.active { display: block; }
+
+        /* Summary */
+        .summary-row { display: flex; justify-content: space-between; margin: .5rem 0; color: var(--text-dark); }
+        .summary-row.muted { color: var(--text-light); }
+        .summary-total { display: flex; justify-content: space-between; padding-top: .75rem; margin-top: .75rem; border-top: 1px dashed #dfeee1; font-weight: 700; }
+        .badge { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .6rem; background: var(--light-green); border-radius: 999px; color: var(--primary-color); font-size: .8rem; font-weight: 600; }
+
+        /* Actions */
+        .actions { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; }
+        .btn { display: inline-flex; align-items: center; gap: .6rem; border: none; border-radius: 12px; padding: .9rem 1.2rem; font-weight: 700; cursor: pointer; transition: .2s; }
+        .btn-primary { background: var(--gradient-primary); color: #fff; box-shadow: 0 8px 18px rgba(46,139,87,.25); }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(46,139,87,.35); }
+        .btn-ghost { background: #f7fbf8; color: var(--primary-color); }
+        .secure { display: flex; align-items: center; gap: .5rem; color: var(--text-light); font-size: .9rem; }
+
+        /* Alerts */
+        .alert { display: none; margin: 1rem 0 0; padding: .9rem 1rem; border-radius: 12px; }
+        .alert.error { display: none; background: #fdecea; color: #b0413e; border: 1px solid #f5c6cb; }
+        .alert.success { display: none; background: #eafaf1; color: #1e7e34; border: 1px solid #b7ebc6; }
+        .show { display: block !important; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a class="logo" href="landing.html"><i class="fa-solid fa-leaf"></i> Zyra</a>
+            <ul class="nav-menu">
+                <li><a href="landing.html">Home</a></li>
+                <li><a href="destination.html">Destinations</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a class="book-now-btn" href="booking.html">Book Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page">
+        <h1>Secure Checkout</h1>
+        <p class="subtitle">Complete your booking in a few easy steps</p>
+
+        <!-- Progress -->
+        <div class="progress-steps" aria-label="Checkout progress">
+            <div class="step completed">
+                <div class="step-circle"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="step-label">Trip</div>
+            </div>
+            <div class="step completed">
+                <div class="step-circle"><i class="fa-solid fa-user"></i></div>
+                <div class="step-label">Details</div>
+            </div>
+            <div class="step active">
+                <div class="step-circle"><i class="fa-solid fa-credit-card"></i></div>
+                <div class="step-label">Checkout</div>
+            </div>
+        </div>
+
+        <div class="checkout-grid">
+            <!-- Left: Forms -->
+            <section class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-user-check"></i>
+                    <h3>Traveler Information</h3>
+                </div>
+                <div class="card-body">
+                    <form id="checkoutForm" novalidate>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="fullName">Full name</label>
+                                <input id="fullName" name="fullName" type="text" placeholder="e.g., Priya Sharma" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input id="email" name="email" type="email" placeholder="name@example.com" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input id="phone" name="phone" type="tel" placeholder="+91 98765 43210" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <select id="country" name="country" required>
+                                    <option value="">Select country</option>
+                                    <option>India</option>
+                                    <option>United States</option>
+                                    <option>United Kingdom</option>
+                                    <option>Canada</option>
+                                    <option>Australia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><input type="checkbox" id="saveProfile" /> Save traveler to my profile</label>
+                        </div>
+
+                        <hr style="border: none; border-top: 1px dashed #dfeee1; margin: 1rem 0;" />
+
+                        <div class="section-title">Payment Method</div>
+                        <div class="pay-methods" role="tablist">
+                            <div class="pay-pill active" data-target="#pay-card" role="tab" aria-selected="true"><i class="fa-solid fa-credit-card"></i> Card</div>
+                            <div class="pay-pill" data-target="#pay-upi" role="tab" aria-selected="false"><i class="fa-solid fa-indian-rupee-sign"></i> UPI</div>
+                            <div class="pay-pill" data-target="#pay-net" role="tab" aria-selected="false"><i class="fa-solid fa-building-columns"></i> Net Banking</div>
+                        </div>
+
+                        <!-- Card -->
+                        <div id="pay-card" class="pay-section active" role="tabpanel">
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label for="cardName">Name on card</label>
+                                    <input id="cardName" type="text" placeholder="As printed on card" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardNumber">Card number</label>
+                                    <input id="cardNumber" type="text" inputmode="numeric" maxlength="19" placeholder="1234 5678 9012 3456" />
+                                    <div class="hint"><i class="fa-brands fa-cc-visa"></i> <i class="fa-brands fa-cc-mastercard"></i> <i class="fa-brands fa-cc-amex"></i></div>
+                                </div>
+                            </div>
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label for="expiry">Expiry</label>
+                                    <input id="expiry" type="text" inputmode="numeric" maxlength="5" placeholder="MM/YY" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input id="cvv" type="password" inputmode="numeric" maxlength="4" placeholder="***" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- UPI -->
+                        <div id="pay-upi" class="pay-section" role="tabpanel">
+                            <div class="form-group">
+                                <label for="upiId">UPI ID</label>
+                                <input id="upiId" type="text" placeholder="name@bank" />
+                                <div class="hint">We will send a collect request to this UPI ID.</div>
+                            </div>
+                        </div>
+
+                        <!-- Net Banking -->
+                        <div id="pay-net" class="pay-section" role="tabpanel">
+                            <div class="form-group">
+                                <label for="bank">Select bank</label>
+                                <select id="bank">
+                                    <option value="">Choose bank</option>
+                                    <option>HDFC Bank</option>
+                                    <option>ICICI Bank</option>
+                                    <option>SBI</option>
+                                    <option>Axis Bank</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><input type="checkbox" id="agree" /> I agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>.</label>
+                        </div>
+
+                        <div class="actions">
+                            <button type="button" class="btn btn-ghost" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                            <button id="payNow" type="submit" class="btn btn-primary"><i class="fa-solid fa-lock"></i> Pay Now</button>
+                            <div class="secure"><i class="fa-solid fa-shield-halved"></i> 256-bit SSL secured</div>
+                        </div>
+
+                        <div id="formError" class="alert error" role="alert"></div>
+                        <div id="formSuccess" class="alert success" role="status"></div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Right: Summary -->
+            <aside class="card">
+                <div class="card-header">
+                    <i class="fa-solid fa-receipt"></i>
+                    <h3>Booking Summary</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group" style="margin-bottom:.8rem">
+                        <span class="badge"><i class="fa-solid fa-tag"></i> Best price guaranteed</span>
+                    </div>
+                    <div class="summary-row"><span>Package</span><strong id="sumPackage">Premium Getaway</strong></div>
+                    <div class="summary-row muted"><span>Travelers</span><span id="sumTravelers">2 Adults</span></div>
+                    <div class="summary-row muted"><span>Dates</span><span id="sumDates">12–16 Oct</span></div>
+
+                    <hr style="border:none;border-top:1px dashed #dfeee1;margin: .9rem 0;" />
+
+                    <div class="summary-row"><span>Base price</span><span id="sumBase">₹ 38,000</span></div>
+                    <div class="summary-row"><span>Taxes & fees</span><span id="sumTax">₹ 3,420</span></div>
+                    <div class="summary-row"><span>Discount</span><span id="sumDisc">- ₹ 2,000</span></div>
+                    <div class="summary-total"><span>Total</span><span id="sumTotal">₹ 39,420</span></div>
+
+                    <p class="hint" style="margin-top:.8rem"><i class="fa-solid fa-circle-info"></i> You can edit details on previous steps before payment.</p>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        // Toggle payment sections
+        const pills = document.querySelectorAll('.pay-pill');
+        const sections = document.querySelectorAll('.pay-section');
+        pills.forEach(p => {
+            p.addEventListener('click', () => {
+                pills.forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+                sections.forEach(s => s.classList.remove('active'));
+                p.classList.add('active');
+                p.setAttribute('aria-selected','true');
+                const sel = p.getAttribute('data-target');
+                const panel = document.querySelector(sel);
+                if (panel) panel.classList.add('active');
+            });
+        });
+
+        // Light formatting helpers
+        const cardNumber = document.getElementById('cardNumber');
+        const expiry = document.getElementById('expiry');
+        if (cardNumber) {
+            cardNumber.addEventListener('input', (e) => {
+                let v = e.target.value.replace(/\D/g, '').slice(0, 16);
+                e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+            });
+        }
+        if (expiry) {
+            expiry.addEventListener('input', (e) => {
+                let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+                if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+                e.target.value = v;
+            });
+        }
+
+        // Simple form validation (front-end only)
+        const form = document.getElementById('checkoutForm');
+        const err = document.getElementById('formError');
+        const ok = document.getElementById('formSuccess');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            err.classList.remove('show');
+            ok.classList.remove('show');
+            err.textContent = '';
+
+            const name = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const country = document.getElementById('country').value;
+            const agree = document.getElementById('agree').checked;
+
+            // Active payment method
+            const method = document.querySelector('.pay-pill.active')?.getAttribute('data-target');
+
+            if (!name || !email || !phone || !country) {
+                return showErr('Please fill traveler information.');
+            }
+            if (!agree) {
+                return showErr('You must agree to the Terms and Privacy Policy.');
+            }
+
+            if (method === '#pay-card') {
+                const cn = (document.getElementById('cardNumber').value || '').replace(/\s/g, '');
+                const ex = document.getElementById('expiry').value || '';
+                const cvv = document.getElementById('cvv').value || '';
+                if (cn.length < 16) return showErr('Please enter a valid card number.');
+                if (!/^(0[1-9]|1[0-2])\/(\d{2})$/.test(ex)) return showErr('Invalid expiry. Use MM/YY');
+                if (cvv.length < 3) return showErr('Invalid CVV.');
+            } else if (method === '#pay-upi') {
+                const upi = document.getElementById('upiId').value || '';
+                if (!/^[\w\.\-]{2,}@[\w\-]{2,}$/i.test(upi)) return showErr('Enter a valid UPI ID (example@bank).');
+            } else if (method === '#pay-net') {
+                const bank = document.getElementById('bank').value;
+                if (!bank) return showErr('Please choose your bank.');
+            }
+
+            // Simulate success
+            ok.textContent = 'Payment simulated successfully! Your booking is confirmed.';
+            ok.classList.add('show');
+            // Optionally redirect if you add a confirmation page later
+            // setTimeout(() => window.location.href = 'booking-confirmation.html', 800);
+        });
+
+        function showErr(msg){ err.textContent = msg; err.classList.add('show'); }
+
+        // Example: pull summary data from query params if present
+        const params = new URLSearchParams(location.search);
+        if (params.get('pkg')) document.getElementById('sumPackage').textContent = params.get('pkg');
+        if (params.get('trav')) document.getElementById('sumTravelers').textContent = params.get('trav');
+        if (params.get('dates')) document.getElementById('sumDates').textContent = params.get('dates');
+        if (params.get('total')) document.getElementById('sumTotal').textContent = params.get('total');
+    </script>
+</body>
+</html>

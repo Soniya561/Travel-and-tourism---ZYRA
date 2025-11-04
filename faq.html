@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ - Zyra Travels</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Theme */
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --primary-color:#2E8B57;--secondary-color:#3CB371;--accent-color:#98FB98;--gold-color:#FFD700;
+      --dark-green:#1F5F3F;--light-green:#F0FFF0;--text-dark:#2F4F2F;--text-light:#6B8E6B;--white:#FFFFFF;
+      --shadow:rgba(0,0,0,.1);--gradient-primary:linear-gradient(135deg,var(--primary-color),var(--secondary-color))
+    }
+    body{font-family:'Inter',sans-serif;line-height:1.6;color:var(--text-dark);overflow-x:hidden;min-height:100vh;
+      background:linear-gradient(135deg,rgba(240,255,240,.85),rgba(248,255,248,.85)),
+      url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2071&q=80') center/cover fixed}
+
+    /* Dark, high-contrast backgrounds by category */
+    body.bg-all{background:linear-gradient(180deg,rgba(6,20,13,.78),rgba(8,28,18,.88)),url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2070&q=80') center/cover fixed}
+    body.bg-booking{background:linear-gradient(180deg,rgba(6,20,13,.78),rgba(8,28,18,.88)),url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=2070&q=80') center/cover fixed}
+    body.bg-payments{background:linear-gradient(180deg,rgba(6,20,13,.78),rgba(8,28,18,.88)),url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=2070&q=80') center/cover fixed}
+    body.bg-changes{background:linear-gradient(180deg,rgba(6,20,13,.78),rgba(8,28,18,.88)),url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2069&q=80') center/cover fixed}
+    body.bg-docs{background:linear-gradient(180deg,rgba(6,20,13,.78),rgba(8,28,18,.88)),url('https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=2070&q=80') center/cover fixed}
+    body.bg-other{background:linear-gradient(180deg,rgba(6,20,13,.78),rgba(8,28,18,.88)),url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2070&q=80') center/cover fixed}
+    .header{position:fixed;top:0;width:100%;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);z-index:1000;padding:1rem 0;border-bottom:1px solid rgba(46,139,87,.12)}
+    .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 2rem}
+    .logo{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--primary-color);text-decoration:none;display:flex;align-items:center;gap:.5rem}
+    .logo i{font-size:2rem;color:var(--secondary-color)}
+    .nav-menu{display:flex;list-style:none;gap:2.5rem;align-items:center}
+    .nav-menu a{text-decoration:none;color:var(--text-dark);font-weight:600;position:relative}
+    .nav-menu a:hover,.nav-menu a.active{color:var(--primary-color)}
+    .nav-menu a::after{content:"";position:absolute;width:0;height:2px;left:0;bottom:-5px;background:var(--primary-color);transition:width .3s ease}
+    .nav-menu a:hover::after,.nav-menu a.active::after{width:100%}
+    .book-now-btn{background:var(--gradient-primary);color:#fff;padding:.8rem 2rem;border-radius:50px;text-decoration:none;font-weight:600;box-shadow:0 4px 15px rgba(46,139,87,.3)}
+    .page{max-width:1100px;margin:0 auto;padding:120px 2rem 4rem}
+
+    .title{font-family:'Playfair Display',serif;font-size:2.6rem;margin-bottom:.5rem;text-align:center;color:#fff}
+    .subtitle{text-align:center;color:var(--text-light);margin-bottom:1.5rem}
+
+    .search{position:relative;max-width:680px;margin:0 auto 1.5rem}
+    .search input{width:100%;padding:1rem 3rem 1rem 3rem;border:2px solid #E8F5E8;border-radius:14px;background:#FAFFFE}
+    .search i{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--text-light)}
+    .clear{position:absolute;right:1rem;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-light)}
+
+    .category-tabs{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin:1rem 0 2rem}
+    .tab{padding:.6rem 1rem;border:2px solid #E8F5E8;border-radius:999px;background:rgba(255,255,255,.9);cursor:pointer}
+    .tab.active{border-color:var(--primary-color);background:var(--light-green);color:var(--primary-color)}
+
+    .faq-list{display:grid;gap:.8rem}
+    .faq-item{background:rgba(255,255,255,.95);border:1px solid rgba(46,139,87,.1);border-radius:14px;box-shadow:0 8px 22px rgba(0,0,0,.06)}
+    .faq-q{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.1rem;cursor:pointer}
+    .faq-q h3{font-size:1rem}
+    .faq-a{display:none;padding:0 1.1rem 1rem;color:#2b3b2b}
+    .faq-item.open .faq-a{display:block}
+
+    .help-card{margin-top:2rem;background:rgba(46,139,87,.06);border:1px dashed rgba(46,139,87,.25);border-radius:14px;padding:1rem;text-align:center}
+    .help-card a{color:var(--primary-color);font-weight:700;text-decoration:none}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav-container">
+      <a class="logo" href="landing.html"><i class="fa-solid fa-leaf"></i> Zyra</a>
+      <ul class="nav-menu">
+        <li><a href="landing.html">Home</a></li>
+        <li><a href="destination.html">Destinations</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="reviews.html">Reviews</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a class="book-now-btn" href="booking.html">Book Now</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page">
+    <h1 class="title">Frequently Asked Questions</h1>
+    <p class="subtitle">Quick answers about booking, payments, changes and more.</p>
+
+    <div class="search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="faqSearch" type="text" placeholder="Search questions (e.g., refund, UPI, passport)" />
+      <span id="clearSearch" class="clear"><i class="fa-solid fa-xmark"></i></span>
+    </div>
+
+    <div class="category-tabs" role="tablist">
+      <button class="tab active" data-cat="all">All</button>
+      <button class="tab" data-cat="booking">Booking</button>
+      <button class="tab" data-cat="payments">Payments</button>
+      <button class="tab" data-cat="changes">Changes & Cancellations</button>
+      <button class="tab" data-cat="docs">Visas & Documents</button>
+      <button class="tab" data-cat="other">Other</button>
+    </div>
+
+    <section id="faqList" class="faq-list">
+      <!-- Booking -->
+      <article class="faq-item" data-cat="booking">
+        <div class="faq-q"><h3>How do I book a package?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">Use the Book Now button to select destination, dates and travelers. Review the summary and proceed to checkout.</div>
+      </article>
+      <article class="faq-item" data-cat="booking">
+        <div class="faq-q"><h3>Can I reserve now and pay later?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">For most packages we support a small advance payment to block seats. The balance is due before ticketing. Availability may vary by package.</div>
+      </article>
+
+      <!-- Payments -->
+      <article class="faq-item" data-cat="payments">
+        <div class="faq-q"><h3>What payment methods are accepted?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">We accept major cards, UPI, and net banking. On checkout, choose your preferred method.</div>
+      </article>
+      <article class="faq-item" data-cat="payments">
+        <div class="faq-q"><h3>Is my payment secure?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">Yes. Payments are processed over 256‑bit SSL. We do not store sensitive card data on our servers.</div>
+      </article>
+      <article class="faq-item" data-cat="payments">
+        <div class="faq-q"><h3>My card was charged but I didn’t get confirmation.</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">Please wait a few minutes and check your spam folder. If still missing, contact support with your transaction reference.</div>
+      </article>
+
+      <!-- Changes & Cancellation -->
+      <article class="faq-item" data-cat="changes">
+        <div class="faq-q"><h3>Can I change travel dates after booking?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">Date changes are subject to airline/hotel rules and fare difference. Contact us at least 72 hours before departure.</div>
+      </article>
+      <article class="faq-item" data-cat="changes">
+        <div class="faq-q"><h3>What is your cancellation policy?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">Refer to our <a href="cancellation-policy.html">cancellation policy</a> for package-specific timelines and fees.</div>
+      </article>
+
+      <!-- Docs -->
+      <article class="faq-item" data-cat="docs">
+        <div class="faq-q"><h3>Do you assist with visas?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">Yes, we provide guidance and documentation support for many destinations. Visa approval is at the discretion of the issuing authority.</div>
+      </article>
+      <article class="faq-item" data-cat="docs">
+        <div class="faq-q"><h3>What documents are required for international travel?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">A valid passport, visa (if applicable), and health documents per destination rules. Always verify the latest requirements.</div>
+      </article>
+
+      <!-- Other -->
+      <article class="faq-item" data-cat="other">
+        <div class="faq-q"><h3>Can you customize itineraries?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">Absolutely. Share your preferences and we’ll tailor a private itinerary including activities, transfers, and stays.</div>
+      </article>
+      <article class="faq-item" data-cat="other">
+        <div class="faq-q"><h3>Do you offer travel insurance?</h3><i class="fa-solid fa-chevron-down"></i></div>
+        <div class="faq-a">We can include comprehensive travel insurance from our partners upon request. Coverage varies by destination and age.</div>
+      </article>
+    </section>
+
+    <div class="help-card">
+      Still need help? Reach us at <a href="mailto:support@zyra.example">support@zyra.example</a> or <a href="contact.html">contact us</a>.
+    </div>
+  </main>
+
+  <script>
+    // Toggle items
+    document.querySelectorAll('.faq-item .faq-q').forEach(q => {
+      q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+    });
+
+    // Category tabs
+    const tabs = document.querySelectorAll('.tab');
+    const items = document.querySelectorAll('.faq-item');
+    tabs.forEach(t => t.addEventListener('click', () => {
+      tabs.forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      const cat = t.dataset.cat;
+      items.forEach(it => {
+        it.style.display = (cat === 'all' || it.dataset.cat === cat) ? '' : 'none';
+      });
+      // reset search
+      document.getElementById('faqSearch').value = '';
+      // set background class on body
+      const body = document.body;
+      body.classList.remove('bg-all','bg-booking','bg-payments','bg-changes','bg-docs','bg-other');
+      body.classList.add('bg-' + cat);
+    }));
+
+    // On load, match the initial active tab background
+    document.addEventListener('DOMContentLoaded', () => {
+      const active = document.querySelector('.tab.active');
+      if (active) document.body.classList.add('bg-' + active.dataset.cat);
+    });
+
+    // Search filter
+    const s = document.getElementById('faqSearch');
+    const clear = document.getElementById('clearSearch');
+    const filter = () => {
+      const q = s.value.trim().toLowerCase();
+      items.forEach(it => {
+        const text = it.textContent.toLowerCase();
+        it.style.display = text.includes(q) ? '' : 'none';
+      });
+    };
+    s.addEventListener('input', filter);
+    clear.addEventListener('click', () => { s.value=''; filter(); });
+  </script>
+</body>
+</html>

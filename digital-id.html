@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zyra Travels — Digital ID (Aadhaar VID + Blockchain)</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary-color:#2E8B57; --secondary-color:#3CB371; --dark-green:#1F5F3F;
+      --light-green:#F0FFF0; --text-dark:#2F4F2F; --text-light:#6B8E6B; --white:#fff;
+      --shadow:rgba(0,0,0,.1); --gradient-primary:linear-gradient(135deg,var(--primary-color),var(--secondary-color));
+      --danger:#B00020; --ok:#1F5F3F; --bg-bad:#FFF0F0; --bg-good:#ECFFF2;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;color:var(--text-dark);line-height:1.6;background:#FAFFFE}
+
+    .header{position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);z-index:1000;border-bottom:1px solid rgba(46,139,87,0.12)}
+    .nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem}
+    .logo{font-family:'Playfair Display',serif;font-weight:700;font-size:1.6rem;color:var(--primary-color);text-decoration:none;display:flex;gap:.5rem;align-items:center}
+    .logo i{color:var(--secondary-color)}
+    .nav-actions{display:flex;gap:.6rem;align-items:center}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:999px;text-decoration:none;font-weight:700;cursor:pointer;transition:.25s}
+    .btn-primary{background:var(--gradient-primary);color:#fff;padding:.65rem 1rem;border:none}
+    .btn-link{color:var(--primary-color);padding:.4rem .75rem;text-decoration:none}
+
+    .hero{background:linear-gradient(135deg,rgba(46,139,87,.78),rgba(60,179,113,.55)), url('https://images.unsplash.com/photo-1502920917128-1aa500764b3a?auto=format&fit=crop&w=1800&q=80') center/cover no-repeat; color:#fff;text-align:center;padding:3rem 1.25rem}
+    .hero h1{font-family:'Playfair Display',serif;font-size:2.2rem;line-height:1.15;margin-bottom:.6rem;text-shadow:0 4px 20px rgba(0,0,0,.28)}
+
+    .container{max-width:1100px;margin:1.25rem auto;padding:0 1.25rem}
+    .panel{background:#fff;border-radius:16px;box-shadow:0 16px 40px rgba(0,0,0,.12);padding:1rem}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    @media (max-width:840px){.grid{grid-template-columns:1fr}}
+
+    .field{display:flex;flex-direction:column;gap:.4rem}
+    .field label{font-weight:700;color:var(--text-dark);display:flex;gap:.45rem;align-items:center}
+    .field input{padding:.8rem;border:2px solid #E8F5E8;border-radius:12px;background:#FAFFFE}
+
+    .muted{font-size:.9rem;color:var(--text-light)}
+    .note{background:#FFFBEA;border:1px solid #F3E6A9;color:#8A6D3B;border-radius:12px;padding:.75rem}
+
+    .card{background:#fff;border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.12);padding:1rem}
+    .status{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .6rem;border-radius:999px;font-weight:800}
+
+    code.box{display:inline-block;padding:.35rem .55rem;border-radius:8px;background:#F5FFF8;border:1px solid #E8F5E8}
+
+    footer{margin:2rem 0 3rem;color:#6c8f6c;text-align:center}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <a class="logo" href="#"><i class="fa-solid fa-leaf"></i> Zyra Travels</a>
+      <div class="nav-actions">
+        <a class="btn btn-link" href="index.html">Home</a>
+        <a class="btn btn-primary" href="#register"><i class="fa-solid fa-id-card"></i> Digital ID</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Digital ID with Aadhaar VID + Blockchain</h1>
+    <p>Demo-only UI to derive a privacy-preserving on-chain ID from Aadhaar Virtual ID (VID). No Aadhaar data is stored.</p>
+  </section>
+
+  <div class="container" id="register">
+    <div class="panel">
+      <div class="grid">
+        <div class="field">
+          <label><i class="fa-solid fa-shield-halved"></i> Aadhaar Virtual ID (VID)</label>
+          <input id="vidInput" type="password" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000 0000" maxlength="19">
+          <small class="muted">Demo-only. Enter a test VID (16 digits). Do not use your real Aadhaar/VID here.</small>
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-eye"></i> Show/Hide</label>
+          <button id="toggleVid" class="btn btn-primary" type="button">Show VID</button>
+        </div>
+      </div>
+      <div style="height:.75rem"></div>
+      <div class="grid">
+        <button id="btnDerive" class="btn btn-primary" type="button"><i class="fa-solid fa-hashtag"></i> Generate Digital ID (Offline)</button>
+        <button id="btnConnect" class="btn btn-primary" type="button"><i class="fa-brands fa-ethereum"></i> Connect Wallet</button>
+      </div>
+    </div>
+
+    <div style="height: .9rem"></div>
+
+    <div class="grid">
+      <div class="card">
+        <h3 style="margin-bottom:.6rem"><i class="fa-solid fa-fingerprint" style="color:#3CB371"></i> Derived Digital ID</h3>
+        <div id="derivedBox" class="muted">Not generated</div>
+        <div style="margin-top:.5rem" class="note">
+          For production: use UIDAI-compliant flows (Offline eKYC/VID via licensed KUA/AUA). Hash locally, never store Aadhaar numbers. Use testnets for development.
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:.6rem"><i class="fa-solid fa-chain"></i> On-chain Registration</h3>
+        <div class="field">
+          <label><i class="fa-solid fa-plug"></i> Contract Address</label>
+          <input id="contractAddress" placeholder="0xYourContractAddress" />
+        </div>
+        <div class="field">
+          <label><i class="fa-solid fa-code"></i> Contract ABI (JSON)</label>
+          <textarea id="contractAbi" rows="6" style="width:100%;padding:.8rem;border:2px solid #E8F5E8;border-radius:12px;background:#FAFFFE" placeholder='[{ "inputs":[{"internalType":"bytes32","name":"idHash","type":"bytes32"}], "name":"registerUser", "outputs":[], "stateMutability":"nonpayable","type":"function" }]'></textarea>
+        </div>
+        <div style="display:flex;gap:.6rem;align-items:center;margin-top:.5rem">
+          <button id="btnRegister" class="btn btn-primary" type="button"><i class="fa-solid fa-cloud-upload"></i> Register On-chain</button>
+          <span id="txStatus" class="muted"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>© <span id="year"></span> Zyra Travels — Demo for identity; ensure legal compliance for Aadhaar.</footer>
+
+  <!-- Ethers v6 for blockchain interactions -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.min.js"></script>
+  <script>
+    const vidInput = document.getElementById('vidInput');
+    const toggleVid = document.getElementById('toggleVid');
+    const btnDerive = document.getElementById('btnDerive');
+    const derivedBox = document.getElementById('derivedBox');
+    const btnConnect = document.getElementById('btnConnect');
+    const btnRegister = document.getElementById('btnRegister');
+    const txStatus = document.getElementById('txStatus');
+    const contractAddressEl = document.getElementById('contractAddress');
+    const contractAbiEl = document.getElementById('contractAbi');
+
+    let provider = null; // ethers.BrowserProvider
+    let signer = null;   // ethers.Signer
+    let lastIdHashHex = null; // 0x...32 bytes
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Local salt to reduce linkage across apps. Replace with backend-provided/rotating salt in production.
+    const APP_SALT = 'zyra-travels-v1';
+
+    // Input masking: format as groups of 4 digits
+    vidInput.addEventListener('input', () => {
+      const digits = vidInput.value.replace(/\D/g, '').slice(0, 16);
+      const grouped = digits.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+      vidInput.value = grouped;
+    });
+
+    toggleVid.addEventListener('click', () => {
+      const isPw = vidInput.type === 'password';
+      vidInput.type = isPw ? 'text' : 'password';
+      toggleVid.textContent = isPw ? 'Hide VID' : 'Show VID';
+    });
+
+    function isValidVid(vid) {
+      return /^\d{16}$/.test(vid);
+    }
+
+    async function sha256Hex(str){
+      const enc = new TextEncoder();
+      const data = enc.encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      const bytes = Array.from(new Uint8Array(hash));
+      return '0x' + bytes.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function toBytes32(hex){
+      if(!hex.startsWith('0x')) hex = '0x' + hex;
+      if(hex.length !== 66){ // 32 bytes => 64 hex chars + 0x
+        throw new Error('Hash must be 32 bytes');
+      }
+      return hex;
+    }
+
+    function short(hex){
+      return hex ? hex.slice(0, 10) + '…' + hex.slice(-6) : '';
+    }
+
+    btnDerive.addEventListener('click', async () => {
+      derivedBox.textContent = 'Generating…';
+      try{
+        const digits = vidInput.value.replace(/\D/g, '');
+        if(!isValidVid(digits)){
+          derivedBox.innerHTML = '<span style="color:var(--danger)">Enter a 16-digit VID (demo only)</span>';
+          lastIdHashHex = null;
+          return;
+        }
+        // Derive a privacy-preserving ID: H = SHA256( VID + SALT )
+        const hex = await sha256Hex(digits + ':' + APP_SALT);
+        lastIdHashHex = toBytes32(hex);
+        derivedBox.innerHTML = `ID Hash (bytes32): <code class="box">${short(lastIdHashHex)}</code>`;
+      }catch(err){
+        console.error(err);
+        derivedBox.innerHTML = '<span style="color:var(--danger)">Failed to generate ID</span>';
+        lastIdHashHex = null;
+      }
+    });
+
+    btnConnect.addEventListener('click', async () => {
+      try{
+        if(!window.ethereum){
+          alert('No wallet found. Please install MetaMask.');
+          return;
+        }
+        provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send('eth_requestAccounts', []);
+        signer = await provider.getSigner();
+        const addr = await signer.getAddress();
+        txStatus.textContent = `Wallet: ${addr.slice(0,6)}…${addr.slice(-4)}`;
+      }catch(err){
+        console.error(err);
+        txStatus.textContent = 'Wallet connection failed';
+      }
+    });
+
+    btnRegister.addEventListener('click', async () => {
+      txStatus.textContent = '';
+      try{
+        if(!lastIdHashHex){
+          alert('Generate the Digital ID first.');
+          return;
+        }
+        if(!signer){
+          alert('Connect wallet first.');
+          return;
+        }
+        const addr = (contractAddressEl.value || '').trim();
+        const abiText = (contractAbiEl.value || '').trim();
+        if(!addr || !/^0x[0-9a-fA-F]{40}$/.test(addr)){
+          alert('Enter a valid contract address');
+          return;
+        }
+        if(!abiText){
+          alert('Paste contract ABI JSON with registerUser(bytes32 idHash)');
+          return;
+        }
+        let abi;
+        try{ abi = JSON.parse(abiText); } catch(e){ alert('Invalid ABI JSON'); return; }
+
+        const contract = new ethers.Contract(addr, abi, signer);
+        txStatus.textContent = 'Submitting transaction…';
+        const tx = await contract.registerUser(lastIdHashHex);
+        txStatus.innerHTML = `Submitted: <code class="box">${tx.hash.slice(0,12)}…</code> Waiting…`;
+        const receipt = await tx.wait();
+        if(receipt && receipt.status === 1){
+          txStatus.innerHTML = `Success ✓ Block <code class="box">${receipt.blockNumber}</code>`;
+        }else{
+          txStatus.textContent = 'Transaction failed';
+        }
+      }catch(err){
+        console.error(err);
+        txStatus.textContent = 'Error: ' + (err?.shortMessage || err?.message || 'unknown');
+      }
+    });
+  </script>
+</body>
+</html>

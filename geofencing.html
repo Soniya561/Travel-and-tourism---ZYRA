@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zyra - Geofencing Alert</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Leaflet for map visualization -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <style>
+    :root {
+      --primary-color: #2E8B57;
+      --secondary-color: #3CB371;
+      --light-green: #F0FFF0;
+      --text-dark: #2F4F2F;
+      --text-light: #6B8E6B;
+      --white: #FFFFFF;
+      --danger: #D9534F;
+      --warning: #F0AD4E;
+      --success: #5CB85C;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      background: linear-gradient(135deg, rgba(46, 139, 87, 0.8), rgba(60, 179, 113, 0.6)),
+                  url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=2070&q=80') center/cover fixed;
+      display: flex; align-items: center; justify-content: center; padding: 2rem;
+    }
+    .container {
+      width: 100%; max-width: 1100px; background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(16px); border-radius: 18px; padding: 1.25rem 1.25rem 1.5rem;
+      border: 1px solid rgba(46,139,87,0.12); box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+    .header { display:flex; justify-content: space-between; align-items: center; gap: .75rem; margin-bottom: .75rem; }
+    .brand { display:flex; align-items:center; gap:.6rem; }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--primary-color); }
+    .subtitle { color: var(--text-light); font-size: .95rem; }
+    .status-pill { padding: .35rem .6rem; border-radius: 999px; font-size: .85rem; font-weight: 600; border: 1px solid #E8F5E8; }
+    .status-ok { background: #E8F5E8; color: var(--primary-color); }
+    .status-warn { background: #FFF4E5; color: #AB6A05; border-color: #FFE4BF; }
+    .status-danger { background: #FDECEA; color: #A94442; border-color: #F7D6D4; }
+
+    .layout { display:grid; grid-template-columns: 350px 1fr; gap: 1rem; }
+    .panel { background: var(--white); border: 1px solid #E8F5E8; border-radius: 12px; padding: .9rem; }
+    .panel h3 { font-size: 1rem; margin-bottom: .6rem; color: var(--primary-color); }
+
+    .form-row { display:flex; gap:.5rem; align-items:center; margin-bottom: .5rem; }
+    .form-row label { width: 110px; font-size: .9rem; color: var(--text-light); }
+    .form-row input, .form-row select, .form-row textarea { flex: 1; padding: .5rem .6rem; border-radius: 8px; border: 1px solid #dfeee0; font-size: .95rem; }
+    .form-row textarea { min-height: 64px; resize: vertical; }
+
+    .btn { display:inline-flex; align-items:center; gap:.4rem; border: none; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color:#fff; padding: .55rem .8rem; border-radius: 10px; cursor:pointer; font-weight:600; }
+    .btn.secondary { background: #e9f7ee; color: var(--primary-color); border: 1px solid #cfe9d7; }
+    .btn.danger { background: var(--danger); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+    #map { width: 100%; height: 520px; border-radius: 12px; }
+
+    .alert-banner { display:none; margin-top:.6rem; padding:.6rem .8rem; border-radius:10px; font-weight:600; }
+    .alert-danger { display:none; background:#FDECEA; color:#A94442; border:1px solid #F7D6D4; }
+    .alert-warning { display:none; background:#FFF4E5; color:#AB6A05; border:1px solid #FFE4BF; }
+
+    .log { margin-top:.6rem; background: #FAFCFB; border: 1px dashed #CFE9D7; padding:.6rem .8rem; border-radius:10px; max-height: 180px; overflow:auto; font-size:.9rem; }
+    .log p { margin-bottom: .35rem; color:#466b4d; }
+
+    @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } #map { height: 340px; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="brand">
+        <div class="logo"><i class="fa-solid fa-map-location-dot"></i> Zyra</div>
+        <div class="subtitle">Geofencing Alert — be notified when leaving your safe boundary.</div>
+      </div>
+      <div id="statusPill" class="status-pill status-warn">Idle</div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <h3><i class="fa-solid fa-sliders"></i> Boundary & Monitoring</h3>
+        <div class="form-row">
+          <label for="boundaryType">Boundary Type</label>
+          <select id="boundaryType">
+            <option value="circle">Circle</option>
+            <option value="polygon">Polygon</option>
+          </select>
+        </div>
+
+        <!-- Destination search (name → coordinates) -->
+        <div class="form-row">
+          <label for="destQuery">Destination</label>
+          <input id="destQuery" type="text" placeholder="Search place, landmark or address" />
+          <button id="searchBtn" class="btn secondary" type="button"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+        </div>
+        <div class="form-row" id="searchResultsRow" style="display:none">
+          <label for="searchResults">Results</label>
+          <select id="searchResults"></select>
+        </div>
+        <div class="form-row" style="margin-top:-.25rem">
+          <label></label>
+          <small class="subtitle">Tip: Click on the map to set the center. Or use your current location.</small>
+        </div>
+
+        <!-- Circle settings -->
+        <div id="circleSettings">
+          <div class="form-row">
+            <label>Center Lat</label>
+            <input id="centerLat" type="number" step="0.000001" value="37.7749" />
+          </div>
+          <div class="form-row">
+            <label>Center Lng</label>
+            <input id="centerLng" type="number" step="0.000001" value="-122.4194" />
+          </div>
+          <div class="form-row">
+            <label>Radius (m)</label>
+            <input id="radiusM" type="number" step="1" value="500" />
+          </div>
+          <div class="form-row">
+            <button id="useCurrentAsCenter" class="btn secondary" type="button"><i class="fa-solid fa-crosshairs"></i> Use current location</button>
+          </div>
+        </div>
+
+        <!-- Polygon settings -->
+        <div id="polygonSettings" style="display:none">
+          <div class="form-row">
+            <label>Coords (lat,lng per line)</label>
+            <textarea id="polygonCoords" placeholder="Example:\n37.775, -122.419\n37.776, -122.414\n37.772, -122.412\n37.771, -122.418"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-top:.4rem; gap:.5rem;">
+          <button id="applyBoundary" class="btn" type="button"><i class="fa-solid fa-check"></i> Apply boundary</button>
+          <button id="startBtn" class="btn" type="button"><i class="fa-solid fa-play"></i> Start monitoring</button>
+          <button id="stopBtn" class="btn danger" type="button" disabled><i class="fa-solid fa-stop"></i> Stop</button>
+        </div>
+
+        <div id="bannerWarn" class="alert-banner alert-warning"><i class="fa-solid fa-triangle-exclamation"></i> Monitoring started. Stay within your boundary.</div>
+        <div id="bannerOut" class="alert-banner alert-danger"><i class="fa-solid fa-bell"></i> You are OUTSIDE the boundary!</div>
+
+        <div class="log" id="log"></div>
+      </div>
+
+      <div class="panel">
+        <h3><i class="fa-solid fa-map"></i> Map</h3>
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Simple logger
+    const logEl = document.getElementById('log');
+    const log = (msg) => { const p = document.createElement('p'); p.textContent = new Date().toLocaleTimeString() + ' • ' + msg; logEl.prepend(p); };
+
+    // Elements
+    const boundaryTypeEl = document.getElementById('boundaryType');
+    const circleSettings = document.getElementById('circleSettings');
+    const polygonSettings = document.getElementById('polygonSettings');
+    const centerLatEl = document.getElementById('centerLat');
+    const centerLngEl = document.getElementById('centerLng');
+    const radiusMEl = document.getElementById('radiusM');
+    const polygonCoordsEl = document.getElementById('polygonCoords');
+    const useCurrentAsCenterBtn = document.getElementById('useCurrentAsCenter');
+    const applyBoundaryBtn = document.getElementById('applyBoundary');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const bannerWarn = document.getElementById('bannerWarn');
+    const bannerOut = document.getElementById('bannerOut');
+    const statusPill = document.getElementById('statusPill');
+
+    // Config & state
+    let state = {
+      monitoring: false,
+      watchId: null,
+      lastInside: null, // null | true | false
+      boundaryType: 'circle',
+      circle: { center: { lat: 37.7749, lng: -122.4194 }, radiusM: 500 },
+      polygon: { coords: [] },
+      marker: null,
+      shape: null
+    };
+
+    // Map setup
+    const map = L.map('map');
+    const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    function setStatus(text, level='warn') {
+      statusPill.textContent = text;
+      statusPill.className = 'status-pill ' + (level === 'ok' ? 'status-ok' : level === 'danger' ? 'status-danger' : 'status-warn');
+    }
+
+    function toNumber(el, fallback=0) { const v = parseFloat(el.value); return isFinite(v) ? v : fallback; }
+
+    function parsePolygon(text) {
+      const lines = text.split(/\n|;/).map(s => s.trim()).filter(Boolean);
+      const coords = [];
+      for (const line of lines) {
+        const m = line.split(/,|\s+/).map(s => s.trim()).filter(Boolean);
+        if (m.length >= 2) {
+          const lat = parseFloat(m[0]);
+          const lng = parseFloat(m[1]);
+          if (isFinite(lat) && isFinite(lng)) coords.push([lat, lng]);
+        }
+      }
+      return coords;
+    }
+
+    // Haversine distance in meters
+    function haversineMeters(lat1, lon1, lat2, lon2) {
+      const R = 6371000; // meters
+      const toRad = d => d * Math.PI / 180;
+      const dLat = toRad(lat2 - lat1);
+      const dLon = toRad(lon2 - lon1);
+      const a = Math.sin(dLat/2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon/2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    // Ray-casting algorithm for point-in-polygon
+    function pointInPolygon(point, vs) {
+      const x = point[0], y = point[1];
+      let inside = false;
+      for (let i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+        const xi = vs[i][0], yi = vs[i][1];
+        const xj = vs[j][0], yj = vs[j][1];
+        const intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / ((yj - yi) || 1e-12) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    function drawBoundary() {
+      // Clear existing shape
+      if (state.shape) { state.shape.remove(); state.shape = null; }
+
+      if (state.boundaryType === 'circle') {
+        const { lat, lng } = state.circle.center;
+        const r = state.circle.radiusM;
+        state.shape = L.circle([lat, lng], { radius: r, color: '#2E8B57' }).addTo(map);
+        map.setView([lat, lng], r < 800 ? 16 : r < 2000 ? 14 : 12);
+      } else if (state.boundaryType === 'polygon' && state.polygon.coords.length >= 3) {
+        state.shape = L.polygon(state.polygon.coords, { color: '#2E8B57' }).addTo(map);
+        map.fitBounds(state.shape.getBounds(), { padding: [20, 20] });
+      } else {
+        map.setView([state.circle.center.lat, state.circle.center.lng], 14);
+      }
+    }
+
+    function updateMarker(lat, lng) {
+      if (!state.marker) {
+        state.marker = L.marker([lat, lng]).addTo(map);
+      } else {
+        state.marker.setLatLng([lat, lng]);
+      }
+    }
+
+    function checkInside(lat, lng) {
+      if (state.boundaryType === 'circle') {
+        const d = haversineMeters(lat, lng, state.circle.center.lat, state.circle.center.lng);
+        return d <= state.circle.radiusM;
+      } else if (state.boundaryType === 'polygon' && state.polygon.coords.length >= 3) {
+        return pointInPolygon([lat, lng], state.polygon.coords);
+      }
+      return true;
+    }
+
+    function notifyOutOfBoundary() {
+      const title = 'Zyra Geofencing Alert';
+      const body = 'You are outside the defined boundary.';
+      if ('Notification' in window) {
+        if (Notification.permission === 'granted') {
+          new Notification(title, { body, icon: 'https://cdn-icons-png.flaticon.com/512/820/820135.png' });
+        } else if (Notification.permission !== 'denied') {
+          Notification.requestPermission().then(p => { if (p === 'granted') new Notification(title, { body }); });
+        }
+      }
+      try { if (navigator.vibrate) navigator.vibrate([200, 100, 200]); } catch (e) {}
+      bannerOut.style.display = 'block';
+    }
+
+    function clearAlerts() { bannerOut.style.display = 'none'; bannerWarn.style.display = 'none'; }
+
+    function onPosition(pos) {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      updateMarker(lat, lng);
+      const inside = checkInside(lat, lng);
+      const stateStr = inside ? 'INSIDE' : 'OUTSIDE';
+      log(`Position: ${lat.toFixed(5)}, ${lng.toFixed(5)} • ${stateStr}`);
+
+      if (inside) {
+        setStatus('Inside boundary', 'ok');
+        bannerOut.style.display = 'none';
+      } else {
+        setStatus('Outside boundary', 'danger');
+        if (state.lastInside !== false) notifyOutOfBoundary(); // fire only on transition
+      }
+      state.lastInside = inside;
+    }
+
+    function onPositionError(err) {
+      log(`Geolocation error: ${err.message}`);
+      setStatus('Location error', 'danger');
+    }
+
+    function startMonitoring() {
+      if (!('geolocation' in navigator)) { alert('Geolocation not supported on this device/browser.'); return; }
+      if (state.monitoring) return;
+      state.monitoring = true;
+      setStatus('Monitoring…', 'warn');
+      bannerWarn.style.display = 'block';
+      bannerOut.style.display = 'none';
+      state.watchId = navigator.geolocation.watchPosition(onPosition, onPositionError, {
+        enableHighAccuracy: true,
+        maximumAge: 10_000,
+        timeout: 20_000
+      });
+      startBtn.disabled = true; stopBtn.disabled = false;
+    }
+
+    function stopMonitoring() {
+      if (!state.monitoring) return;
+      try { if (state.watchId) navigator.geolocation.clearWatch(state.watchId); } catch (_) {}
+      state.watchId = null; state.monitoring = false; state.lastInside = null;
+      setStatus('Idle', 'warn');
+      startBtn.disabled = false; stopBtn.disabled = true;
+      clearAlerts();
+      log('Monitoring stopped.');
+    }
+
+    function applyBoundary() {
+      state.boundaryType = boundaryTypeEl.value;
+      if (state.boundaryType === 'circle') {
+        state.circle.center.lat = toNumber(centerLatEl, state.circle.center.lat);
+        state.circle.center.lng = toNumber(centerLngEl, state.circle.center.lng);
+        const r = Math.max(10, toNumber(radiusMEl, state.circle.radiusM));
+        state.circle.radiusM = r;
+        log(`Applied circle boundary at (${state.circle.center.lat.toFixed(5)}, ${state.circle.center.lng.toFixed(5)}) • radius ${r}m`);
+      } else {
+        const coords = parsePolygon(polygonCoordsEl.value);
+        if (coords.length < 3) { alert('Polygon needs at least 3 valid coordinates.'); return; }
+        state.polygon.coords = coords;
+        log(`Applied polygon boundary with ${coords.length} vertices.`);
+      }
+      drawBoundary();
+    }
+
+    boundaryTypeEl.addEventListener('change', () => {
+      const type = boundaryTypeEl.value;
+      circleSettings.style.display = type === 'circle' ? 'block' : 'none';
+      polygonSettings.style.display = type === 'polygon' ? 'block' : 'none';
+      setTimeout(drawBoundary, 0);
+    });
+
+    useCurrentAsCenterBtn.addEventListener('click', () => {
+      if (!('geolocation' in navigator)) return alert('Geolocation not supported');
+      navigator.geolocation.getCurrentPosition(pos => {
+        centerLatEl.value = pos.coords.latitude.toFixed(6);
+        centerLngEl.value = pos.coords.longitude.toFixed(6);
+        applyBoundary();
+        log('Center set to current location.');
+      }, err => alert('Unable to get current location: ' + err.message));
+    });
+
+    applyBoundaryBtn.addEventListener('click', applyBoundary);
+    startBtn.addEventListener('click', startMonitoring);
+    stopBtn.addEventListener('click', stopMonitoring);
+
+    // Initialize
+    drawBoundary();
+  </script>
+</body>
+</html>
